@@ -17,3 +17,5 @@ To get started with Hugo for deployment with Vercel, you can use the [Hugo CLI](
 ```shell
 $ hugo new site project-name
 ```
+
+当前主题：https://github.com/xianmin/hugo-theme-jane.git
