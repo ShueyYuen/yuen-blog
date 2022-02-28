@@ -2,7 +2,8 @@
 # If you want to see the full configuration, please check `full-config.toml` .
 # And see https://gohugo.io/getting-started/configuration/ .
 
-baseURL = "http://localhost:1313/"
+# baseURL = "http://localhost:1313/"
+baseURL = "http://www.shuey.fun/"
 title = "Shuey Yuen Blog"
 enableRobotsTXT = true
 enableEmoji = true
@@ -76,12 +77,7 @@ defaultContentLanguage = "en"           # Default language to use
 
   [params.social]                                         # 社交链接
     a-email = "mailto:cofalconer@petalmail.com"
-    # b-stack-overflow = "http://localhost:1313"
-    # e-linkedin = "http://localhost:1313"
     g-github = "http://localhost:1313"
-    # h-weibo = "http://localhost:1313"
-    # i-zhihu = "http://localhost:1313"
-    # n-gitlab = "http://localhost:1313"
     q-bilibili = "http://localhost:1313"
     t-youtube = "http://localhost:1313"
 
