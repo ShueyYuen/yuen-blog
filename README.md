@@ -10,12 +10,4 @@ Deploy your own Hugo project with Vercel.
 
 _Live Example: https://hugo-template.vercel.app_
 
-### How We Created This Example
-
-To get started with Hugo for deployment with Vercel, you can use the [Hugo CLI](https://gohugo.io/commands/) to initialize the project:
-
-```shell
-$ hugo new site project-name
-```
-
-当前主题：https://github.com/xianmin/hugo-theme-jane.git
+当前主题：https://github.com/miiiku/hugo-theme-kagome

@@ -4,15 +4,15 @@
 
 # baseURL = "http://localhost:1313/"
 baseURL = "http://www.shuey.fun/"
-title = "Shuey Yuen Blog"
+title = "Shuey Yuen"
 enableRobotsTXT = true
 enableEmoji = true
-theme = "jane"
+theme = "kagome"
 
 hasCJKLanguage = true     # has chinese/japanese/korean ? # 自动检测是否包含 中文\日文\韩文
-paginate = 3              # Number of articles displayed on the homepage  # 首页每页显示的文章数
+paginate = 7              # Number of articles displayed on the homepage  # 首页每页显示的文章数
 rssLimit = 20             # Limit Entry Count to Rss file # 限制 Rss 文章输出数量
-disqusShortname = ""      # disqus_shortname
+walineComment = "walineComment"      # disqus_shortname
 googleAnalytics = ""      # UA-XXXXXXXX-X
 copyright = "Shuey Yuen"            # default: author.name ↓        # 默认为下面配置的author.name ↓
 
@@ -23,6 +23,9 @@ defaultContentLanguage = "en"           # Default language to use
 
 [author]                  # essential                     # 必需
   name = "Shuey Yuen"
+  email = "cofalconer@petalmail.com"
+  description = "不愚为耻，不愚为耻"
+  avatar = "/images/avatar.webp"
 
 [sitemap]                 # essential                     # 必需
   changefreq = "weekly"
@@ -50,6 +53,23 @@ defaultContentLanguage = "en"           # Default language to use
   identifier = "categories"
   url = "/categories/"
 
+  # 底部社交图标
+  [[menu.social]]
+    identifier = "github"
+    name = "github"
+    url = "https://github.com/ShueyYuen"
+    weight = 1
+  [[menu.social]]
+    identifier = "email"
+    name = "email"
+    url = "mailto:cofalconer@petalmail.com"
+    weight = 2
+  [[menu.social]]
+    identifier = "bilibili"
+    name = "bilibili"
+    url = "https://space.bilibili.com/44685985?spm_id_from=333.1007.0.0"
+    weight = 3
+
 
 [params]
   since = "2017"            # Site creation time          # 站点建立时间
@@ -57,7 +77,6 @@ defaultContentLanguage = "en"           # Default language to use
   rssFullContent = true     # if false, Rss feed instead of the summary
 
   # site info (optional)                                  # 站点信息（可选，不需要的可以直接注释掉）
-  logoTitle = "Cofal<font color=\"#F3D085\">の</font>ブログ"        # default: the title value    # 默认值: 上面设置的title值
   keywords = ["shuey yuen", "simulator","javascript", "前端"]
   description = "Blog of Shuey Yuen, to share my idea."
 
@@ -69,17 +88,36 @@ defaultContentLanguage = "en"           # Default language to use
   toc = true                                                                            # 是否开启目录
   photoswipe = true         # see https://github.com/dimsemenov/PhotoSwipe            # 是否启用PhotoSwipe（图片可点击）
   contentCopyright = '<a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a>'
+  # 国内备案号
+  beian = ""
+  # TOC目录出现字符长度限制
+  toc_show_len = 300
 
   # Link custom CSS and JS assets
   #   (relative to /static/css and /static/js respectively)
   customCSS = []            # if ['custom.css'], load '/static/css/custom.css' file
   customJS = []             # if ['custom.js'], load '/static/js/custom.js' file
 
-  [params.social]                                         # 社交链接
-    a-email = "mailto:cofalconer@petalmail.com"
-    g-github = "http://localhost:1313"
-    q-bilibili = "http://localhost:1313"
-    t-youtube = "http://localhost:1313"
+  [params.aplayer]
+    theme = "#b7daff"
+    autoplay = false
+    loop = "none"
+    mutex = true
+
+  [params.dplayer]
+    theme = "#b7daff"
+    autoplay = false
+    loop = false
+    mutex = true
+  
+  
+  [params.widget]
+    # 相关文章推荐数量
+    articles_count = 6
+    # 分类相关显示数量
+    categories_count = 6
+    # 标签相关显示数量
+    tags_count = 12
 
 [markup]
   defaultMarkdownHandler = "goldmark"  # blackfriday or goldmark
