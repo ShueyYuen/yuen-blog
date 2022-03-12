@@ -11,3 +11,4 @@ Deploy your own Hugo project with Vercel.
 _Live Example: https://hugo-template.vercel.app_
 
 当前主题：https://github.com/miiiku/hugo-theme-kagome
+参考：https://segmentfault.com/a/1190000037767089
