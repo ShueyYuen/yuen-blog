@@ -24,6 +24,9 @@
 
       {{- block "widget" . -}}{{- end -}}
     </div>
+    <div class="layout-block">
+      {{ partial "waline.html" . }}
+    </div>
   </main>
 
   {{- partial "footer.html" . -}}

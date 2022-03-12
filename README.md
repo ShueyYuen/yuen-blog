@@ -12,3 +12,7 @@ _Live Example: https://hugo-template.vercel.app_
 
 当前主题：https://github.com/miiiku/hugo-theme-kagome
 参考：https://segmentfault.com/a/1190000037767089
+
+export LEAN_ID=LOfY0OUxfGOWSryINhS5J0gW-MdYXbMMI && export LEAN_KEY=G9Wdh1pP3gPFwkzMw8d2QHpa && export LEAN_MASTER_KEY=eP42VSktubqHbbfcmAibmzQe && hugo server
+
+https://waline.js.org/
