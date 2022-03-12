@@ -3,7 +3,7 @@
 # And see https://gohugo.io/getting-started/configuration/ .
 
 # baseURL = "http://localhost:1313/"
-baseURL = "http://www.shuey.fun/"
+baseURL = "https://www.shuey.fun/"
 title = "Shuey Yuen"
 enableRobotsTXT = true
 enableEmoji = true

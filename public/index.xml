@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Shuey Yuen Blog</title>
-    <link>http://www.shuey.fun/</link>
+    <link>https://www.shuey.fun/</link>
     <description>Recent content on Shuey Yuen Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Shuey Yuen</copyright>
-    <lastBuildDate>Sun, 16 Feb 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://www.shuey.fun/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 16 Feb 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://www.shuey.fun/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>WASM学习笔记</title>
-      <link>http://www.shuey.fun/post/2020-02-16-wasm%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <link>https://www.shuey.fun/post/2020-02-16-wasm%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Sun, 16 Feb 2020 00:00:00 +0000</pubDate>
       
-      <guid>http://www.shuey.fun/post/2020-02-16-wasm%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://www.shuey.fun/post/2020-02-16-wasm%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
       <description>安装准备 Git. Linux和OS X系统自带Git.这里可以参考这篇博客Windows下安装Git. 安装后可以使用检查是否安装正确. &amp;gt; git --version git version 2.24.0.windows.2 CMake. 自</description>
     </item>
     
     <item>
       <title>四月是你的谎言</title>
-      <link>http://www.shuey.fun/post/2019-01-15-%E5%9B%9B%E6%9C%88%E6%98%AF%E4%BD%A0%E7%9A%84%E8%B0%8E%E8%A8%80/</link>
+      <link>https://www.shuey.fun/post/2019-01-15-%E5%9B%9B%E6%9C%88%E6%98%AF%E4%BD%A0%E7%9A%84%E8%B0%8E%E8%A8%80/</link>
       <pubDate>Tue, 15 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>http://www.shuey.fun/post/2019-01-15-%E5%9B%9B%E6%9C%88%E6%98%AF%E4%BD%A0%E7%9A%84%E8%B0%8E%E8%A8%80/</guid>
+      <guid>https://www.shuey.fun/post/2019-01-15-%E5%9B%9B%E6%9C%88%E6%98%AF%E4%BD%A0%E7%9A%84%E8%B0%8E%E8%A8%80/</guid>
       <description>四月是你的谎言 老套的故事 &amp;emsp;&amp;emsp;男主是个有点自闭的少年，然后……哈哈，然后就没有然后啦，总之这个开端就已经是个老套的剧本啦！</description>
     </item>
     
