@@ -10,7 +10,6 @@
   {{ if ne $Enable true }}
   {{- partial "disqus.html" . -}}
   {{ end }}
-  {{- partial "disqus.html" . -}}
 
   <div class="article-paging">
     {{ with .NextInSection }}

@@ -63,6 +63,27 @@ $dark-border-secondary: #373e47;
   
   --theme-border-primary: #{$dark-border-primary};
   --theme-border-secondary: #{$dark-border-secondary};
+
+  // waline样式
+  /* 常规颜色 */
+  --waline-white: #1f2428;
+  --waline-light-grey: #aaa;
+  --waline-dark-grey: #fff;
+
+  /* 布局颜色 */
+  --waline-text-color: #aaa;
+  --waline-bgcolor: #1f2428;
+  --waline-bgcolor-light: #373e44;
+  --waline-border-color: #333;
+  --waline-disable-bgcolor: red;
+  --waline-disable-color: #272727;
+  --waline-theme-color: #27ae60;
+  /* 特殊颜色 */
+  --waline-bq-color: #272727;
+
+  /* 其他颜色 */
+  --waline-info-bgcolor: #272727;
+  --waline-info-color: #666;
 }
 
 @media (prefers-color-scheme: light) {
@@ -100,5 +121,26 @@ $dark-border-secondary: #373e47;
   
     --theme-border-primary: #{$dark-border-primary};
     --theme-border-secondary: #{$dark-border-secondary};
+    
+    // waline样式
+    /* 常规颜色 */
+    --waline-white: #1f2428;
+    --waline-light-grey: #aaa;
+    --waline-dark-grey: #fff;
+
+    /* 布局颜色 */
+    --waline-text-color: #aaa;
+    --waline-bgcolor: #1f2428;
+    --waline-bgcolor-light: #373e44;
+    --waline-border-color: #333;
+    --waline-disable-bgcolor: red;
+    --waline-disable-color: #272727;
+    --waline-theme-color: #27ae60;
+    /* 特殊颜色 */
+    --waline-bq-color: #272727;
+
+    /* 其他颜色 */
+    --waline-info-bgcolor: #272727;
+    --waline-info-color: #666;
   }
 }
