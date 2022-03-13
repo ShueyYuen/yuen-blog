@@ -1,0 +1,24 @@
+#waline {
+    & .vpanel {
+        overflow: hidden;
+        border-radius: var(--radius);
+        background-color: var(--theme-bg-primary);
+        box-shadow: var(--soft-shadow) var(--soft-shadow) calc(var(--soft-shadow) * 2) var(--theme-bg-shadow),calc(-1 * var(--soft-shadow)) calc(-1 * var(--soft-shadow)) calc(var(--soft-shadow) * 2) var(--theme-bg-high);
+        --radius: var(--soft-large-radius);
+        border: none;
+    }
+
+    & .vinfo {
+        & button {
+            border-radius: 10rem;
+        }
+    }
+    
+    & .vcount {
+        color: var(--theme-text-primary);
+    }
+
+    & .vpreview {
+        color: var(--theme-text-primary);
+    }
+}

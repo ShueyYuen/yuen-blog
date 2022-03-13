@@ -13,7 +13,7 @@
         <p class="card-text--row">{{ . }}</p>
       {{ end }}
     {{ else }}
-      <p class="card-text--row">{{ .Date.Format "2006-01-02 15:04" }}</p>
+      <p class="card-text--row">{{ .Date.Format "2006-01-02" }} | 阅读量: <span id="{{ .RelPermalink | safeURL }}" class="waline-visitor-count" /></p>
       
       {{ $taxo := "categories" }}
       {{ with .Param $taxo }}

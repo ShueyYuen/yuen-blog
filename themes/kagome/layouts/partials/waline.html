@@ -1,12 +1,14 @@
-<div class="">
+<div class="" style="padding: 0 10px;">
     <script src="//cdn.jsdelivr.net/npm/@waline/client"></script>
     <div id="waline"></div>
 </div>
 <script type="application/javascript">
     Waline({
         el: '#waline',
-        serverURL: 'https://shuey-comment.vercel.app/',
+        serverURL: 'https://comment.shuey.fun/',
         visitor: true,
+        avatar: 'retro',
+        dark: '.theme-dark',
         emoji: [
             'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/weibo',
             'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili',

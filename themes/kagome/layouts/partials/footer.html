@@ -41,19 +41,12 @@
   <div class="colour-bar"></div>
   
   {{ with .Site.Copyright }}
-  <p>{{ . | safeHTML }}</p>
+  <p>{{ . | safeHTML }} / <a href="https://comment.shuey.fun/ui" target="_blank">admin</a></p>
   {{ end }}
 
   {{ with .Site.Params.Beian }}
   <p><a href="http://www.miitbeian.gov.cn" target="_blank">{{ . }}</a></p>
   {{ end }}
-
-  <p>
-    Powered by
-    <a href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>
-    Theme - 
-    <a href="https://github.com/miiiku/hugo-theme-kagome" target="_blank" rel="noopener noreferrer author">kagome</a>
-  </p>
 
   <p>
     <a href="javascript:;" id="theme-light">🌞 {{ i18n "theme.light" }}</a>
