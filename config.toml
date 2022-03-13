@@ -69,7 +69,11 @@ defaultContentLanguage = "zh-cn"           # Default language to use
     name = "zhihu"
     url = "https://zhihu.com/people/shueyyuen"
     weight = 4
-
+  [[menu.social]]
+    identifier = "csdn"
+    name = "CSDN"
+    url = "https://blog.csdn.net/weixin_42345325"
+    weight = 5
 
 [params]
   since = "2017"            # Site creation time          # 站点建立时间

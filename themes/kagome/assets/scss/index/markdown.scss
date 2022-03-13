@@ -137,12 +137,44 @@
 }
 
 .markdown-body a {
-  color: #0366d6;
   text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  background: linear-gradient(45deg, #D83A56 0, #D83A56 25%, #FF616D 25%, #FF616D 50%, #B6C9F0 50%, #B6C9F0 75%, #66DE93 75%, #66DE93 100%);
+  background-position: 100% 100%, 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 2px;
+  transition: background-size .2s linear;
+
+  &:hover {
+    background-size: 100% 2px, 0 2px;
+  }
 }
 
-.markdown-body a:hover {
-  text-decoration: underline;
+@media (prefers-color-scheme: dark) {
+  .markdown-body a {
+    color: #ca508f;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .markdown-body a {
+    color: #0366d6;
+  }
+}
+
+.theme-dark .markdown-body a {
+  color: #ca508f;
+}
+
+.theme-light .markdown-body a {
+  color: #0366d6;
+}
+
+.markdown-body .footnote-ref {
+  font-size: 12px;
+  line-height: 12px;
+  vertical-align: super;
 }
 
 .markdown-body strong {
@@ -157,6 +189,13 @@
   border: 0;
   border-bottom: 1px solid var(--theme-border-primary);
   transition: transitions(border-color, 0.3s);
+}
+
+.markdown-body .footnotes hr {
+  height: 0;
+  border-top: 2px dashed palegoldenrod;
+  border-color: var(--theme-border-primary);
+  background-color: transparent;
 }
 
 .markdown-body hr:after,
