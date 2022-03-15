@@ -16,3 +16,5 @@ _Live Example: https://hugo-template.vercel.app_
 export LEAN_ID=LOfY0OUxfGOWSryINhS5J0gW-MdYXbMMI && export LEAN_KEY=G9Wdh1pP3gPFwkzMw8d2QHpa && export LEAN_MASTER_KEY=eP42VSktubqHbbfcmAibmzQe && hugo server
 
 https://waline.js.org/
+
+学习对象：https://www.xianmin.org/hugo-theme-jane/post/shortcode-notice/
