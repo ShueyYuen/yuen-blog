@@ -97,6 +97,8 @@ defaultContentLanguage = "zh-cn"           # Default language to use
   customCSS = []            # if ['custom.css'], load '/static/css/custom.css' file
   customJS = []             # if ['custom.js'], load '/static/js/custom.js' file
 
+  clarityID = "b43ixctzrv"    # bing的热力图
+
   [params.aplayer]
     theme = "#b7daff"
     autoplay = false
