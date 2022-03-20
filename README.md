@@ -18,3 +18,16 @@ export LEAN_ID=LOfY0OUxfGOWSryINhS5J0gW-MdYXbMMI && export LEAN_KEY=G9Wdh1pP3gPF
 https://waline.js.org/
 
 学习对象：https://www.xianmin.org/hugo-theme-jane/post/shortcode-notice/
+
+## 依赖的免费项目
+
+1. [Vercel](https://vercel.com)
+2. [LeanCloud](https://console.leancloud.app)
+3. [DnsAliyun](https://dns.console.aliyun.com)
+4. [Waline](https://waline.js.org)
+5. [Cloud Mongo](https://cloud.mongodb.com)
+6. [七牛云](https://portal.qiniu.com)
+7. [Algolia](https://www.algolia.com)
+8. [Webpushr](https://www.webpushr.com)
+9. [Iconfont](https://iconfont.cn)
+

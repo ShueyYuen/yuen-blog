@@ -11,6 +11,32 @@
   {{- partial "disqus.html" . -}}
   {{ end }}
 
+  {{ if or .Page.Params.plantuml .Site.Params.plantuml }}
+  <!-- PlantUML -->
+  <script src="https://cdn.jsdelivr.net/gh/jmnote/plantuml-encoder@1.2.4/dist/plantuml-encoder.min.js" integrity="sha256-Qsk2KRBCN5qVZX7B+8+2IvQl1Aqc723qV1tBCQaVoqo=" crossorigin="anonymous"></script>
+  <script>
+    (function(){
+      let plantumlPrefix = "language-plantuml";
+      let light = document.documentElement.className.indexOf('theme-dark') == -1;
+      let plantumlTheme = light ? "superhero-outline" : "sandstone";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + plantumlPrefix + "]"), function(code){
+        let codeText = code.innerText.trim();
+        if (codeText.indexOf('!theme') == -1) {
+          let themePosition = codeText.indexOf('\n');
+          codeText = `${codeText.slice(0, themePosition)}
+            \n!theme ${plantumlTheme}${codeText.slice(themePosition)}`;
+        }
+        let image = document.createElement("IMG");
+        image.loading = 'lazy'; // Lazy loading
+        image.src = 'http://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(codeText);
+        code.parentNode.insertBefore(image, code);
+        code.style.display = 'none';
+      });
+    })();
+  </script>
+  {{ end }}
+
+
   <div class="article-paging">
     {{ with .NextInSection }}
       {{ partial "card/card-paging.html" . }}

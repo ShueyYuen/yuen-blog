@@ -59,4 +59,17 @@
     <a href="javascript:;" id="theme-dark">🌛 {{ i18n "theme.dark" }}</a>
     <a href="javascript:;" id="theme-auto">🤖️ {{ i18n "theme.auto" }}</a>
   </p>
+  {{- if .Site.Params.algolia.appId -}}
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+  <script>
+      docsearch({
+        apiKey: {{ .Site.Params.algolia.searchOnlyKey }},
+        indexName: {{ .Site.Params.algolia.indexName }},
+        appId: {{ .Site.Params.algolia.appId }},
+        inputSelector: '.docsearch-input',
+        debug: false,
+      });
+  </script>
+  {{- end -}}
+  <!-- <script src="/js/framework.js"></script> -->
 </footer>

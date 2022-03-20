@@ -1,0 +1,16 @@
+{
+  "id": "3261192",
+  "name": "ShueyBlog",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "个人博客",
+  "glyphs": [
+    {
+      "icon_id": "856397",
+      "name": "搜索",
+      "font_class": "search",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    }
+  ]
+}

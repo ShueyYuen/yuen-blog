@@ -1,10 +1,10 @@
 # And see https://gohugo.io/getting-started/configuration/
 baseURL = "https://www.shuey.fun/"
-title = "Shuey Yuen"
+title = "Shuey猫舍"
 enableRobotsTXT = true
 enableEmoji = true
 theme = "kagome"
-copyright = "© 2017-2021 Shuey Yuen" # default: author.name ↓ # 默认为下面配置的author.name ↓
+copyright = "© 2017-2021 Shuey Yuen"
 
 hasCJKLanguage = true     # has chinese/japanese/korean ? # 自动检测是否包含 中文\日文\韩文
 paginate = 7              # Number of articles displayed on the homepage  # 首页每页显示的文章数
@@ -28,22 +28,22 @@ defaultContentLanguage = "zh-cn"           # Default language to use
 
 [menu]
   [[menu.main]]             # config your menu              # 配置目录
-    name = "HOME"
+    name = "文章"
     weight = 10
     identifier = "home"
     url = "/"
   [[menu.main]]
-    name = "ARCHIVES"
+    name = "归档"
     weight = 20
     identifier = "archives"
     url = "/post/"
   [[menu.main]]
-    name = "TAGS"
+    name = "标签"
     weight = 30
     identifier = "tags"
     url = "/tags/"
   [[menu.main]]
-    name = "CATEGORIES"
+    name = "分类"
     weight = 40
     identifier = "categories"
     url = "/categories/"
@@ -117,9 +117,41 @@ defaultContentLanguage = "zh-cn"           # Default language to use
     categories_count = 6
     # 标签相关显示数量
     tags_count = 12
+  
+
+  [params.algolia]
+    vars = ["title", "summary", "date", "publishdate", "expirydate", "permalink"]
+    params = ["categories", "tags"]
+    appId = "YQOQ4NTHKU"
+    indexName = "post"
+    searchOnlyKey = "d8edf6d7734befcee737833602d146d5"
 
 [markup]
   defaultMarkdownHandler = "goldmark"  # blackfriday or goldmark
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    style = "monokai"
+    tabWidth = 4
+
+[outputs]
+  home = ['HTML', 'RSS', 'Algolia']
+  page = ['HTML']
+
+[outputFormats]
+  [outputFormats.Algolia]
+    baseName = "algolia"
+    isPlainText = true
+    mediaType = "application/json"
+    notAlternative = true
+
+[Blackfriday]
+  hrefTargetBlank = true

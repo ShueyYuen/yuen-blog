@@ -50,5 +50,10 @@
   {{ with .OutputFormats.Get "rss" -}}
   {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
   {{ end -}}
+
+  {{- if .Site.Params.algolia.appId -}}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+  {{- end -}}
+  <link rel="stylesheet" href="/font/iconfont.css">
   <link rel="icon" type="image/ico" sizes="32x32" href="/favicon.ico">
 </head>

@@ -1,0 +1,7 @@
+{{- $.Scratch.Add "index" slice -}}
+{{- range where (where .Site.Pages "Type" "in" (slice "post")) "IsPage" true -}}
+  {{- if not .Draft -}}
+    {{- $.Scratch.Add "index" (dict "objectID" .File.UniqueID "url" .Permalink "content" (.Summary | plainify) "tags" .Params.Tags "lvl0" .Title "lvl1" .Params.Categories "lvl2" .Description) -}}
+  {{- end -}}
+{{- end -}}
+{{- $.Scratch.Get "index" | jsonify -}}

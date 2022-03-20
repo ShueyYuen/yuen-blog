@@ -167,6 +167,10 @@
   color: #ca508f;
 }
 
+.theme-dark .markdown-body pre {
+  background-color: var(--theme-bg-primary);
+}
+
 .theme-light .markdown-body a {
   color: #0366d6;
 }

@@ -1,10 +1,8 @@
 (function () {
+  generateThemeMedia();
   
   const currentTheme:string  = window.localStorage.getItem('theme') || ''
-
-  if (currentTheme && currentTheme !== 'auto') {
-    switchTheme(currentTheme)
-  }
+  currentTheme && switchTheme(currentTheme);
 
   window.addEventListener('DOMContentLoaded', () => {
     /** moble click toggle menu */
@@ -46,12 +44,20 @@
       })
     }
 
+    footNoteTooltip();
+
     /** aplayer init */
     aplayerInit()
     /** dplayer init */
     dplayerInit()
   });
 })();
+
+let themeMedia:MediaQueryList;
+
+function generateThemeMedia() {
+  themeMedia = window.matchMedia("(prefers-color-scheme: light)");
+}
 
 function toCamel(str:string) {
   const arrs = str.split('-')
@@ -96,19 +102,79 @@ function querySelectorArrs (selector:string):Array<Element> {
 
 function switchTheme (theme:string) {
   const rootDom:Element = document.documentElement
-  if (theme === 'auto') {
-    rootDom.classList.remove('theme-dark')
-    rootDom.classList.remove('theme-light')
-  }
-  if (theme === 'dark') {
-    rootDom.classList.remove('theme-light')
-    rootDom.classList.add('theme-dark')
-  }
-  if (theme === 'light') {
-    rootDom.classList.remove('theme-dark')
-    rootDom.classList.add('theme-light')
+  switch (theme) {
+    case "auto":
+      autoSwitchTheme({
+        matches: themeMedia.matches, media: ""
+      } as MediaQueryListEvent);
+      themeMedia.addEventListener("change", autoSwitchTheme);
+      break;
+    default:
+      themeMedia.removeEventListener("change", autoSwitchTheme);
+      rootDom.classList.remove(`theme-${ theme == "light" ? "dark":"light" }`);
+      rootDom.classList.add(`theme-${ theme == "light" ? "light":"dark" }`);
+      reloadPlantUML(theme == "light");
   }
   window.localStorage.setItem('theme', theme)
+}
+
+function autoSwitchTheme (e:MediaQueryListEvent) {
+  const rootDom:Element = document.documentElement
+  rootDom.classList.remove(`theme-${ e.matches ? "dark":"light" }`);
+  rootDom.classList.add(`theme-${ e.matches ? "light":"dark" }`);
+  reloadPlantUML(e.matches)
+}
+
+interface PlantUMLEncoder {
+  encode(code: string): string 
+}
+
+function reloadPlantUML(light:Boolean) {
+  let plantumlPrefix:string = "language-plantuml";
+  let plantTheme:string = light ? "superhero-outline" : "sandstone";
+  Array.prototype.forEach.call(
+    document.querySelectorAll("[class^=" + plantumlPrefix + "]"),
+    function(code:HTMLElement){
+      let codeText:string = code.innerText.trim();
+      if (codeText.indexOf('!theme') == -1) {
+        let themePosition:number = codeText.indexOf('\n');
+        codeText = `${codeText.slice(0, themePosition)}
+          !theme ${plantTheme}${codeText.slice(themePosition)}`;
+      }
+      if ((window as any).plantumlEncoder) {
+        let plantumlEncoder: PlantUMLEncoder = (window as any).plantumlEncoder;
+        let image:HTMLImageElement = <HTMLImageElement>document.createElement("IMG");
+        let preImageNode:ChildNode = code.parentNode.firstChild;
+        code.parentNode.removeChild(preImageNode);
+        image.loading = 'lazy'; // Lazy loading
+        image.src = 'http://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(codeText);
+        code.parentNode.insertBefore(image, code);
+        code.style.display = 'none';
+      }
+  });
+}
+
+/**
+ * footnote tooltip
+ */
+function footNoteTooltip() {
+  document.querySelectorAll(".footnote-ref").forEach(
+    function(elem:Element) {
+      let id:string = elem.getAttribute("href").substring(1);
+      let outerWrapper = <HTMLSpanElement>document.createElement("SPAN");
+      outerWrapper.className = "fn-content";
+      let innerWrapper = <HTMLSpanElement>document.createElement("SPAN");
+      innerWrapper.className = "fn-text";
+      innerWrapper.setAttribute("style", "display: none;");
+      let footnotes = document.getElementById(id).children;
+      for(let i = 0; i < footnotes.length; i ++) {
+        let cloned = footnotes.item(i).cloneNode();
+        cloned.textContent =  footnotes.item(i).textContent.replace("↩︎", "");
+        innerWrapper.appendChild(cloned);
+      }
+      outerWrapper.appendChild(innerWrapper);
+      elem.parentElement.appendChild(outerWrapper);
+    });
 }
 
 function aplayerInit () {
