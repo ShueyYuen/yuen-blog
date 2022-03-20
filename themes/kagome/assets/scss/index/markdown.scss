@@ -221,8 +221,12 @@
 }
 
 .markdown-body table {
-  border-spacing: 0;
+  width: 100%;
+  overflow: auto;
   border-collapse: collapse;
+  border-radius: var(--soft-small-radius);
+
+  @include soft-box(var(--soft-small-radius));
 }
 
 .markdown-body td,
@@ -804,12 +808,6 @@
   margin-bottom: 16px;
 }
 
-.markdown-body table {
-  display: block;
-  width: 100%;
-  overflow: auto;
-}
-
 .markdown-body table th {
   font-weight: 600;
 }
@@ -817,16 +815,12 @@
 .markdown-body table td,
 .markdown-body table th {
   padding: 6px 13px;
-  border: 1px solid #dfe2e5;
+  border-radius: var(--soft-small-radius);
+  border-bottom: 1px solid var(--theme-border-secondary);
 }
 
-.markdown-body table tr {
-  background-color: #fff;
-  border-top: 1px solid #c6cbd1;
-}
-
-.markdown-body table tr:nth-child(2n) {
-  background-color: #f6f8fa;
+.markdown-body tr:last-child td {
+  border: none;
 }
 
 .markdown-body img {
