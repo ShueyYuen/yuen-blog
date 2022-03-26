@@ -10,6 +10,7 @@ tags: [
 categories: [
     "Web",
 ]
+cover: '/images/2020/0216/title-bg.jpg'
 ---
 
 ## 安装准备
@@ -27,7 +28,7 @@ git pull
 cd .\emsdk\
 .\emsdk install --global latest
 ```
-既然下来就是日常迫害大陆用户的时候,大陆用户的访问速度会很慢,尤其的在下载dependence中的Node的时候(此时需要注意的是,没有必要自己提前下载Node,因为会装一个Emscripten特定版本的Node),我安装的时候正好赶上国内的特殊时期(某个政党作死导致自己的公信力暂时降低,于是言论管制的很厉害),所以,大概用B的速度下载30MB+的东西,大概花费了半天的时间吧,才下好一个Node(垃圾某党)
+既然下来就是日常迫害大陆用户的时候,大陆用户的访问速度会很慢,尤其的在下载dependence中的Node的时候(此时需要注意的是,没有必要自己提前下载Node,因为会装一个Emscripten特定版本的Node),我安装的时候正好赶上国内的特殊时期,所以,大概用B的速度下载30MB+的东西,大概花费了半天的时间吧,才下好一个Node.
 ```bash
 (base) PS D:\emsdk> .\emsdk install --global latest
 Installing SDK 'sdk-releases-upstream-9e60f34accb4627d7358223862a7e74291886ab6-64bit'..

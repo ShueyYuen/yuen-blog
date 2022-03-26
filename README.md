@@ -31,3 +31,9 @@ https://waline.js.org/
 8. [Webpushr](https://www.webpushr.com)
 9. [Iconfont](https://iconfont.cn)
 
+样式参考：
+
+neumorphism.io
+
+aplayer:
+https://aplayer.js.org/#/home

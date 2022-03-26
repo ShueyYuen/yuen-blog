@@ -32,11 +32,11 @@ aplayer: true
     &emsp;&emsp;偏向于<font color="#9f3ed5">搞笑番、恋爱番、催泪番、萌系番</font>，欢迎大家和我聊动漫相关的话题！！
     </p> 
 {{< aplayer
-    url="https://qiniu.sukoshi.xyz/public/music/鹿乃 - アイロニ.mp3"
-    name="アイロニ"
-    artist="鹿乃"
-    cover="https://qiniu.sukoshi.xyz/public/music/鹿乃 - アイロニ.jpg"
-    lrc="https://qiniu.sukoshi.xyz/public/music/鹿乃 - アイロニ.lrc"
+    url="https://cdn.shuey.fun/musics/2020/0102/your-lie-in-april.mp3"
+    name="宫园薰的信"
+    artist="四月是你的谎言"
+    cover="https://cdn.shuey.fun/musics/2020/0102/your-lie-in-april.webp"
+    lrc="https://cdn.shuey.fun/musics/2020/0102/your-lie-in-april.lrc"
     lrcType="3"
 >}}
     <h3>正式的自我介绍</h3>

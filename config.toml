@@ -88,7 +88,7 @@ defaultContentLanguage = "zh-cn"           # Default language to use
   toc = true                # 是否开启目录
  
   # 国内备案号
-  beian = ""
+  beian = "皖ICP备19010100号-4"
   # TOC目录出现字符长度限制
   toc_show_len = 300
 
@@ -119,6 +119,10 @@ defaultContentLanguage = "zh-cn"           # Default language to use
     categories_count = 6
     # 标签相关显示数量
     tags_count = 12
+  
+  [params.CDN]
+    enable = true
+    host = "https://cdn.shuey.fun"
   
 
   [params.algolia]

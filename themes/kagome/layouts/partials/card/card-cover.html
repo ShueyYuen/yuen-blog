@@ -1,7 +1,15 @@
 <div class="article-cover card-container content-padding-large soft-size--large soft-style--box {{ if .Params.cover -}} img {{- end -}}">
 
   <div class="card-cover">
-    {{ with .Params.cover }}
+    {{- $CDNImgDestination := .Params.cover }}
+    {{ if (and .Site.Params.CDN.enable (not .Site.IsServer)) }}
+      {{ if $CDNImgDestination }}
+        {{ if not (or (hasPrefix $CDNImgDestination "http://") (hasPrefix $CDNImgDestination "https://") (hasPrefix $CDNImgDestination "data:image")) }}
+          {{ $CDNImgDestination = (print .Site.Params.CDN.host (path.Join .Params.cover)) }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    {{ with $CDNImgDestination }}
       <img src="{{ . }}" alt="{{ . }}" />
     {{ end }}
   </div>

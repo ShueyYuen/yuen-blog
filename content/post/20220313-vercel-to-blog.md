@@ -10,7 +10,7 @@ categories: [
     "Web",
 ]
 toc: true
-cover: /images/2022/03/13/title-bg.webp
+cover: /images/2022/0313/title-bg.webp
 ---
 
 ## 白嫖项目
@@ -27,11 +27,11 @@ cover: /images/2022/03/13/title-bg.webp
 
 登录[Vercel][]注册一个账号，选择**新增项目**。
 
-![vercel dashboard](/images/2022/03/13/vercel.png)
+![vercel dashboard](/images/2022/0313/vercel.png)
 
 此处使用[Hugo][][^hugo]来构建，所以在选择模板的选择**浏览所有模板**，选择Hugo，授权Github账户的访问权限，之后就可以按照Vercel的操作提示一路走下去，结果部署后，网页就会在`***.vercel.app`的地址上被部署。
 
-![vercel new project](/images/2022/03/13/project.webp)
+![vercel new project](/images/2022/0313/project.webp)
 
 如果希望自己的域名更加简单，需要在其他的域名服务商处购买域名绑定到vercel上。
 
@@ -70,7 +70,7 @@ Waline({
 
 更加详细的配置可以直接参考此篇博文：[Waline 评论系统的介绍与基础配置](https://guanqr.com/tech/website/introduction-and-basic-setting-of-waline/)。基础的功能配置完成后应该包含如下图所示的环境变量。
 
-![Vercel Envs](/images/2022/03/13/envs.webp)
+![Vercel Envs](/images/2022/0313/envs.webp)
 
 ## Faas
 
@@ -84,7 +84,7 @@ Waline({
 
 使用过程中出现以下问题，由于我平常上网日常连公司的VPN，结果这次使用Cloud MongoDB一直出现无法连接的问题，似乎是因为MongoDB那边屏蔽了一些VPN服务器的连接，即使使用`0.0.0.0/0`放开访问也无法连接。
 
-![mongodb dashboard](/images/2022/03/13/mongo.png)
+![mongodb dashboard](/images/2022/0313/mongo.png)
 
 ### Next.js
 
@@ -135,7 +135,7 @@ module.exports = async (req: VercelRequest, res: VercelResponse) => {
 
 依然去[Algolia][]上去注册一个账号，里面有免费方案，支持10,000个文档的索引，对于我们搭建网站来说已经完全够用，我觉得大家基本上都写不到10,000个文档页面。
 
-![Algolia New Application](/images/2022/03/13/algolia.png)
+![Algolia New Application](/images/2022/0313/algolia.png)
 
 这一步之后，大家一定要记得去选择Data Center，不然默认会被分配到欧洲的节点，到国内一个数据延迟都要半秒钟，很影响用户的使用体验，别问我怎么知道这件事的。
 

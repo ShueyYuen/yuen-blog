@@ -1,8 +1,14 @@
+{{- $CDNImgDestination := .Destination }}
+{{ if (and .Page.Site.Params.CDN.enable (not .Page.Site.IsServer)) }}
+  {{ if not (or (hasPrefix $CDNImgDestination "http://") (hasPrefix $CDNImgDestination "https://") (hasPrefix $CDNImgDestination "data:image")) }}
+    {{ $CDNImgDestination = (print .Page.Site.Params.CDN.host (path.Join .Destination)) }}
+  {{ end }}
+{{ end }}
 {{ if .Title }}
   <figure class="figure-image">
-    <img src="{{ .Destination | safeURL }}" title="{{ .Title }}" alt="{{ .PlainText | safeHTML }}" loading="lazy" />
+    <img src="{{ $CDNImgDestination | safeURL }}" title="{{ .Title }}" alt="{{ .PlainText | safeHTML }}" loading="lazy" />
     <figcaption>{{ .Title }}</figcaption>
   </figure>
 {{ else }}
-  <p><img src="{{ .Destination | safeURL }}" alt="{{ .PlainText | safeHTML }}" loading="lazy" /></p>
+  <p><img src="{{ $CDNImgDestination | safeURL }}" alt="{{ .PlainText | safeHTML }}" loading="lazy" /></p>
 {{ end }}
