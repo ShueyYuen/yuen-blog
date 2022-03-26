@@ -19,7 +19,7 @@ defaultContentLanguage = "zh-cn"           # Default language to use
   name = "Shuey Yuen"
   email = "cofalconer@petalmail.com"
   description = "不愚为耻，不愚为耻"
-  avatar = "/images/avatar.webp"
+  avatar = "https://cdn.shuey.fun/images/avatar.webp"
 
 [sitemap]                 # essential                     # 必需
   changefreq = "weekly"

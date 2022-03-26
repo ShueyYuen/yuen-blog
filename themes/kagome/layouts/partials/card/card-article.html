@@ -1,6 +1,14 @@
 <div class="article-item">
   <section class="article-card card-container content-padding-large soft-size--large soft-style--box">
-    <div class="card-cover" {{ with .Params.cover -}} background-image-lazy data-img="{{ . }}" {{- end }}></div>
+    {{- $CDNImgDestination := .Params.cover }}
+    {{ if (and .Site.Params.CDN.enable (not .Site.IsServer)) }}
+      {{ if $CDNImgDestination }}
+        {{ if not (or (hasPrefix $CDNImgDestination "http://") (hasPrefix $CDNImgDestination "https://") (hasPrefix $CDNImgDestination "data:image")) }}
+          {{ $CDNImgDestination = (print .Site.Params.CDN.host (path.Join .Params.cover)) }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    <div class="card-cover" {{ with $CDNImgDestination -}} background-image-lazy data-img="{{ . }}" {{- end }}></div>
     <div class="card-text">
       <a href="{{ .Permalink | safeURL }}"><h4 class="card-text--title">{{ .Title }}</h4></a>
 
