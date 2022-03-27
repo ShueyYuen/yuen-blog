@@ -10,24 +10,24 @@ hasCJKLanguage = true     # has chinese/japanese/korean ? # 自动检测是否�
 paginate = 7              # Number of articles displayed on the homepage  # 首页每页显示的文章数
 rssLimit = 20             # Limit Entry Count to Rss file # 限制 Rss 文章输出数量
 walineComment = "walineComment"      # disqus_shortname
-googleAnalytics = ""      # UA-XXXXXXXX-X        
+googleAnalytics = "UA-132577144-1"      # UA-XXXXXXXX-X        
 
 # language support # en / zh-cn / other... translations present in i18n/
 defaultContentLanguage = "zh-cn"           # Default language to use
 
-[author]                  # essential                     # 必需
+[author]
   name = "Shuey Yuen"
   email = "cofalconer@petalmail.com"
   description = "不愚为耻，不愚为耻"
   avatar = "https://cdn.shuey.fun/images/avatar.webp"
 
-[sitemap]                 # essential                     # 必需
+[sitemap]
   changefreq = "weekly"
   priority = 0.5
   filename = "sitemap.xml"
 
 [menu]
-  [[menu.main]]             # config your menu              # 配置目录
+  [[menu.main]]
     name = "文章"
     weight = 10
     identifier = "home"
