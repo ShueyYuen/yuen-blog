@@ -1,8 +1,14 @@
 {{ if $.Site.Author }}
+{{- $CDNImgDestination := $.Site.Author.avatar }}
+{{ if (and .Page.Site.Params.CDN.enable (not .Page.Site.IsServer)) }}
+  {{ if not (or (hasPrefix $CDNImgDestination "http://") (hasPrefix $CDNImgDestination "https://") (hasPrefix $CDNImgDestination "data:image")) }}
+    {{ $CDNImgDestination = (print .Page.Site.Params.CDN.host (path.Join  $.Site.Author.avatar)) }}
+  {{ end }}
+{{ end }}
 <section class="aside-widget widget-author content-padding-large soft-size--large soft-style--box">
   <div class="widget-body">
     <div class="author-box {{ if $.Site.Author.avatar }}avatar{{ end }}">
-      {{ with $.Site.Author.avatar }}
+      {{ with $CDNImgDestination }}
       <img class="author-avatar soft-size--round soft-style--box" src="{{ . }}" alt="{{ $.Site.Author.name }}">
       {{ end }}
       <h2 class="author-name text-ellipsis">{{ $.Site.Author.name }}</h2>

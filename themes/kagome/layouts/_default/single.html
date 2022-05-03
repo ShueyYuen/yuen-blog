@@ -27,6 +27,7 @@
             \n!theme ${plantumlTheme}${codeText.slice(themePosition)}`;
         }
         let image = document.createElement("IMG");
+        code.parentNode.className = 'plantuml-center';
         image.loading = 'lazy'; // Lazy loading
         image.src = 'http://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(codeText);
         code.parentNode.insertBefore(image, code);
@@ -35,8 +36,6 @@
     })();
   </script>
   {{ end }}
-
-
   <div class="article-paging">
     {{ with .NextInSection }}
       {{ partial "card/card-paging.html" . }}

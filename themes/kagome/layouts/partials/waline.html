@@ -1,19 +1,24 @@
-<div class="" style="padding: 0 10px;">
-    <script src="//cdn.jsdelivr.net/npm/@waline/client"></script>
+<div style="padding: 0 10px;">
+    <script src="//cdn.jsdelivr.net/npm/@waline/client/dist/waline.js"></script>
+    <style>
+        @import url("//cdn.jsdelivr.net/npm/@waline/client/dist/waline.css");
+    </style>
     <div id="waline"></div>
 </div>
 <script type="application/javascript">
-    Waline({
+    Waline.init({
         el: '#waline',
         serverURL: 'https://comment.shuey.fun/',
+{{ if not .Page.Site.IsServer }}
         visitor: true,
-        avatar: 'retro',
+{{ end }}
+        // avatar: 'retro',
         dark: '.theme-dark',
         emoji: [
-            'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/weibo',
-            'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili',
-            'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/alus',
-            'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-food',
+            // 'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/weibo',
+            // 'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili',
+            // 'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/alus',
+            // 'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-food',
             'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-natural'
         ],
     });

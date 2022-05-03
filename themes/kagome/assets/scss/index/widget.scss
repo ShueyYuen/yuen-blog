@@ -196,3 +196,11 @@
     color: var(--theme-text-primary);
   }
 }
+
+.plantuml-center {
+  text-align: center;
+}
+
+.playground-view iframe {
+  border-radius: 5px;
+}

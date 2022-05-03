@@ -10,6 +10,19 @@
 {{- $autoplay := .Get "autoplay"  | default $.Site.Params.aplayer.autoplay -}}
 {{- $loop     := .Get "loop"      | default $.Site.Params.aplayer.loop -}}
 {{- $mutex    := .Get "mutex"     | default $.Site.Params.aplayer.mutex -}}
+
+{{ if (and .Page.Site.Params.CDN.enable (not .Page.Site.IsServer)) }}
+  {{ if not (or (hasPrefix $cover "http://") (hasPrefix $cover "https://") (hasPrefix $cover "data:image")) }}
+    {{ $cover = (print .Page.Site.Params.CDN.host (path.Join $cover)) }}
+  {{ end }}
+  {{ if not (or (hasPrefix $url "http://") (hasPrefix $url "https://") (hasPrefix $url "data:image")) }}
+    {{ $url = (print .Page.Site.Params.CDN.host (path.Join $url)) }}
+  {{ end }}
+  {{ if not (or (hasPrefix $lrc "http://") (hasPrefix $lrc "https://") (hasPrefix $lrc "data:image")) }}
+    {{ $lrc = (print .Page.Site.Params.CDN.host (path.Join $lrc)) }}
+  {{ end }}
+{{ end }}
+
 <div
   class="aplayer-box"
   data-url="{{ $url }}"

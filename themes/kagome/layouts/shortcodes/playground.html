@@ -1,0 +1,29 @@
+{{- $id := .Get "id" | default "" -}} {{/* dark、light */}}
+{{- $theme := .Get "theme" | default "dark" -}} {{/* dark、light */}}
+{{- $tab := .Get "tab" | default "result" -}} {{/* result、js、css、html */}}
+{{- $processor := .Get "processor" | default "" -}} {{/* ''、scss、less */}}
+
+{{/* 参数：js、html、css、head、jses、cses */}}
+
+<div id="{{ $id }}" class="playground-view">
+    <iframe id="{{ $id }}-iframe" src="//code.shuey.fun?tab={{ $tab }}&theme={{ $theme }}" frameborder="0" width="100%" height="400px" allowtransparency="true" allowfullscreen="true"></iframe>
+    <div style="display: none;" id="{{ $id }}-params">
+        {{ .Inner }}
+    </div>
+    <script>
+        const paramsData = document.getElementById("{{ $id }}-params");
+        const queryMap = { pre: {{ $processor }}, };
+        for (let element of paramsData.children) {
+            const name = element.getAttribute('name');
+            const inner = element.innerHTML.trim();
+            if (element.getAttribute('array') === 'true') {
+                queryMap[name] = inner.split('\n');
+            } else {
+                queryMap[name] = inner;
+            }
+        }
+        const codeBase = window.btoa(encodeURIComponent(JSON.stringify(queryMap)));
+        // document.getElementById("{{ $id }}-iframe").setAttribute("src", "http://localhost:3000/?tab={{ $tab }}&theme={{ $theme }}");
+        document.getElementById("{{ $id }}-iframe").setAttribute("src", "//code.shuey.fun/?tab={{ $tab }}&theme={{ $theme }}&code=" + codeBase);
+    </script>
+</div>

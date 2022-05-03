@@ -36,8 +36,8 @@ cover: /images/2019/0115/title-bg.webp
 ## 光るなら
 
 {{< dplayer
-    url="https://cdn.shuey.fun/images/2019/0115/OP.mp4"
-    pic="https://cdn.shuey.fun/images/2019/0115/OP-poster.webp"
+    url="/images/2019/0115/OP.mp4"
+    pic="/images/2019/0115/OP-poster.webp"
 >}}
 
 不论是宫园薰最后在拉着她空气小提琴完成他俩的合奏，还是有马公生注视着空气中的宫园薰。最后一场的演奏都是完美的，没有人缺席。  
@@ -68,10 +68,10 @@ cover: /images/2019/0115/title-bg.webp
 ******
 
 {{< aplayer
-    url="https://cdn.shuey.fun/musics/2020/0102/your-lie-in-april.mp3"
+    url="/musics/2020/0102/your-lie-in-april.mp3"
     name="宫园薰的信"
     artist="四月是你的谎言"
-    cover="https://cdn.shuey.fun/musics/2020/0102/your-lie-in-april.webp"
-    lrc="https://cdn.shuey.fun/musics/2020/0102/your-lie-in-april.lrc"
+    cover="/musics/2020/0102/your-lie-in-april.webp"
+    lrc="/musics/2020/0102/your-lie-in-april.lrc"
     lrcType="3"
 >}}

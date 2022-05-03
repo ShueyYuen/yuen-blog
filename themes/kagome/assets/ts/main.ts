@@ -146,6 +146,7 @@ function reloadPlantUML(light:Boolean) {
         let image:HTMLImageElement = <HTMLImageElement>document.createElement("IMG");
         let preImageNode:ChildNode = code.parentNode.firstChild;
         code.parentNode.removeChild(preImageNode);
+        code.parentElement.className = 'plantuml-center';
         image.loading = 'lazy'; // Lazy loading
         image.src = 'http://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(codeText);
         code.parentNode.insertBefore(image, code);

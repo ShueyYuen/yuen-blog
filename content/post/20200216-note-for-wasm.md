@@ -71,6 +71,8 @@ docker run --rm -it -v `pwd`:/src apiaryio/emcc emcc
 
 之后每次打开命令行都需要cd到emsdk所在的文件夹下,然后使用`emsdk activate latest`激活环境,之后才可以使用emcc命令, 可以说自己安装的使用体验相当的恶心,简直就是恶心,所以我安装完之后投奔docker的怀抱......
 
+以下是我个人制作的docker镜像：docker pull cofalconer/emsdk:sdl2, 其中包括emsdk以及配套的OpenGL环境，可以直接编译C++软件到web端运行！
+
 {
     不建议加入环境变量, 比如我电脑上许多的环境版本和他的不一样,加入环境变量后就会很麻烦.
 }

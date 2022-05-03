@@ -6,6 +6,14 @@
 {{- $loop     := .Get "loop"      | default $.Site.Params.dplayer.loop -}}
 {{- $mutex    := .Get "mutex"     | default $.Site.Params.dplayer.mutex -}}
 
+{{ if (and .Page.Site.Params.CDN.enable (not .Page.Site.IsServer)) }}
+  {{ if not (or (hasPrefix $pic "http://") (hasPrefix $pic "https://") (hasPrefix $pic "data:image")) }}
+    {{ $pic = (print .Page.Site.Params.CDN.host (path.Join $pic)) }}
+  {{ end }}
+  {{ if not (or (hasPrefix $url "http://") (hasPrefix $url "https://") (hasPrefix $url "data:image")) }}
+    {{ $url = (print .Page.Site.Params.CDN.host (path.Join $url)) }}
+  {{ end }}
+{{ end }}
 
 <a href=""></a>
 
