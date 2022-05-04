@@ -86,6 +86,10 @@ $dark-border-secondary: #373e47;
   --waline-info-color: #666;
 }
 
+.theme-dark .wl-count{
+  color: #ffffffaa;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     --theme-bg-primary: #{$light-bg-primary};
