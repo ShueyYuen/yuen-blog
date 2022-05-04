@@ -203,9 +203,9 @@ module.exports = async (req: VercelRequest, res: VercelResponse) => {
 
 | 网站 | 地址 |
 |-----|-----|
-| Vercel | http://vercel.app/ |
-| MongoDB | http://cloud.mongodb.com/ |
-| LeanCloud | http://leancloud.app/ |
+| Vercel | https://vercel.app/ |
+| MongoDB | https://cloud.mongodb.com/ |
+| LeanCloud | https://leancloud.app/ |
 | Hugo | https://gohugo.io/ |
 | Waline | https://waline.js.org/ |
 | Kagome主题 | https://github.com/miiiku/hugo-theme-kagome |
@@ -213,9 +213,9 @@ module.exports = async (req: VercelRequest, res: VercelResponse) => {
 | Next.js | https://nextjs.org/ |
 | Algolia | https://www.algolia.com/ |
 
-[Vercel]: http://vercel.app/ "Vercel官网"
-[MongoDB]: http://cloud.mongodb.com/ "MongoDB Cloud官网"
-[LeanCloud]: http://leancloud.app/ "LeanCloud官网"
+[Vercel]: https://vercel.app/ "Vercel官网"
+[MongoDB]: https://cloud.mongodb.com/ "MongoDB Cloud官网"
+[LeanCloud]: https://leancloud.app/ "LeanCloud官网"
 [Hugo]: https://gohugo.io/ "Hogo官网"
 [Waline]: https://waline.js.org/ "Waline插件"
 [Kagome主题]: https://github.com/miiiku/hugo-theme-kagome "Kagome主题"

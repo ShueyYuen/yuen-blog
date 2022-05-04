@@ -21,8 +21,7 @@
         <p class="card-text--row">{{ . }}</p>
       {{ end }}
     {{ else }}
-      <p class="card-text--row">{{ .Date.Format "2006-01-02" }} | 阅读量: <span id="{{ .RelPermalink | safeURL }}" class="waline-visitor-count" /></p>
-      
+      <p class="card-text--row">{{ .Date.Format "2006-01-02" }} | 阅读量: <span data-path="{{ .RelPermalink | safeURL }}" class="waline-pageview-count" /> | 评论: <span data-path="{{ .RelPermalink | safeURL }}" class="waline-comment-count" /></p>
       {{ $taxo := "categories" }}
       {{ with .Param $taxo }}
         <ul class="card-text--tag">

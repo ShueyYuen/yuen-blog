@@ -10,8 +10,9 @@
         el: '#waline',
         serverURL: 'https://comment.shuey.fun/',
 {{ if not .Page.Site.IsServer }}
-        visitor: true,
+        pageview: true,
 {{ end }}
+        comment: true,
         // avatar: 'retro',
         dark: '.theme-dark',
         emoji: [
