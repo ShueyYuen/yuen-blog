@@ -25,7 +25,6 @@
             }
         }
         const codeBase = window.btoa(encodeURIComponent(JSON.stringify(queryMap)));
-        // document.getElementById("{{ $id }}-iframe").setAttribute("src", "http://localhost:3000/?tab={{ $tab }}&theme={{ $theme }}");
         document.getElementById("{{ $id }}-iframe").setAttribute("src", "//code.shuey.fun/?readonly={{ $readonly }}&tab={{ $tab }}&theme={{ $theme }}&code=" + codeBase);
     }
     </script>
