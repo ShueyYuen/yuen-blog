@@ -148,7 +148,7 @@ function reloadPlantUML(light:Boolean) {
         code.parentNode.removeChild(preImageNode);
         code.parentElement.className = 'plantuml-center';
         image.loading = 'lazy'; // Lazy loading
-        image.src = 'http://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(codeText);
+        image.src = 'https://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(codeText);
         code.parentNode.insertBefore(image, code);
         code.style.display = 'none';
       }
