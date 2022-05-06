@@ -13,7 +13,7 @@
     {{- end -}}
 
     {{- if eq .Kind "term" -}} {{/* 某一分类下列表 banner */}}
-      <div class="card-cover" {{- with .Params.cover -}} style="background-image: url({{- . -}});" {{- end -}}></div>
+      <div class="card-cover" {{ with .Params.cover }} style="background-image: url({{- . -}});" {{- end -}}></div>
       <div class="card-text">
         <h1 class="card-text--title">{{- or .Title .Data.Term -}}</h1>
         {{- with .Params.description -}}
