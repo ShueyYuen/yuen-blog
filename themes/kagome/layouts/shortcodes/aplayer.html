@@ -11,31 +11,31 @@
 {{- $loop     := .Get "loop"      | default $.Site.Params.aplayer.loop -}}
 {{- $mutex    := .Get "mutex"     | default $.Site.Params.aplayer.mutex -}}
 
-{{ if (and .Page.Site.Params.CDN.enable (not .Page.Site.IsServer)) }}
-  {{ if not (or (hasPrefix $cover "http://") (hasPrefix $cover "https://") (hasPrefix $cover "data:image")) }}
-    {{ $cover = (print .Page.Site.Params.CDN.host (path.Join $cover)) }}
-  {{ end }}
-  {{ if not (or (hasPrefix $url "http://") (hasPrefix $url "https://") (hasPrefix $url "data:image")) }}
-    {{ $url = (print .Page.Site.Params.CDN.host (path.Join $url)) }}
-  {{ end }}
-  {{ if not (or (hasPrefix $lrc "http://") (hasPrefix $lrc "https://") (hasPrefix $lrc "data:image")) }}
-    {{ $lrc = (print .Page.Site.Params.CDN.host (path.Join $lrc)) }}
-  {{ end }}
-{{ end }}
+{{- if (and .Page.Site.Params.CDN.enable (not .Page.Site.IsServer)) -}}
+  {{- if not (or (hasPrefix $cover "http://") (hasPrefix $cover "https://") (hasPrefix $cover "data:image")) -}}
+    {{- $cover = (print .Page.Site.Params.CDN.host (path.Join $cover)) -}}
+  {{- end -}}
+  {{- if not (or (hasPrefix $url "http://") (hasPrefix $url "https://") (hasPrefix $url "data:image")) -}}
+    {{- $url = (print .Page.Site.Params.CDN.host (path.Join $url)) -}}
+  {{- end -}}
+  {{- if not (or (hasPrefix $lrc "http://") (hasPrefix $lrc "https://") (hasPrefix $lrc "data:image")) -}}
+    {{- $lrc = (print .Page.Site.Params.CDN.host (path.Join $lrc)) -}}
+  {{- end -}}
+{{- end -}}
 
 <div
   class="aplayer-box"
-  data-url="{{ $url }}"
-  data-name="{{ $name }}"
-  data-artist="{{ $artist }}"
+  data-url="{{- $url -}}"
+  data-name="{{- $name -}}"
+  data-artist="{{- $artist -}}"
 
-  {{ with $cover -}}   data-cover="{{ . }}"     {{- end }}
-  {{ with $lrc -}}     data-lrc="{{ . }}"       {{- end }}
+  {{- with $cover -}}   data-cover="{{- . -}}"     {{- end -}}
+  {{- with $lrc -}}     data-lrc="{{- . -}}"       {{- end -}}
   
-  {{ with $lrcType -}} config-lrc-type="{{ . }}"{{- end }}
-  {{ with $theme -}}   config-theme="{{ . }}"   {{- end }}
-  {{ with $loop -}}    config-loop="{{ . }}"    {{- end }}
+  {{- with $lrcType -}} config-lrc-type="{{- . -}}"{{- end -}}
+  {{- with $theme -}}   config-theme="{{- . -}}"   {{- end -}}
+  {{- with $loop -}}    config-loop="{{- . -}}"    {{- end -}}
 
-  {{ if ne $autoplay nil -}}  {{ printf "config-autoplay=%t" $autoplay | safeHTMLAttr }}  {{- end }}
-  {{ if ne $mutex nil -}}     {{ printf "config-mutex =%t" $mutex | safeHTMLAttr }}       {{- end }}
+  {{- if ne $autoplay nil -}}  {{- printf "config-autoplay=%t" $autoplay | safeHTMLAttr -}}  {{- end -}}
+  {{- if ne $mutex nil -}}     {{- printf "config-mutex =%t" $mutex | safeHTMLAttr -}}       {{- end -}}
 ></div>

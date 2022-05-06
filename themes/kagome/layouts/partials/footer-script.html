@@ -1,8 +1,7 @@
 {{/* google analytics */}}
 {{- template "_internal/google_analytics.html" . -}}
-
 {{/* baidu analytics */}}
-{{ with .Site.Params.Analytics.baidu }}
+{{- with .Site.Params.Analytics.baidu -}}
 <script type="application/javascript">
   var _hmt = _hmt || [];
   (function() {
@@ -10,9 +9,9 @@
       return console.log("本地调试，未加载analytics代码")
     }
     var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?{{ . }}";
+    hm.src = "https://hm.baidu.com/hm.js?{{- . -}}";
     var s = document.getElementsByTagName("script")[0]; 
     s.parentNode.insertBefore(hm, s);
   })();
 </script>
-{{ end }}
+{{- end -}}

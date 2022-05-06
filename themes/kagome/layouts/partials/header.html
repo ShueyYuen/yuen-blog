@@ -1,7 +1,7 @@
 <header class="header-container layout-block layout-padding">
   <div class="header-inner content-padding-large soft-size--large soft-style--box">
     <div class="header-logo">
-      <a href="{{ .Site.BaseURL }}"><h1>{{ .Site.Title }}</h1></a>
+      <a href="{{- .Site.BaseURL -}}"><h1>{{- .Site.Title -}}</h1></a>
     </div>
     <nav class="header-nav">
       <div class="header-nav--btn">
@@ -11,9 +11,9 @@
       </div>
       <div class="header-nav--list">
         <div>
-          {{ range .Site.Menus.main }}
-          <a class="list-item soft-size--small soft-style--hover soft-style--active" href="{{ .URL | safeURL }}" title="{{ .Title }}">{{ .Name }}</a>
-          {{ end }}
+          {{- range .Site.Menus.main -}}
+          <a class="list-item soft-size--small soft-style--hover soft-style--active" href="{{- .URL | safeURL -}}" title="{{- .Title -}}">{{- .Name -}}</a>
+          {{- end -}}
           {{- if .Site.Params.algolia.appId -}}
           <div class="header-nav--search">
             <input type="search" class="docsearch-input soft-style--input" placeholder="Search" required/>

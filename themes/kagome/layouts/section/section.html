@@ -1,20 +1,20 @@
-{{ define "main" }}
+{{- define "main" -}}
 
-  {{ partial "card/card-banner.html" . }}
+  {{- partial "card/card-banner.html" . -}}
 
-  {{ with .Sections }}
+  {{- with .Sections -}}
     <div class="section-swiper layout-block">
-      {{ range . }}
-        {{ partial "card/card-childer.html" . }}
-      {{ end }}
+      {{- range . -}}
+        {{- partial "card/card-childer.html" . -}}
+      {{- end -}}
     </div>
-  {{ end }}
+  {{- end -}}
 
   <div class="article-list layout-block">
-    {{ range .Paginator.Pages }}
-      {{ partial "card/card-article.html" . }}
-    {{ end }}
+    {{- range .Paginator.Pages -}}
+      {{- partial "card/card-article.html" . -}}
+    {{- end -}}
   </div>
 
-  {{ partial "pagination.html" . }}
-{{ end }}
+  {{- partial "pagination.html" . -}}
+{{- end -}}

@@ -6,21 +6,24 @@
     <div id="waline"></div>
 </div>
 <script type="application/javascript">
+    const locale = {
+        placeholder: '欢迎评论, 填写邮箱可以在评论被回复时收到通知哦~',
+        sofa: '来发评论互动吧~',
+        admin: '博主',
+    };
     Waline.init({
         el: '#waline',
+        locale,
         serverURL: 'https://comment.shuey.fun',
-{{ if not .Page.Site.IsServer }}
+{{- if not .Page.Site.IsServer -}}
         pageview: true,
-{{ end }}
+{{- end -}}
         comment: true,
         // avatar: 'retro',
         dark: '.theme-dark',
         emoji: [
-            // 'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/weibo',
-            // 'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili',
-            // 'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/alus',
-            // 'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-food',
-            'https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-natural'
+            'https://unpkg.com/@waline/emojis@1.0.1/bilibili',
+            'https://unpkg.com/@waline/emojis@1.0.1/tw-natural',
         ],
     });
 </script>

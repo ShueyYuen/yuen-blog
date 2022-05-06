@@ -1,10 +1,9 @@
 {{/* 某一分类的文章列表 */}}
-{{ define "main" }}
-  {{ partial "card/card-banner.html" . }}
-
+{{- define "main" -}}
+  {{- partial "card/card-banner.html" . -}}
   <div class="article-list layout-block">
-    {{ range .Pages }}
-      {{ partial "card/card-article.html" . }}
-    {{ end }}
+    {{- range .Pages -}}
+      {{- partial "card/card-article.html" . -}}
+    {{- end -}}
   </div>
-{{ end }}
+{{- end -}}
