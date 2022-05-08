@@ -113,6 +113,7 @@ function switchTheme (theme:string) {
       themeMedia.removeEventListener("change", autoSwitchTheme);
       rootDom.classList.remove(`theme-${ theme == "light" ? "dark":"light" }`);
       rootDom.classList.add(`theme-${ theme == "light" ? "light":"dark" }`);
+      rootDom.setAttribute(`data-theme`, theme == "light" ? "light":"dark");
       reloadPlantUML(theme == "light");
   }
   window.localStorage.setItem('theme', theme)
@@ -122,6 +123,7 @@ function autoSwitchTheme (e:MediaQueryListEvent) {
   const rootDom:Element = document.documentElement
   rootDom.classList.remove(`theme-${ e.matches ? "dark":"light" }`);
   rootDom.classList.add(`theme-${ e.matches ? "light":"dark" }`);
+  rootDom.setAttribute(`data-theme`, e.matches ? "light":"dark");
   reloadPlantUML(e.matches)
 }
 

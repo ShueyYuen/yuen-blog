@@ -9,7 +9,6 @@ body {
   transition: transitions(background-color, 0.3s);
 }
 
-
 body::-webkit-scrollbar  
 {  
     width: 10px;  
@@ -26,12 +25,11 @@ body::-webkit-scrollbar-track
 body::-webkit-scrollbar-thumb  
 {
   border-radius: 10px;
-  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-  background-color: var(--theme-bg-high);
+  background-color: var(--theme-text-primary);
   transition: transitions(background-color, 0.3s);
   
   &:hover {
-    background-color: var(--theme-bg-shadow);
+    opacity: 1;
   } 
 }
 
@@ -102,4 +100,8 @@ body::-webkit-scrollbar-thumb
   &.soft-style--active:active {
     @include soft-box--active(var(--radius));
   }
+}
+
+.DocSearch-NoResults-Prefill-List {
+  margin-top: 10px;
 }

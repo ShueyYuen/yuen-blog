@@ -53,9 +53,9 @@
   {{- if .Site.Params.algolia.appId -}}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
   {{- end -}}
-  <link rel="stylesheet" href="/font/iconfont.css"/>
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_3261192_fcjsoolemp.css"/>
   <link rel="icon" type="image/ico" sizes="32x32" href="/favicon.ico"/>
   {{- if .Site.Params.algolia.appId -}}
-  <link rel="preconnect" href="https://YOUR_APP_ID-dsn.algolia.net" crossorigin />
+  <link rel="preconnect" href="https://{{- .Site.Params.algolia.appId | lower -}}-dsn.algolia.net" crossorigin />
   {{- end -}}
 </head>

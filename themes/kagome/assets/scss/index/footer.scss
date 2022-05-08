@@ -17,14 +17,14 @@
       height: 45px;
       padding: 10px;
 
-      &:hover svg.icon {
-        fill: var(--theme-text-stress);
+      &:hover .iconfont {
+        color: var(--theme-text-stress);
       }
 
-      svg.icon {
-        display: block;
-        fill: var(--theme-text-low);
-        transition: transitions(fill, 0.3s);
+      .iconfont {
+        color: var(--theme-text-low);
+        font-size: 24px;
+        transition: transitions(color, 0.3s);
       }
     }
   }
