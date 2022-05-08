@@ -1,7 +1,22 @@
 {{- $.Scratch.Add "index" slice -}}
 {{- range where (where .Site.Pages "Type" "in" (slice "post")) "IsPage" true -}}
   {{- if not .Draft -}}
-    {{- $.Scratch.Add "index" (dict "objectID" .File.UniqueID "url" .Permalink "content" (.Summary | plainify) "tags" .Params.Tags "lvl0" .Title "lvl1" .Params.Categories "lvl2" .Description) -}}
+    {{- $headLines := findRE "<a.*?>(.|\n)*?</a>" .TableOfContents -}}
+    {{- $headContent := slice -}}
+    {{- range $headLines -}}
+      {{- $headContent = $headContent | append (replaceRE "<a.*?>(.*?)</a>" "$1" .) -}}
+    {{- end -}}
+    {{- $documentContent := .Content -}}
+    {{- $paras := slice -}}
+    {{- range (split $documentContent "\n") -}}
+      {{- $paragraph := trim . " " -}}
+      {{- if hasPrefix $paragraph "\u003cp\u003e" -}}
+        {{- $paragraph = substr $paragraph 3 -4 | plainify -}}
+        {{- $paras = $paras | append $paragraph -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $.Scratch.Add "index" (dict "objectID" .File.UniqueID "url" .Permalink "content" $paras "type" "lvl1" "hierarchy" (dict "lvl0" .Title "lvl1" .Description "lvl2" $headContent "lvl3" .Params.Categories "lvl4" .Params.Tags "lvl5" "")) -}}
+    {{/* 标题层级最大到lvl6 */}}
   {{- end -}}
 {{- end -}}
 {{- $.Scratch.Get "index" | jsonify -}}

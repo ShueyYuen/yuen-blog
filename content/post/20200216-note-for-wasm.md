@@ -2,8 +2,7 @@
 author: "Shuey Yuen"
 date: 2020-02-16
 title: "WASM学习笔记"
-subtitle: 因为项目的一些需求,打算学习WASM来完善项目的性能方面的缺陷.
-header-img: img/2019/09/23/title-bg.webp
+description: 因为项目的一些需求,打算学习WASM来完善项目的性能方面的缺陷.
 tags: [
     "WASM", "C++", "Emscripten"
 ]

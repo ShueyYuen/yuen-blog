@@ -15,10 +15,7 @@
           <a class="list-item soft-size--small soft-style--hover soft-style--active" href="{{- .URL | safeURL -}}" title="{{- .Title -}}">{{- .Name -}}</a>
           {{- end -}}
           {{- if .Site.Params.algolia.appId -}}
-          <div class="header-nav--search">
-            <input type="search" class="docsearch-input soft-style--input" placeholder="Search" required/>
-            <span class="iconfont icon-search header-nav--search-icon"></span>
-          </div>
+          <div id="docsearch"></div>
           {{- end -}}
         </div>
       </div>

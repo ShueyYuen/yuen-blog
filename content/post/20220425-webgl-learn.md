@@ -2,7 +2,7 @@
 author: "Shuey Yuen"
 date: 2022-04-25T16:39:26+08:00
 title: "WebGL学习"
-subtitle: WebGL入门级别学习
+description: WebGL入门级别学习
 tags: [
     "WebGL",
 ]

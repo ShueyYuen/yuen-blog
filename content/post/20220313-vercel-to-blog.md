@@ -2,7 +2,7 @@
 author: "Shuey Yuen"
 date: 2022-03-13T22:57:32+08:00
 title: "Vercel搭建博客"
-subtitle: 如何最大限度的白嫖可用的资源。
+description: 如何最大限度的白嫖可用的资源。
 tags: [
     "Vercel", "MongoDB", "Next", "Hugo", "Waline", "Algolia"
 ]

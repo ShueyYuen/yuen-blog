@@ -1,7 +1,7 @@
 <head>
-  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-  <meta http-equiv="Content-Language" content="zh-CN"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <meta http-equiv='content-language' content='zh-CN'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   {{- if or .Params.author .Site.Author.name -}} {{/* author */}}
@@ -27,10 +27,13 @@
   {{- hugo.Generator -}}
 
   {{- $title := .Site.Title -}}
+  {{- if ne .Params.Title .Title -}}
+    {{- $title = printf "%s 🌟 %s" .Title $title -}}
+  {{- end -}}
   {{- with .Params.Title -}}
-  {{- $title = printf "%s 🌟 %s" . $title -}}
+    {{- $title = printf "%s 🌟 %s" . $title -}}
   {{- end }}
-  <title>{{- $title -}}</title>
+  <title data="{{ .Title }}">{{- $title -}}</title>
   {{ template "_internal/opengraph.html" . -}}
   {{ template "_internal/twitter_cards.html" . -}}
   {{/* style */}}
@@ -48,8 +51,11 @@
   {{- end -}}
 
   {{- if .Site.Params.algolia.appId -}}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3" />
   {{- end -}}
   <link rel="stylesheet" href="/font/iconfont.css"/>
   <link rel="icon" type="image/ico" sizes="32x32" href="/favicon.ico"/>
+  {{- if .Site.Params.algolia.appId -}}
+  <link rel="preconnect" href="https://YOUR_APP_ID-dsn.algolia.net" crossorigin />
+  {{- end -}}
 </head>
