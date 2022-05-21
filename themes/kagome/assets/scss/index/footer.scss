@@ -58,4 +58,27 @@
       color: var(--theme-text-active);
     }
   }
+
+  @keyframes theme-change {
+    0% {
+      display: block;
+    }
+    99% {
+      display: block;
+    }
+    100% {
+      display: none;
+    }
+  }
+
+  .theme-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to bottom, #000428, #004e92, #2BC0E4, #EAECC6);
+    background-size: 100vw 300vh;
+    animation: theme-change 1s ease;
+  }
 }

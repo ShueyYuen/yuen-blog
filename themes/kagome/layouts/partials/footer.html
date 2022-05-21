@@ -6,19 +6,15 @@
         {{- if eq .Identifier "github" -}}  {{/* github */}}
         <i class="iconfont icon-github"></i>
         {{- end -}}
-
         {{- if eq .Identifier "email" -}}  {{/* email */}}
         <i class="iconfont icon-mail4"></i>
         {{- end -}}
-
         {{- if eq .Identifier "bilibili" -}}  {{/* bilibili */}}
         <i class="iconfont icon-bilibilia"></i>
         {{- end -}}
-
         {{- if eq .Identifier "zhihu" -}}  {{/* zhihu */}}
         <i class="iconfont icon-zhihu"></i>
         {{- end -}}
-
         {{- if eq .Identifier "csdn" -}}  {{/* csdn */}}
         <i class="iconfont icon-csdn"></i>
         {{- end -}}
@@ -44,8 +40,9 @@
     <a href="javascript:;" id="theme-dark">🌛 {{ i18n "theme.dark" -}}</a>
     <a href="javascript:;" id="theme-auto">🤖️ {{ i18n "theme.auto" -}}</a>
   </p>
+  <!-- <div class="theme-container"></div> -->
   {{- if .Site.Params.algolia.appId -}}
-  <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@docsearch/js@3"></script>
   <script>
       const translations = {
         button: {
@@ -56,8 +53,8 @@
           searchBox: {
             resetButtonTitle: 'Clear the query',
             resetButtonAriaLabel: 'Clear the query',
-            cancelButtonText: 'Cancel',
-            cancelButtonAriaLabel: 'Cancel',
+            cancelButtonText: '取消',
+            cancelButtonAriaLabel: '取消',
           },
           startScreen: {
             recentSearchesTitle: '最近',

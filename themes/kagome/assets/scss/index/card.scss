@@ -79,7 +79,11 @@
         padding: 4px 8px;
         transition: color 0.3s ease, background-color 0.3s ease;
         &::before {
-          content: "#";
+          font-family: "iconfont" !important;
+          font-size: 14px;
+          font-style: normal;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
           margin-right: 4px;
         }
   
@@ -87,6 +91,14 @@
           color: var(--theme-text-active);
           background-color: #fff;
         }
+      }
+
+      &:first-of-type a::before {
+        content: "\e609";
+      }
+
+      &:last-of-type a::before {
+        content: "\e880";
       }
     }
   }

@@ -145,7 +145,7 @@ module.exports = async (req: VercelRequest, res: VercelResponse) => {
 
 ```html
 {{- if .Site.Params.algolia.appId -}}
-<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script src="https://fastly.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
 <script>
     docsearch({
       apiKey: {{ .Site.Params.algolia.searchOnlyKey }},
