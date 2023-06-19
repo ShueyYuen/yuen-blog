@@ -24,4 +24,29 @@
             border-radius: 5px;
         }
     }
+
+    & .wl-gif-popup .wl-gallery {
+        &::-webkit-scrollbar  
+        {
+            width: 6px;
+            height: 4px; 
+        }
+        
+        &::-webkit-scrollbar-track  
+        {
+            border-radius: 4px;  
+            background-color: transparent;  
+        }
+        
+        &::-webkit-scrollbar-thumb  
+        {
+            border-radius: 4px;
+            background-color: var(--waline-active-color);
+            transition: transitions(background-color, 0.3s);
+            
+            &:hover {
+            opacity: 1;
+            } 
+        }
+    }
 }

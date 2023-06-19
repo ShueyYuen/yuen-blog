@@ -24,8 +24,6 @@
   <meta name="description" content="{{- with .Description -}}{{- . -}}{{- else -}}{{- with .Site.Params.description -}}{{- . -}}{{- end -}}{{- end -}}"/>
   {{ end -}}
 
-  {{- hugo.Generator -}}
-
   {{- $title := .Site.Title -}}
   {{- if ne .Params.Title .Title -}}
     {{- $title = printf "%s 🌟 %s" .Title $title -}}

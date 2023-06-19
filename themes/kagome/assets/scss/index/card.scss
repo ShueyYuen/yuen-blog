@@ -35,8 +35,8 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    background-image: #ff5858;
-    background-image: linear-gradient(1deg, #f857a6, #ff5858);
+    background-image: #28c76f;
+    background-image: linear-gradient(120deg, #81fbb8 10%, #28c76f 100%);
 
     &::after {
       content: "";
@@ -159,8 +159,8 @@
     }
 
     &:nth-child(2n) .article-card .card-cover {
-      background-image: #ff5858;
-      background-image: linear-gradient(1deg, #f857a6, #ff5858);
+      background-image: #28c76f;
+      background-image: linear-gradient(120deg, #81fbb8 10%, #28c76f 100%);
     }
 
     &:nth-child(3n) .article-card .card-cover {
