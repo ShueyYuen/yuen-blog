@@ -7,12 +7,12 @@
 body {
   background-color: var(--theme-bg-primary);
   transition: transitions(background-color, 0.3s);
+  overflow: overlay;
 }
 
 body::-webkit-scrollbar  
 {  
-    width: 10px;  
-    height: 6px;  
+    width: 6px;  
     background-color: var(--theme-bg-primary);  
 }
 
@@ -25,8 +25,9 @@ body::-webkit-scrollbar-track
 body::-webkit-scrollbar-thumb  
 {
   border-radius: 10px;
-  background-color: var(--theme-text-primary);
+  background-color: var(--theme-text-active);
   transition: transitions(background-color, 0.3s);
+  opacity: 0.5;
   
   &:hover {
     opacity: 1;

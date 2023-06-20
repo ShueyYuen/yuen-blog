@@ -6,6 +6,14 @@
     {{- range $headLines -}}
       {{- $headContent = $headContent | append (replaceRE "<a.*?>(.*?)</a>" "$1" .) -}}
     {{- end -}}
+    {{- $CDNImgDestination := .Params.cover -}}
+    {{- if (and .Site.Params.CDN.enable (not .Site.IsServer)) -}}
+      {{- if $CDNImgDestination -}}
+        {{- if not (or (hasPrefix $CDNImgDestination "http://") (hasPrefix $CDNImgDestination "https://") (hasPrefix $CDNImgDestination "data:image")) -}}
+          {{- $CDNImgDestination = (print .Site.Params.CDN.host (path.Join .Params.cover)) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
     {{- $documentContent := .Content -}}
     {{- $paras := slice -}}
     {{- range (split $documentContent "\n") -}}
@@ -15,7 +23,7 @@
         {{- $paras = $paras | append $paragraph -}}
       {{- end -}}
     {{- end -}}
-    {{- $.Scratch.Add "index" (dict "objectID" .File.UniqueID "url" .Permalink "content" $paras "type" "lvl1" "hierarchy" (dict "lvl0" .Title "lvl1" .Description "lvl2" $headContent "lvl3" .Params.Categories "lvl4" .Params.Tags "lvl5" "")) -}}
+    {{- $.Scratch.Add "index" (dict "objectID" .File.UniqueID "url" .Permalink "content" $paras "type" "lvl1" "image" $CDNImgDestination "hierarchy" (dict "lvl0" .Title "lvl1" .Description "lvl2" $headContent "lvl3" .Params.Categories "lvl4" .Params.Tags "lvl5" "")) -}}
     {{/* 标题层级最大到lvl6 */}}
   {{- end -}}
 {{- end -}}

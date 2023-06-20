@@ -8,3 +8,13 @@
 svg .cls-1, svg .cls-2 {
   fill: var(--docsearch-primary-color);
 }
+
+@media #{$mq-mb} {
+  .header-container {
+    .header-nav--list #docsearch {
+      .DocSearch {
+        margin: 0 auto;
+      }
+    }
+  }
+}

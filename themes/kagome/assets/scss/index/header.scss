@@ -15,6 +15,10 @@
     color: var(--theme-text-primary);
     transition: transitions((color, text-shadow), 0.3s);
     @include soft-text;
+
+    &:hover {
+      color: var(--theme-text-active);
+    }
   }
 
   .header-nav {
@@ -131,8 +135,7 @@
       position: absolute;
       z-index: 9;
       top: 100%;
-      right: 28px;
-      transform: translateY(-20px);
+      right: 16px;
 
       &::before, &::after {
         position: absolute;
