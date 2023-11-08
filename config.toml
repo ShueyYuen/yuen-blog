@@ -42,6 +42,11 @@ defaultContentLanguage = "zh-cn"           # Default language to use
     weight = 40
     identifier = "categories"
     url = "/categories/"
+  [[menu.main]]
+    name = "项目"
+    weight = 40
+    identifier = "projects"
+    url = "/projects/"
 
   # 底部社交图标
   [[menu.social]]
@@ -83,7 +88,7 @@ defaultContentLanguage = "zh-cn"           # Default language to use
   toc = true                # 是否开启目录
  
   # 国内备案号
-  beian = "皖ICP备19010100号-4"
+  beian = "皖ICP备2023022130号"
   # TOC目录出现字符长度限制
   toc_show_len = 300
 
