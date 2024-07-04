@@ -1,17 +1,17 @@
 <div style="padding: 0 10px;">
-    <script src="//fastly.jsdelivr.net/npm/@waline/client/dist/waline.js"></script>
     <style>
-        @import url("//fastly.jsdelivr.net/npm/@waline/client/dist/waline.css");
+        @import url("//unpkg.com/@waline/client@v3/dist/waline.csss");
     </style>
     <div id="waline"></div>
 </div>
-<script type="application/javascript">
+<script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
     const locale = {
         placeholder: '欢迎评论, 填写邮箱可以在评论被回复时收到通知哦~',
         sofa: '来发评论互动吧~',
         admin: '博主',
     };
-    Waline.init({
+    init({
         el: '#waline',
         locale,
         serverURL: 'https://comment.shuey.fun',
