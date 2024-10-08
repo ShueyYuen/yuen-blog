@@ -9,7 +9,7 @@
       position: relative;
       overflow: hidden;
 
-      > img {
+      >img {
         display: block;
         width: 100%;
         max-height: 380px;
@@ -78,6 +78,7 @@
         border-radius: 20px;
         padding: 4px 8px;
         transition: color 0.3s ease, background-color 0.3s ease;
+
         &::before {
           font-family: "iconfont" !important;
           font-size: 14px;
@@ -104,6 +105,21 @@
   }
 }
 
+.article-item {
+  .card-container {
+    .card-cover {
+      filter: brightness(0.9) grayscale(0.2);
+      transition: filter 0.3s;
+    }
+
+    &:hover {
+      .card-cover {
+        filter: brightness(1.1) grayscale(0);
+      }
+    }
+  }
+}
+
 /** section swiper style */
 .section-swiper {
   display: flex;
@@ -117,11 +133,13 @@
   .swiper-item {
     padding: var(--layout-padding-x);
     scroll-snap-align: center;
+
     @include mq-pc {
       width: 25%;
       flex: 0 0 25%;
       min-width: 25%;
     }
+
     @include mq-mb {
       width: 50%;
       flex: 1 1 50%;
