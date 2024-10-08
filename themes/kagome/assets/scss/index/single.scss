@@ -1,3 +1,5 @@
+$slider-width: 340px;
+
 .single-container {
   display: flex;
   align-items: flex-start;
@@ -10,16 +12,16 @@
   .widget-info {
     position: sticky;
     top: 0;
-    width: 360px;
-    min-width: 360px;
+    width: #{$slider-width};
+    min-width: #{$slider-width};
     display: flex;
     flex-direction: column;
   }
 
   @include mq-pc {
     .article-info {
-      flex: 0 1 calc(100% - 360px);
-      min-width: calc(100% - 360px);
+      flex: 0 1 calc(100% - #{$slider-width});
+      min-width: calc(100% - #{$slider-width});
     }
     .widget-info {
       display: flex;
