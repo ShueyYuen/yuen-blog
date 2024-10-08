@@ -1,6 +1,6 @@
 <div class="article-section layout-block layout-padding">
   <section class="section-card card-container content-padding-large soft-size--large soft-style--box">
-    
+
     {{- if eq .Kind "taxonomy" -}} {{/* 分类 banner */}}
       <div class="card-cover" {{- with .Params.cover -}} style="background-image: url({{- . -}});" {{- end -}}></div>
       <div class="card-text">
@@ -27,10 +27,8 @@
       <div class="card-cover" {{- with .Params.cover -}} style="background-image: url({{- . -}});" {{- end -}}></div>
       <div class="card-text">
         <h1 class="card-text--title">{{- .Title -}}</h1>
-        
         {{- if .Section -}} {{/* section single page */}}
           <p class="card-text--row">{{- .Date.Format "2006-01-02 15:04" -}}</p>
-          
           {{- $taxo := "categories" -}}
           {{- with .Param $taxo -}}
             <ul class="card-text--tag">
@@ -41,7 +39,6 @@
               {{- end -}}
             </ul>
           {{- end -}}
-
           {{- $taxo := "tags" -}}
           {{- with .Param $taxo -}}
             <ul class="card-text--tag">
@@ -66,7 +63,7 @@
         {{- with .Title -}} {{/* title */}}
           <h1 class="card-text--title">{{- . -}}</h1>
         {{- end -}}
-        
+
         {{- with .Params.description -}} {{/* desc */}}
           <div class="card-text--row">{{- . -}}</div>
         {{- end -}}
@@ -74,7 +71,7 @@
         {{- with len .RegularPages -}} {{/* pages */}}
           <p class="card-text--row">{{- i18n "total_count" . -}}</p>
         {{- end -}}
-        
+
         {{- with len .Sections -}} {{/* children sections */}}
           <p class="card-text--row">{{- i18n "children_total_count" . -}}</p>
         {{- end -}}

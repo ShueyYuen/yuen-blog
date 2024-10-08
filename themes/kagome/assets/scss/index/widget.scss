@@ -8,7 +8,7 @@
       display: flex;
       align-items: center;
       padding-bottom: 6px;
-  
+
       > span {
         color: var(--theme-text-stress);
         font-weight: 500;
@@ -38,19 +38,19 @@
       color: var(--theme-text-stress);
       font: var(--base-font);
       transition: transitions(color, 0.3s);
-  
+
       &.center {
         text-align: center;
       }
-  
+
       &:hover {
         color: var(--theme-text-active);
-  
+
         > svg {
           fill: var(--theme-text-active);
         }
       }
-  
+
       > svg {
         display: inline-block;
         vertical-align: middle;

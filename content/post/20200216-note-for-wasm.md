@@ -33,7 +33,7 @@ cd .\emsdk\
 Installing SDK 'sdk-releases-upstream-9e60f34accb4627d7358223862a7e74291886ab6-64bit'..
 Installing tool 'node-12.9.1-64bit'..
 ```
-我找了找,我应该算是第一个傻到遇到这个问题的人......毕竟真的大佬都去Docker了. 附上Docker的使用方式,不要太简单. 
+我找了找,我应该算是第一个傻到遇到这个问题的人......毕竟真的大佬都去Docker了. 附上Docker的使用方式,不要太简单.
 ```bash
 docker run --rm -it -v `pwd`:/src apiaryio/emcc emcc
 ```
@@ -45,7 +45,7 @@ docker run --rm -it -v `pwd`:/src apiaryio/emcc emcc
     ```
     发现下载会开在一个位置, 链接如下: https://storage.googleapis.com/webassembly/emscripten-releases-builds/deps/*
 
-2. 找到Git下来的emsdk文件夹,找到emsdk.py文件, 
+2. 找到Git下来的emsdk文件夹,找到emsdk.py文件,
     ```python
     emsdk_master_server = 'https://storage.googleapis.com/webassembly/emscripten-releases-builds/deps/'
     emsdk_packages_url = emsdk_master_server

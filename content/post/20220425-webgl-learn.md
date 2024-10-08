@@ -69,8 +69,8 @@ canvas.addEventListener('mousedown', e => {
 canvas.addEventListener('mousemove', e => {
   if (!e.buttons) return;
   const alias = {
-    x: e.offsetX - prePoint.x, 
-    y: e.offsetY - prePoint.y, 
+    x: e.offsetX - prePoint.x,
+    y: e.offsetY - prePoint.y,
   }
   switch(e.buttons) {
     case 1: // left button

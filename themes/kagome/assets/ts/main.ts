@@ -1,6 +1,6 @@
 (function () {
   generateThemeMedia();
-  
+
   const currentTheme:string  = window.localStorage.getItem('theme') || ''
   currentTheme && switchTheme(currentTheme);
 
@@ -84,7 +84,7 @@ function formatAttr(el:Element): object {
     const key = toCamel(attr.replace('config-', ''))
     const value = el.getAttribute(attr)
     const toBool = boolMap.get(value)
-    
+
     if (toBool !== undefined) {             /** 处理bool值 */
       config[key] = toBool
     } else if (numberList.includes(key)) {  /** 处理number值 */
@@ -128,7 +128,7 @@ function autoSwitchTheme (e:MediaQueryListEvent) {
 }
 
 interface PlantUMLEncoder {
-  encode(code: string): string 
+  encode(code: string): string
 }
 
 function reloadPlantUML(light:Boolean) {

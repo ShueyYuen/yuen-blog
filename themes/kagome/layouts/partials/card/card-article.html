@@ -13,7 +13,7 @@
       <a href="{{- .Permalink | safeURL -}}"><h4 class="card-text--title">{{- .Title -}}</h4></a>
 
       <p class="card-text--row">{{- .Date.Format "January 2, 2006" -}}</p>
-      
+
       {{- $taxo := "categories" -}}
       {{- with .Param $taxo -}}
         <ul class="card-text--tag">

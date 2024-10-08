@@ -6,7 +6,7 @@ tags:
 
 toc:
   other: 目錄
-  
+
 related_posts:
   other: 最新文章
 
@@ -19,10 +19,10 @@ search:
 comment:
   other: 留言
 
-newer: 
+newer:
   other: 上壹篇
 
-older: 
+older:
   other: 下壹篇
 
 theme:
@@ -32,7 +32,7 @@ theme:
   dark:
     other: 深色
 
-  auto: 
+  auto:
     other: 自動
 
 total_count:

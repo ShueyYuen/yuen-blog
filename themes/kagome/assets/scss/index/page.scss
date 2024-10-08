@@ -24,7 +24,7 @@
       align-items: center;
       transition: transitions(color);
       height: 100%;
-  
+
       img {
         display: block;
         width: 46px;
@@ -34,17 +34,17 @@
         object-fit: cover;
         flex: 0 0 46px;
       }
-  
+
       div {
         overflow: hidden;
         line-height: var(--font-base-lh);
       }
-  
+
       h4 {
         font-weight: bold;
         color: var(--theme-text-stress);
       }
-  
+
       p {
         color: var(--theme-text-primary);
       }
@@ -65,7 +65,7 @@
       @include mq-pc {
         max-width: 50%;
       }
-  
+
       @include mq-mb {
         max-width: 100%;
         flex: 1 1 auto;

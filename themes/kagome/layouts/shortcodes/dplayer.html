@@ -23,7 +23,7 @@
 
   {{- with $pic -}}            data-pic="{{- . -}}"        {{- end -}}
   {{- with $theme -}}          config-theme="{{- . -}}"    {{- end -}}
-  
+
   {{- if ne $autoplay nil -}}  {{- printf "config-autoplay=%t" $autoplay | safeHTMLAttr -}}  {{- end -}}
   {{- if ne $loop nil -}}      {{- printf "config-loop=%t" $loop | safeHTMLAttr -}}          {{- end -}}
   {{- if ne $mutex nil -}}     {{- printf "config-mutex =%t" $mutex | safeHTMLAttr -}}       {{- end -}}

@@ -1,7 +1,7 @@
 /** card common style */
 .card-container {
   position: relative;
-  
+
   &.img {
     padding: 0;
 
@@ -73,7 +73,7 @@
       margin-top: 18px;
       margin-left: -8px;
       margin-right: -8px;
-  
+
       a {
         border-radius: 20px;
         padding: 4px 8px;
@@ -86,7 +86,7 @@
           -moz-osx-font-smoothing: grayscale;
           margin-right: 4px;
         }
-  
+
         &:hover {
           color: var(--theme-text-active);
           background-color: #fff;

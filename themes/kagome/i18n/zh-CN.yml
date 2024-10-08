@@ -1,4 +1,4 @@
-categories: 
+categories:
   other: 分类
 
 tags:
@@ -21,7 +21,7 @@ comment:
 
 newer:
   other: 上一篇
-  
+
 older:
   other: 下一篇
 
@@ -32,7 +32,7 @@ theme:
   dark:
     other: 深色
 
-  auto: 
+  auto:
     other: 自动
 
 total_count:

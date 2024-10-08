@@ -145,7 +145,7 @@ abstract ComputedGetter {
   -value
   -dirty
   +(): any
-  +stop: () => void 
+  +stop: () => void
 }
 
 interface Autorun {

@@ -10,28 +10,29 @@ body {
   overflow: overlay;
 }
 
-body::-webkit-scrollbar  
-{  
-    width: 6px;  
-    background-color: var(--theme-bg-primary);  
-}
-
-body::-webkit-scrollbar-track  
+*::-webkit-scrollbar
 {
-    border-radius: 10px;  
-    background-color: transparent;  
+    width: 6px;
+    height: 6px;
+    background-color: var(--theme-bg-primary);
 }
 
-body::-webkit-scrollbar-thumb  
+*::-webkit-scrollbar-track
+{
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb
 {
   border-radius: 10px;
   background-color: var(--theme-text-active);
   transition: transitions(background-color, 0.3s);
   opacity: 0.5;
-  
+
   &:hover {
     opacity: 1;
-  } 
+  }
 }
 
 .text-ellipsis {
@@ -93,7 +94,7 @@ body::-webkit-scrollbar-thumb
   &.soft-style--box {
     @include soft-box(var(--radius));
   }
-  
+
   &.soft-style--hover:hover {
     @include soft-box(var(--radius));
   }

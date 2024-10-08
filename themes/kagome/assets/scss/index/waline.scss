@@ -5,6 +5,14 @@
         box-shadow: var(--soft-shadow) var(--soft-shadow) calc(var(--soft-shadow) * 2) var(--theme-bg-shadow),calc(-1 * var(--soft-shadow)) calc(-1 * var(--soft-shadow)) calc(var(--soft-shadow) * 2) var(--theme-bg-high);
         --radius: var(--soft-large-radius);
         border: none;
+
+        & .wl-panel {
+            background-color: var(--theme-bg-primary);
+        }
+
+        & .wl-editor:focus {
+            background-color: var(--theme-bg-high);
+        }
     }
 
     & .vinfo {
@@ -26,27 +34,27 @@
     }
 
     & .wl-gif-popup .wl-gallery {
-        &::-webkit-scrollbar  
+        &::-webkit-scrollbar
         {
             width: 6px;
-            height: 4px; 
+            height: 4px;
         }
-        
-        &::-webkit-scrollbar-track  
+
+        &::-webkit-scrollbar-track
         {
-            border-radius: 4px;  
-            background-color: transparent;  
+            border-radius: 4px;
+            background-color: transparent;
         }
-        
-        &::-webkit-scrollbar-thumb  
+
+        &::-webkit-scrollbar-thumb
         {
             border-radius: 4px;
             background-color: var(--waline-active-color);
             transition: transitions(background-color, 0.3s);
-            
+
             &:hover {
             opacity: 1;
-            } 
+            }
         }
     }
 }
