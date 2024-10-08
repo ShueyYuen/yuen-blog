@@ -114,7 +114,7 @@ function switchTheme (theme:string) {
       rootDom.classList.remove(`theme-${ theme == "light" ? "dark":"light" }`);
       rootDom.classList.add(`theme-${ theme == "light" ? "light":"dark" }`);
       rootDom.setAttribute(`data-theme`, theme == "light" ? "light":"dark");
-      reloadPlantUML(theme == "light");
+      window.reloadPlantUML && window.reloadPlantUML(theme == "light");
   }
   window.localStorage.setItem('theme', theme)
 }
@@ -124,37 +124,11 @@ function autoSwitchTheme (e:MediaQueryListEvent) {
   rootDom.classList.remove(`theme-${ e.matches ? "dark":"light" }`);
   rootDom.classList.add(`theme-${ e.matches ? "light":"dark" }`);
   rootDom.setAttribute(`data-theme`, e.matches ? "light":"dark");
-  reloadPlantUML(e.matches)
+  window.reloadPlantUML && window.reloadPlantUML(e.matches)
 }
 
 interface PlantUMLEncoder {
   encode(code: string): string
-}
-
-function reloadPlantUML(light:Boolean) {
-  let plantumlPrefix:string = "language-plantuml";
-  let plantTheme:string = light ? "superhero-outline" : "sandstone";
-  Array.prototype.forEach.call(
-    document.querySelectorAll("[class^=" + plantumlPrefix + "]"),
-    function(code:HTMLElement){
-      let codeText:string = code.innerText.trim();
-      if (codeText.indexOf('!theme') == -1) {
-        let themePosition:number = codeText.indexOf('\n');
-        codeText = `${codeText.slice(0, themePosition)}
-          !theme ${plantTheme}${codeText.slice(themePosition)}`;
-      }
-      if ((window as any).plantumlEncoder) {
-        let plantumlEncoder: PlantUMLEncoder = (window as any).plantumlEncoder;
-        let image:HTMLImageElement = <HTMLImageElement>document.createElement("IMG");
-        let preImageNode:ChildNode = code.parentNode.firstChild;
-        code.parentNode.removeChild(preImageNode);
-        code.parentElement.className = 'plantuml-center';
-        image.loading = 'lazy'; // Lazy loading
-        image.src = 'https://www.plantuml.com/plantuml/svg/~1' + plantumlEncoder.encode(codeText);
-        code.parentNode.insertBefore(image, code);
-        code.style.display = 'none';
-      }
-  });
 }
 
 /**

@@ -498,7 +498,7 @@ gl.drawArrays和gl.drawElements将状态绘制到屏幕上。
 
 `#version 300 es`: 首行启用WebGL2
 
-## 创建着色器程序。
+## 创建着色器程序
 
 ```plantuml
 @startuml
