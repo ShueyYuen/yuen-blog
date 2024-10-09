@@ -9,7 +9,7 @@
       align-items: center;
       padding-bottom: 6px;
 
-      > span {
+      >span {
         color: var(--theme-text-stress);
         font-weight: 500;
         font-size: var(--font-stress-size);
@@ -46,12 +46,12 @@
       &:hover {
         color: var(--theme-text-active);
 
-        > svg {
+        >svg {
           fill: var(--theme-text-active);
         }
       }
 
-      > svg {
+      >svg {
         display: inline-block;
         vertical-align: middle;
         fill: var(--theme-text-stress);
@@ -99,21 +99,31 @@
 
 /** 目录TOC widget */
 .widget-toc {
-  ul, ol {
+  .widget-body {
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+
+  ul,
+  ol {
     list-style: inherit;
     padding-left: 20px;
 
-    > li {
+    >li {
       margin: 16px 0;
 
       &::marker {
         color: var(--theme-text-primary);
       }
 
-      > a {
+      >a {
         font: var(--base-font);
         color: var(--theme-text-primary);
         transition: transitions(color, 0.3s);
+
+        &.active {
+          color: var(--theme-text-focus);
+        }
 
         &:hover {
           color: var(--theme-text-active);
@@ -129,17 +139,18 @@
 
   .post-item {
     &:not(:last-child) {
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
 
     a {
       font: var(--base-font);
-      color: var(--theme-text-active);
+      color: var(--theme-text-primary);
       font-weight: bolder;
-      border-bottom: 2px solid #dde0e0;
+      border-bottom: 1px solid #dde0e0;
       transition: transitions((color, border-color), 0.3s);
 
       &:hover {
+        color: var(--theme-text-active);
         border-color: var(--theme-text-active);
       }
     }
@@ -150,7 +161,7 @@
 .widget-categories .categories-list {
   list-style: none;
 
-  > li {
+  >li {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -163,12 +174,12 @@
       margin-bottom: 6px;
     }
 
-    > a {
+    >a {
       color: var(--theme-text-primary);
       transition: transitions(color, 0.3s);
     }
 
-    > span {
+    >span {
       display: inline-block;
       border-radius: 20px;
       color: var(--theme-text-light);
@@ -190,7 +201,7 @@
   gap: 3px;
   margin: 0 -10px;
 
-  > a {
+  >a {
     display: block;
     padding: 8px 10px;
     color: var(--theme-text-primary);
@@ -203,5 +214,5 @@
 
 .playground-view iframe {
   border-radius: 5px;
-  box-shadow: var(--soft-shadow) var(--soft-shadow) calc(var(--soft-shadow) * 2) var(--theme-bg-shadow),calc(-1 * var(--soft-shadow)) calc(-1 * var(--soft-shadow)) calc(var(--soft-shadow) * 2) var(--theme-bg-high);
+  box-shadow: var(--soft-shadow) var(--soft-shadow) calc(var(--soft-shadow) * 2) var(--theme-bg-shadow), calc(-1 * var(--soft-shadow)) calc(-1 * var(--soft-shadow)) calc(var(--soft-shadow) * 2) var(--theme-bg-high);
 }

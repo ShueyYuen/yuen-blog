@@ -114,11 +114,11 @@ defaultContentLanguage = "zh-cn"           # Default language to use
 
   [params.widget]
     # 相关文章推荐数量
-    articles_count = 6
+    articles_count = 4
     # 分类相关显示数量
-    categories_count = 6
+    categories_count = 2
     # 标签相关显示数量
-    tags_count = 12
+    tags_count = 6
 
   [params.CDN]
     enable = true

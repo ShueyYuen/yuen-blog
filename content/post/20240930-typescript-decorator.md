@@ -32,6 +32,18 @@ cover: /images/2022/0508/title_bg.webp
 
 ## TypeScript 中的装饰器
 
+### 前置知识
+
+#### Descriptor
+
+每个对象都有一组不可见的属性，其中包含于该属性关联的元数据，称为“属性描述符号”。
+
+> [[Web Dev] Property descriptors](https://web.dev/learn/javascript/objects/property-descriptors)
+>
+> [[MDN] Object.getOwnPropertyDescriptor()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor)
+
+#### 原型链
+
 ### demo
 
 > 以下为装饰器相关代码，可以在 *⚙ -> JavaScript* 中配置是否启用[实验性装饰器](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#decorators)。
@@ -89,18 +101,6 @@ console.log('main');
 const instance = new MyClass("Hello");
 {{</playground/param>}}
 {{</playground>}}
-
-### 前置知识
-
-#### Descriptor
-
-每个对象都有一组不可见的属性，其中包含于该属性关联的元数据，称为“属性描述符号”。
-
-> [[Web Dev] Property descriptors](https://web.dev/learn/javascript/objects/property-descriptors)
->
-> [[MDN] Object.getOwnPropertyDescriptor()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor)
-
-
 
 ### 代码分析
 
@@ -170,19 +170,22 @@ __decorate([
 ```plantuml
 @startuml
 start
-:属性装饰器;
 floating note
   同一个目标的多个装饰器顺序按照先定义
   （从上到下、从左到右）后应用的顺序, 
   如果是装饰器工厂则先定义先生成。
 end note
 
-group 成员方法
+group 实例成员
   note left
-    方法装饰器和访问器装饰器
-    是同优先级的
+    方法装饰器、访问器
+    装饰器和属性装饰器
+    是同优先级的。谁先
+    声明谁先应用。
   end note
   split
+    :属性装饰器;
+  split again
     :(set)参数装饰器;
     :访问器装饰器;
   split again
@@ -193,10 +196,9 @@ end group
 
 group 静态成员
   note left
-    静态成员中，方法
-    装饰器、访问器装
-    饰器和属性装饰器
-    是同优先级的
+    静态成员装饰器获取
+    到的 target 和实例
+    成员不一样。
   end note
   split
     :属性装饰器;
@@ -214,15 +216,25 @@ end group
 end
 @enduml
 ```
+> 以上过程是根据编译结果推测执行顺序，详情可以查看[TypeScript源码v5.6.3, legacyDecorators](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts);
+>
+> - 函数及参数装饰器执行顺序[源码](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts#L532)
+> - 静态成员和实例成员执行顺序[源码](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts#L183)
 
 > *同名访问器的装饰器，不允许使用相同的装饰器分别修饰*，详情见[Accessor Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html#accessor-decorators);
->
-> 如果启用了`emitDecoratorMetadata`, `Metadata`的应用时机在用户装饰器之前。所以用户装饰器可以安全的访问`design:type`, `design:paramtypes`, `design:returntype`等信息，详情见[reflect-metadata](https://github.com/rbuckton/reflect-metadata)[^reflect]。
+
+> 如果启用了`emitDecoratorMetadata`, `Metadata`应用时机在用户装饰器之前。所以用户装饰器可以安全的访问`design:type`, `design:paramtypes`, `design:returntype`等信息，详情见[reflect-metadata](https://github.com/rbuckton/reflect-metadata)[^reflect].
 
 ### 推荐文章
 
 - [TS装饰器完全指南](https://mirone.me/a-complete-guide-to-typescript-decorator/)
 - [TS handbook 装饰器](https://www.typescriptlang.org/docs/handbook/decorators.html)
 - [编写类型友好的装饰器](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#writing-well-typed-decorators)
+
+## TS装饰器应用
+
+### 功能增加（如日志）
+
+### DI（依赖注入）
 
 [^reflect]: 对当前的[Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect)的扩充。
