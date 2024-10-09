@@ -66,6 +66,9 @@
   line-height: var(--font-base-lh);
   word-wrap: break-word;
   transition: transitions(color, 0.3s);
+  padding-top: 24px;
+
+  counter-reset: chapter 0;
 }
 
 .markdown-body details {
@@ -743,15 +746,40 @@
 .markdown-body h1,
 .markdown-body h2 {
   padding-bottom: .3em;
+  padding-top: .3em;
   border-bottom: 1px solid var(--theme-border-secondary);
 }
 
 .markdown-body h2 {
   font-size: 1.5em;
+  margin-top: 4em;
+  counter-increment: chapter 1;
+  counter-reset: section 0;
+  position: relative;
+
+  &::before, &::after {
+    content: counter(chapter);
+    font-size: .8em;
+    color: var(--theme-text-stress);
+    position: absolute;
+    right: 100%;
+    top: 50%;
+  }
+
+  &::before {
+    clip-path: polygon(0 0, 100% 0, 100% 40%, 0 60%);
+    transform: translateY(-50%) translate(-5px, -1px) skew(-10deg);
+  }
+
+  &::after {
+    clip-path: polygon(0 60%, 100% 40%, 100% 100%, 0 100%);
+    transform: translateY(-50%) translate(-7px, 1px) skew(-10deg);
+  }
 }
 
 .markdown-body h3 {
   font-size: 1.25em;
+  counter-increment: section 1;
 }
 
 .markdown-body h4 {
