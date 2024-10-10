@@ -72,7 +72,7 @@ Waline({
 
 ![Vercel Envs](/images/2022/0313/envs.webp)
 
-## Faas
+## FaaS
 
 使用[Next.js][]作为后台服务的提供，数据库使用从[MongoDB][]申请到的512MB大小的数据库。
 

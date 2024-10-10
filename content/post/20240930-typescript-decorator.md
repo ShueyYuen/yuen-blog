@@ -44,57 +44,93 @@ cover: /images/2022/0508/title_bg.webp
 
 #### 原型链
 
+在 JavaScript 中，原型链（prototype chain）是对象属性继承的一种机制。每个 JavaScript 对象（除了 __null__ 之外）都有一个与之关联的原型对象，当你试图访问对象的某个属性时，JavaScript 会首先检查该对象本身是否拥有这个属性。如果没有，它会顺着原型链往上查找，直到找到这个属性或到达 __null__（表示链的尽头）。
+
+##### 原型链的结构
+
+- 每个对象都有一个特殊的属性 __\_\_proto\_\___，指向它的原型对象（prototype）。注意 __\_\_proto\_\___ 是实现中的一个内部属性，而 prototype 是函数对象特有的属性。
+- 一个对象的原型对象又有它自己的原型对象，这样就形成了一条链，称为原型链。
+- 当试图访问一个对象的属性时，JavaScript 引擎会首先在对象自身查找该属性。如果找不到，它会沿着原型链向上查找。
+
+```plantuml
+@startuml
+skinparam rectangle<<behavior>> {
+  roundCorner 25
+}
+
+rectangle MyClass构造函数 as MC
+rectangle MyClass原型对象 as MP
+rectangle MyClass实例 as MI
+
+MC -right-> MP :prototype
+MP -left-> MC :constructor
+MI -up-> MP :__proto__
+MC .down.> MI :new
+
+rectangle Function构造函数 as FC
+rectangle "f(){ [native code] }" as FP
+
+FC -right-> FP :prototype
+FC -right-> FP :__proto__
+FP -left-> FC :constructor
+FC .down.> MC :new
+MC -up-> FP :__proto__
+
+rectangle Object构造函数 as OC
+rectangle Object原型对象 as OP
+rectangle null
+
+OC -right-> OP :prototype
+OP -left-> OC :constructor
+OP -up-> null :__proto__
+
+OC .down.> MP :new
+MP -up-> OP :__proto__
+FP -up-> OP :__proto__
+OC -down-> FP :__proto__
+@enduml
+```
+
+> 逐步验证上图：[详解prototype与__proto__](https://louiszhai.github.io/2015/12/17/prototype/)
+>
+> JSObject以及JSFunction的关系可以参考[（更新）从Chrome源码看JS Object的实现](https://zhuanlan.zhihu.com/p/26169639)中的插图.
+
 ### demo
 
-> 以下为装饰器相关代码，可以在 *⚙ -> JavaScript* 中配置是否启用[实验性装饰器](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#decorators)。
->
 > 在 *⚙ -> 配置* 中打开Console, 查看执行结果。
+>
+> ~~以下为装饰器相关代码，可以在 *⚙ -> JavaScript* 中配置是否启用[实验性装饰器](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#decorators)。~~
 
 {{<playground id="decorator-example" theme="dark" tab="js" tsc="{\"experimentalDecorators\": true, \"emitDecoratorMetadata\": true }" >}}
 {{<playground/param js>}}
-function classDecorator<T extends { new (...args: any[]): {} }>(constructor: T) {
-  console.log('class decorator apply')
+// 类型不友好，仅供时序测试
+function decoratorFactory(name: string) {
+  console.log(`${name} decorator generate`);
+  return (function() {
+    console.log(`${name} decorator apply`);
+  } as any)
 }
+const functionDecorator = decoratorFactory('func');
 
-function functionDecorator(target: any, key: any) {
-  console.log('function decorator  apply');
-}
-
-function functionDecoratorFactory(name: string) {
-  console.log(`function decorator ${name} generate`);
-  return function(target: any, key: any) {
-    console.log(`function  decorator ${name} apply`);
-  }
-}
-
-function propertyDecorator(target: any, key: any) {
-  console.log('property decorator  apply');
-}
-
-function paramsDecorator(target: any, key: any, index: number) {
-  console.log('params decorator  apply');
-}
-
-function accessorDecorator (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-  console.log('accessor decorator  apply');
-};
-
-@classDecorator
+@decoratorFactory('class')
 class MyClass {
-  @propertyDecorator
+  @decoratorFactory('static property')
+  public static PROPS: number = 1;
+ 
+  @decoratorFactory('property')
   public prop1: number = 0;
 
   constructor(public data: string) {}
 
-  @accessorDecorator
+  @decoratorFactory('accessor')
   public get prop() {
     return this.prop1;
   }
 
-  @functionDecoratorFactory('1')
+  @decoratorFactory('func1')
   @functionDecorator
-  @functionDecoratorFactory('2')
-  public greet(@paramsDecorator a: number): void {}
+  @decoratorFactory('func2')
+  public greet(@decoratorFactory('params') a: number): void {}
 }
 
 console.log('main');
@@ -159,9 +195,9 @@ var __param =
 ```javascript
 __decorate([
   // 先通过工厂函数生成所有的装饰器
-  functionDecoratorFactory('1'),
+  decoratorFactory('func1'),
   functionDecorator,
-  functionDecoratorFactory('2'),
+  decoratorFactory('func2'),
 ], MyClass.prototype, "greet", null);
 ```
 
@@ -169,6 +205,7 @@ __decorate([
 
 ```plantuml
 @startuml
+title 装饰器执行顺序图
 start
 floating note
   同一个目标的多个装饰器顺序按照先定义
@@ -216,6 +253,7 @@ end group
 end
 @enduml
 ```
+
 > 以上过程是根据编译结果推测执行顺序，详情可以查看[TypeScript源码v5.6.3, legacyDecorators](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts);
 >
 > - 函数及参数装饰器执行顺序[源码](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts#L532)
@@ -233,8 +271,113 @@ end
 
 ## TS装饰器应用
 
+**纸上得来终觉浅，绝知此事要躬行**
+
 ### 功能增加（如日志）
 
+首先我们简单的创建一个http服务，同时声明好路由控制器。
+
+{{< highlight typescript "linenos=table,hl_lines=4-5, linenostart=1" >}}
+import * as http from "http";
+import { default as Router } from "router";
+import finalhandler from "finalhandler";
+/// <reference path="reflect-metadata/standalone.d.ts" />
+import "reflect-metadata";
+
+const router = new Router();
+http
+  .createServer((req, res) => router(req, res, finalhandler(req, res)))
+  .listen(8080);
+{{< / highlight >}}
+
+分别实现方法装饰器、类装饰器。
+
+- **TimeLog**：在原有的方法上包装一层，打印函数的运行时间，实际开发中需要考虑函数的异步以及其他回调方式。
+
+- **AllMethod**：作用是允许任意方法请求该二级路由，实际开发中可以用工厂创建，同时将请求方法和路由一起存入`metaData`。
+
+- **Controller**：由于类装饰器最后运行，因此我们可以拿到方法上保存的`metaData`，并增加统一的路由前缀后注册到路由控制器上。
+
+{{< highlight typescript "linenos=table, linenostart=12" >}}
+function TimeLog(name: string): MethodDecorator {
+  return function <T>(
+    target: Object,
+    propertyKey: string | symbol,
+    descriptor: TypedPropertyDescriptor<T>
+  ) {
+    const originalMethod = descriptor.value! as unknown as Function;
+
+    descriptor.value = function (...args: any[]) {
+      const start = performance.now();
+      const result = originalMethod.apply(target, args);
+      const executionTime = performance.now() - start;
+      console.log(`Method ${name} executed in ${executionTime}ms`);
+      return result;
+    } as unknown as T;
+
+    return descriptor;
+  };
+}
+
+const pathSymbol = Symbol("path");
+
+function Controller(path: string): ClassDecorator {
+  return function (target: any) {
+    for (const handlerName in target.prototype) {
+      const childPath = Reflect.getMetadata(
+        pathSymbol,
+        target.prototype,
+        handlerName
+      );
+      const handler = target.prototype[handlerName];
+      router.use(`${path}${childPath}`, handler);
+    }
+  };
+}
+
+function AllMethod(path: string): MethodDecorator {
+  return function (
+    targetPrototype: Object,
+    propertyKey: string | symbol,
+    descriptor: TypedPropertyDescriptor<any>
+  ) {
+    Reflect.defineMetadata(pathSymbol, path, targetPrototype, propertyKey);
+  };
+}
+{{< / highlight >}}
+
+最后编写我们的用户控制器类，分别注册`GET /user/query/:id`以及`GET /user/exists/:name`俩个接口。
+
+{{< highlight typescript "linenos=table, linenostart=58" >}}
+@Controller("/user")
+class UserController {
+  @AllMethod("/query/:id")
+  @TimeLog("query")
+  public getById(
+    req: http.IncomingMessage & { params: Record<string, string> },
+    res: http.ServerResponse<http.IncomingMessage>
+  ) {
+    res.end(`${req.method} ${req.params.id}`, "utf-8");
+  }
+
+  @AllMethod("/exists/:name")
+  public queryIsTargetExisted(
+    req: http.IncomingMessage & { params: Record<string, string> },
+    res: http.ServerResponse<http.IncomingMessage>
+  ) {
+    res.end(`${req.params.name} already exists;`, "utf-8");
+  }
+}
+{{< / highlight >}}
+
+按照上述的代码即可编写简单一个简单的服务框架啦。
+
+> 代码依赖[router](https://github.com/pillarjs/router)、[reflect-metadata](https://github.com/rbuckton/reflect-metadata)。
+
 ### DI（依赖注入）
+
+实现依赖注入需要解决很多问题，例如循环依赖。本文只展示技术应用，不做完整的校验。
+
+> 私下推荐一下VSCode的依赖注入方式，[源码](https://github.com/microsoft/vscode/blob/1.94.1/src/vs/platform/instantiation/common/instantiation.ts);
 
 [^reflect]: 对当前的[Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect)的扩充。

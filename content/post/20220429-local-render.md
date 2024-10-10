@@ -13,3 +13,5 @@ toc: true
 plantuml: true
 cover: /images/2022/0429/title_bg.webp
 ---
+
+> [The Anatomy of a Frame](https://aerotwist.com/blog/the-anatomy-of-a-frame/)
