@@ -2,7 +2,7 @@
 author: "Shuey Yuen"
 date: 2024-09-30T10:14:12+08:00
 title: "TypeScript装饰器"
-description: 简单介绍我所了解到的装饰器。
+description: 简单介绍愚所了解的装饰器。
 tags: ["TypeScript", "Decorator", "Design Pattern"]
 categories: ["Web"]
 toc: true
@@ -261,7 +261,7 @@ end
 
 > *同名访问器的装饰器，不允许使用相同的装饰器分别修饰*，详情见[Accessor Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html#accessor-decorators);
 
-> 如果启用了`emitDecoratorMetadata`, `Metadata`应用时机在用户装饰器之前。所以用户装饰器可以安全的访问`design:type`, `design:paramtypes`, `design:returntype`等信息，详情见[reflect-metadata](https://github.com/rbuckton/reflect-metadata)[^reflect].
+> 如果启用了 `emitDecoratorMetadata`, `Metadata` 应用时机在用户装饰器之前。所以用户装饰器可以安全的访问 `design:type`, `design:paramtypes`, `design:returntype` 等信息，详情见[reflect-metadata](https://github.com/rbuckton/reflect-metadata)[^reflect].
 
 ### 推荐文章
 
@@ -273,7 +273,7 @@ end
 
 **纸上得来终觉浅，绝知此事要躬行**
 
-### 功能增加（如日志）
+### 功能增加（如日志、路由）
 
 首先我们简单的创建一个http服务，同时声明好路由控制器。
 
@@ -294,9 +294,9 @@ http
 
 - **TimeLog**：在原有的方法上包装一层，打印函数的运行时间，实际开发中需要考虑函数的异步以及其他回调方式。
 
-- **AllMethod**：作用是允许任意方法请求该二级路由，实际开发中可以用工厂创建，同时将请求方法和路由一起存入`metaData`。
+- **AllMethod**：作用是允许任意方法请求该二级路由，实际开发中可以用工厂创建，同时将请求方法和路由一起存入 `metaData`。
 
-- **Controller**：由于类装饰器最后运行，因此我们可以拿到方法上保存的`metaData`，并增加统一的路由前缀后注册到路由控制器上。
+- **Controller**：由于类装饰器最后运行，因此我们可以拿到方法上保存的 `metaData`，并增加统一的路由前缀后注册到路由控制器上。
 
 {{< highlight typescript "linenos=table, linenostart=12" >}}
 function TimeLog(name: string): MethodDecorator {
@@ -346,7 +346,7 @@ function AllMethod(path: string): MethodDecorator {
 }
 {{< / highlight >}}
 
-最后编写我们的用户控制器类，分别注册`GET /user/query/:id`以及`GET /user/exists/:name`俩个接口。
+最后编写我们的用户控制器类，分别注册 `GET /user/query/:id` 以及 `GET /user/exists/:name` 俩个接口。
 
 {{< highlight typescript "linenos=table, linenostart=58" >}}
 @Controller("/user")
@@ -370,14 +370,82 @@ class UserController {
 }
 {{< / highlight >}}
 
-按照上述的代码即可编写简单一个简单的服务框架啦。
+按照上述的代码即可编写简单一个简单的服务框架啦。也可以用上述方式配合[express](https://github.com/expressjs/express)等框架啦。
 
 > 代码依赖[router](https://github.com/pillarjs/router)、[reflect-metadata](https://github.com/rbuckton/reflect-metadata)。
 
 ### DI（依赖注入）
 
-实现依赖注入需要解决很多问题，例如循环依赖。本文只展示技术应用，不做完整的校验。
+如何实现依赖注入？其实就是解决俩个主要问题，“依赖什么”以及“如何找到依赖”。不同于 `Java` 有内置的查询所有类的方法，在 `ts` 中我们需要自己实现一个全局的单例作为容器。
 
-> 私下推荐一下VSCode的依赖注入方式，[源码](https://github.com/microsoft/vscode/blob/1.94.1/src/vs/platform/instantiation/common/instantiation.ts);
+实现依赖注入需要解决很多细节上问题，例如循环依赖。本文只展示技术应用，不做完整的校验。
+
+> 私推荐一下VSCode的依赖注入方式[源码](https://github.com/microsoft/vscode/blob/1.94.1/src/vs/platform/instantiation/common/instantiation.ts)，以及别人写的解读博客[VSCode For Web 深入浅出 -- 依赖注入设计](https://juejin.cn/post/7166143245851115550)。
+
+```typescript
+type Constructor<T = any> = new (...args: any[]) => T;
+const container = new Map<string | symbol, Constructor>();
+
+function Inject(key: string | symbol): ClassDecorator {
+  return function (target: any) {
+    container.set(key, target);
+  };
+}
+
+function Injected(key: string): PropertyDecorator {
+  return function (target: any, propertyKey: string | symbol) {
+    const privateKey = typeof propertyKey === 'string' ? Symbol(propertyKey) : Symbol(propertyKey.toString());
+
+    Object.defineProperty(target, propertyKey, {
+      get: function () {
+        if (!this[privateKey]) {
+          const constructor = container.get(key);
+          if (!constructor) {
+            throw new Error("依赖未注册");
+          }
+          this[privateKey] = new constructor();
+        }
+        return this[privateKey];
+      },
+      set: function (value: any) {
+        this[privateKey] = value;
+      },
+      enumerable: true,
+      configurable: true,
+    });
+  };
+}
+```
+
+- **@Inject**：装饰器用于将类注册到容器中。
+- **@Injected**：装饰器用于从容器中获取依赖并注入到类的属性中。
+
+推荐博文的结尾也有一个简单的依赖注入的实现，和上述实现在属性装饰器部分有区别。一个是注入对象立即绑定到原型上，所有实例共享一个依赖；一个是使用时绑定到实例上，每个实例一个不同的依赖。实际开发中一般俩个都可能是合理的场景！
+
+{{< highlight typescript "linenos=table, linenostart=34" >}}
+interface IService { write(name: string): void; };
+@Inject("IService")
+class AService implements IService {
+  write(name: string) {
+    console.log(name);
+  }
+}
+
+class InjectTest {
+  @Injected("IService")
+  private readonly service: IService = null!;
+
+  doSomething() {
+    this.service.write('hello world');
+  }
+}
+
+const test = new InjectTest();
+test.doSomething();
+{{</ highlight >}}
+
+我们首先定义了一个 `IService` 接口，它包含一个 `write` 方法。之所以抽象接口出来，是为了减少被注入类和服务类具体实现之间的耦合。
+
+接下来，我们定义了一个 `AService` 类，它实现了 `IService` 接口。我们使用 `@Inject("IService")` 装饰器将 `AService` 类注册为 `IService` 的实现。最后使用 `@Injected("IService")` 装饰器将 `IService` 的实例注入到 `service` 属性中。
 
 [^reflect]: 对当前的[Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect)的扩充。
