@@ -8,6 +8,11 @@ body {
   background-color: var(--theme-bg-primary);
   transition: transitions(background-color, 0.3s);
   overflow: overlay;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
 }
 
 *::-webkit-scrollbar
