@@ -7,7 +7,7 @@ tags: ["TypeScript", "Decorator", "Design Pattern"]
 categories: ["Web"]
 toc: true
 plantuml: true
-cover: /images/2022/0508/title_bg.webp
+cover: /images/2024/0930/title-bg.webp
 ---
 
 ## 装饰器模式
