@@ -715,9 +715,11 @@
 }
 
 .markdown-body blockquote {
-  padding: 0 1em;
+  padding: .5em 1em;
   color: #6a737d;
-  border-left: .25em solid #dfe2e5;
+  border-left: .2em solid #dfe2e5;
+  background: var(--theme-blockquote);
+  border-radius: 0 6px 6px 0;
 }
 
 .markdown-body blockquote>:first-child {
@@ -756,11 +758,31 @@
   margin-top: 5em;
   counter-increment: chapter 1;
   counter-reset: section 0;
+
+  &::after,
+  &::before {
+    font-size: .8em;
+    content: counter(chapter);
+  }
+}
+
+.markdown-body h3 {
+  font-size: 1.25em;
+  counter-increment: section 1;
+
+  &::before,
+  &::after {
+    font-size: 0.7em;
+    content: counter(chapter) "." counter(section) " ";
+  }
+}
+
+.markdown-body h2,
+.markdown-body h3 {
   position: relative;
 
-  &::before, &::after {
-    content: counter(chapter);
-    font-size: .8em;
+  &::before,
+  &::after {
     color: var(--theme-text-stress);
     position: absolute;
     right: 100%;
@@ -776,11 +798,6 @@
     clip-path: polygon(0 60%, 100% 40%, 100% 100%, 0 100%);
     transform: translateY(-50%) translate(-7px, 1px) skew(-10deg);
   }
-}
-
-.markdown-body h3 {
-  font-size: 1.25em;
-  counter-increment: section 1;
 }
 
 .markdown-body h4 {

@@ -6,8 +6,6 @@ $light-bg-active1: #dddfe1;
 $light-bg-active2: #ffffff;
 
 $light-text-active: #2ecc71;
-$light-text-focus: #10bb57;
-$light-text-focus2: #009c41;
 $light-text-light: #ffffff;
 $light-text-primary: #3e3e5f;
 $light-text-low: #aeacb1;
@@ -16,6 +14,9 @@ $light-text-stress: #14281D;
 $light-border-primary: #e1e4e8;
 $light-border-secondary: #ebedef;
 
+$light-text-focus: #10bb57;
+$light-text-focus2: #009c41;
+$light-blockquote: rgba(238, 238, 238, 0.5);
 
 /** dark theme */
 $dark-bg-primary: #1e2428;
@@ -25,8 +26,6 @@ $dark-bg-active1: #1b2024;
 $dark-bg-active2: #20272b;
 
 $dark-text-active: #3dad6c;
-$dark-text-focus: #54c482;
-$dark-text-focus2: #bad1c4;
 $dark-text-light: #d7dfe6;
 $dark-text-primary: #adbac7;
 $dark-text-low: #444c56;
@@ -34,6 +33,10 @@ $dark-text-stress: #cdd9e5;
 
 $dark-border-primary: #444c56;
 $dark-border-secondary: #373e47;
+
+$dark-text-focus: #54c482;
+$dark-text-focus2: #bad1c4;
+$dark-blockquote: rgba(67, 76, 82, 0.5);
 
 @mixin theme-light {
   --theme-bg-primary: #{$light-bg-primary};
@@ -52,6 +55,8 @@ $dark-border-secondary: #373e47;
 
   --theme-border-primary: #{$light-border-primary};
   --theme-border-secondary: #{$light-border-secondary};
+
+  --theme-blockquote: #{$light-blockquote};
 }
 
 :root.theme-light {
@@ -83,6 +88,8 @@ $dark-border-secondary: #373e47;
 
   --theme-border-primary: #{$dark-border-primary};
   --theme-border-secondary: #{$dark-border-secondary};
+
+  --theme-blockquote: #{$dark-blockquote};
 
   // waline样式
   /* 常规颜色 */
