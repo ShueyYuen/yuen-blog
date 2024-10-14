@@ -14,6 +14,15 @@ $light-text-stress: #14281D;
 $light-border-primary: #e1e4e8;
 $light-border-secondary: #ebedef;
 
+$light-warning: hsl(0, 65%, 65%);
+$light-warning-bg: hsla(0, 65%, 65%, 0.15);
+$light-info: hsl(30, 80%, 70%);
+$light-info-bg: hsla(30, 80%, 70%, 0.15);
+$light-note: hsl(200, 65%, 65%);
+$light-note-bg: hsla(200, 65%, 65%, 0.15);
+$light-success: hsl(140, 65%, 65%);
+$light-success-bg: hsla(140, 65%, 65%, 0.15);
+
 $light-text-focus: #10bb57;
 $light-text-focus2: #009c41;
 $light-blockquote: rgba(238, 238, 238, 0.5);
@@ -34,6 +43,15 @@ $dark-text-stress: #cdd9e5;
 $dark-border-primary: #444c56;
 $dark-border-secondary: #373e47;
 
+$dark-warning: hsl(0, 25%, 35%);
+$dark-warning-bg: hsla(0, 25%, 35%, 0.15);
+$dark-info: hsl(30, 25%, 35%);
+$dark-info-bg: hsla(30, 25%, 35%, 0.15);
+$dark-note: hsl(200, 25%, 35%);
+$dark-note-bg: hsla(200, 25%, 35%, 0.15);
+$dark-success: hsl(140, 25%, 35%);
+$dark-success-bg: hsla(140, 25%, 35%, 0.15);
+
 $dark-text-focus: #54c482;
 $dark-text-focus2: #bad1c4;
 $dark-blockquote: rgba(67, 76, 82, 0.5);
@@ -46,8 +64,6 @@ $dark-blockquote: rgba(67, 76, 82, 0.5);
   --theme-bg-actvie2: #{$light-bg-active2};
 
   --theme-text-active: #{$light-text-active};
-  --theme-text-focus: #{$light-text-focus};
-  --theme-text-focus2: #{$light-text-focus2};
   --theme-text-light: #{$light-text-light};
   --theme-text-primary: #{$light-text-primary};
   --theme-text-low: #{$light-text-low};
@@ -56,6 +72,17 @@ $dark-blockquote: rgba(67, 76, 82, 0.5);
   --theme-border-primary: #{$light-border-primary};
   --theme-border-secondary: #{$light-border-secondary};
 
+  --theme-warning: #{$light-warning};
+  --theme-warning-bg: #{$light-warning-bg};
+  --theme-info: #{$light-info};
+  --theme-info-bg: #{$light-info-bg};
+  --theme-note: #{$light-note};
+  --theme-note-bg: #{$light-note-bg};
+  --theme-success: #{$light-success};
+  --theme-success-bg: #{$light-success-bg};
+
+  --theme-text-focus: #{$light-text-focus};
+  --theme-text-focus2: #{$light-text-focus2};
   --theme-blockquote: #{$light-blockquote};
 }
 
@@ -79,8 +106,6 @@ $dark-blockquote: rgba(67, 76, 82, 0.5);
   --theme-bg-actvie2: #{$dark-bg-active2};
 
   --theme-text-active: #{$dark-text-active};
-  --theme-text-focus: #{$dark-text-focus};
-  --theme-text-focus2: #{$dark-text-focus2};
   --theme-text-light: #{$dark-text-light};
   --theme-text-primary: #{$dark-text-primary};
   --theme-text-low: #{$dark-text-low};
@@ -89,6 +114,17 @@ $dark-blockquote: rgba(67, 76, 82, 0.5);
   --theme-border-primary: #{$dark-border-primary};
   --theme-border-secondary: #{$dark-border-secondary};
 
+  --theme-warning: #{$dark-warning};
+  --theme-warning-bg: #{$dark-warning-bg};
+  --theme-info: #{$dark-info};
+  --theme-info-bg: #{$dark-info-bg};
+  --theme-note: #{$dark-note};
+  --theme-note-bg: #{$dark-note-bg};
+  --theme-success: #{$dark-success};
+  --theme-success-bg: #{$dark-success-bg};
+
+  --theme-text-focus: #{$dark-text-focus};
+  --theme-text-focus2: #{$dark-text-focus2};
   --theme-blockquote: #{$dark-blockquote};
 
   // waline样式

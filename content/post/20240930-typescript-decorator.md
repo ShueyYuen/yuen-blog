@@ -16,6 +16,8 @@ cover: /images/2022/0508/title_bg.webp
 
 > [《Design Patterns: Elements of Reusable Object-Oriented Software》#196](https://store.shuey.fun/ebook/CSBook/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/DesignPatterns.pdf)
 
+> 举个🌰，一个人，可以在冬天的时穿羽绒服，也可以在下雨天套上雨衣。所有这些外在的服装并没有改变人的本质，但是它们却拓展了人的基本抗性。——[一起读透TS装饰器](https://juejin.cn/post/7004035071459983390)
+
 **优点**
 
 1. 相比较于类的继承来扩展功能，对对象进行包裹更加的灵活;
@@ -26,13 +28,22 @@ cover: /images/2022/0508/title_bg.webp
 1. 没有继承结构清晰;
 2. 层数较多时，难以理解和管理.
 
+
+### 推荐文章
+
+- [设计模式之装饰器模式（decorator pattern）](https://www.cnblogs.com/yssjun/p/11110013.html)
+
 ## TypeScript 中的装饰器[^experimental]
+
+{{< notice notice-warning >}}
+以下所有内容均使用旧版本装饰器！！！
+{{< /notice >}}
 
 装饰器可以修改类的行为， 常用于[元编程](https://en.wikipedia.org/wiki/Metaprogramming)和代码复用。
 
 ### 装饰器语法
 
-装饰装饰器是一种特殊类型的声明，本质上是一个普通的函数，它可以通过 `@` 符号附加到类、方法、访问器、属性或参数上。装饰器函数的第一个参数是目标对象，后续参数根据装饰器的类型不同而有所不同。
+装饰装饰器是一种特殊类型的声明，本质上是一个普通的函数，它可以通过 `@` 符号附加到类、方法、访问器、属性或参数上。
 
 装饰器的基本语法如下：
 
@@ -110,11 +121,6 @@ class HeavyTask {
   }
 }
 ```
-
-
-### 推荐文章
-
-- [设计模式之装饰器模式（decorator pattern）](https://www.cnblogs.com/yssjun/p/11110013.html)
 
 ## TS装饰器详情
 
@@ -352,7 +358,7 @@ end
 
 首先我们简单的创建一个http服务，同时声明好路由控制器。
 
-{{< highlight typescript "linenos=table,hl_lines=4-5, linenostart=1" >}}
+```typescript {hl_lines=["4-5"]}
 import * as http from "http";
 import { default as Router } from "router";
 import finalhandler from "finalhandler";
@@ -363,8 +369,7 @@ const router = new Router();
 http
   .createServer((req, res) => router(req, res, finalhandler(req, res)))
   .listen(8080);
-{{< / highlight >}}
-
+```
 分别实现方法装饰器、类装饰器。
 
 - **TimeLog**：在原有的方法上包装一层，打印函数的运行时间，实际开发中需要考虑函数的异步以及其他回调方式。
@@ -373,7 +378,7 @@ http
 
 - **Controller**：由于类装饰器最后运行，因此我们可以拿到方法上保存的 `metaData`，并增加统一的路由前缀后注册到路由控制器上。
 
-{{< highlight typescript "linenos=table, linenostart=12" >}}
+```typescript {linenostart=12}
 function TimeLog(name: string): MethodDecorator {
   return function <T>(
     target: Object,
@@ -419,11 +424,11 @@ function AllMethod(path: string): MethodDecorator {
     Reflect.defineMetadata(pathSymbol, path, targetPrototype, propertyKey);
   };
 }
-{{< / highlight >}}
+```
 
 最后编写我们的用户控制器类，分别注册 `GET /user/query/:id` 以及 `GET /user/exists/:name` 俩个接口。
 
-{{< highlight typescript "linenos=table, linenostart=58" >}}
+```typescript {linenostart=58}
 @Controller("/user")
 class UserController {
   @AllMethod("/query/:id")
@@ -443,7 +448,7 @@ class UserController {
     res.end(`${req.params.name} already exists;`, "utf-8");
   }
 }
-{{< / highlight >}}
+```
 
 按照上述的代码即可编写简单一个简单的服务框架啦。也可以用上述方式配合[express](https://github.com/expressjs/express)等框架啦。
 
@@ -503,7 +508,7 @@ function Injected(key: string): PropertyDecorator {
 
 推荐博文的结尾也有一个简单的依赖注入的实现，和上述实现在属性装饰器部分有区别。一个是注入对象立即绑定到原型上，所有实例共享一个依赖；一个是使用时绑定到实例上，每个实例一个不同的依赖。实际开发中一般俩个都可能是合理的场景！
 
-{{< highlight typescript "linenos=table, linenostart=33" >}}
+```typescript {linenostart=33}
 interface IService { write(name: string): void; };
 @Inject("IService")
 class AService implements IService {
@@ -523,7 +528,7 @@ class InjectTest {
 
 const test = new InjectTest();
 test.doSomething();
-{{</ highlight >}}
+```
 
 我们首先定义了一个 `IService` 接口，它包含一个 `write` 方法。之所以抽象接口出来，是为了减少被注入类和服务类具体实现之间的耦合。
 
@@ -532,6 +537,7 @@ test.doSomething();
 ## 参考文献
 
 - [一起读透TS装饰器](https://juejin.cn/post/7004035071459983390)
+- [深入理解Typescript装饰器](https://3rcd.com/blog/ts-decorator)
 
 [^experimental]: 本文主要介绍旧版本装饰器，需启用 `experimentalDecorators`。
 [^reflect]: 对当前的[Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect)的扩充。

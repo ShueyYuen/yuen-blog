@@ -196,6 +196,9 @@ declare var reloadPlantUML: (isDark: boolean) => void
       });
 
       const header = headers[index];
+      if (!header) {
+        return;
+      }
       tocLinks.forEach(link => link.classList.remove('active'));
       const tocLink = tocLinks.get('#' + header.id);
       if (tocLink) {
