@@ -145,7 +145,7 @@ defaultContentLanguage = "zh-cn"           # Default language to use
     lineNos = true
     lineNumbersInTable = true
     noClasses = true
-    style = "monokai"
+    style = "dracula"
     tabWidth = 4
 
 [outputs]
