@@ -33,7 +33,7 @@ cover: /images/2024/0930/title-bg.webp
 
 - [设计模式之装饰器模式（decorator pattern）](https://www.cnblogs.com/yssjun/p/11110013.html)
 
-## TypeScript 中的装饰器[^experimental]
+## TS 中的装饰器[^experimental]
 
 {{< notice notice-warning >}}
 以下所有内容均使用旧版本装饰器！！！
@@ -43,7 +43,7 @@ cover: /images/2024/0930/title-bg.webp
 
 ### 装饰器语法
 
-装饰装饰器是一种特殊类型的声明，本质上是一个普通的函数，它可以通过 `@` 符号附加到类、方法、访问器、属性或参数上。
+装饰装饰器是一种特殊类型的声明，本质上是一个普通的函数，通过语法 `@Decorator` 加到类、方法、访问器、属性或参数上。
 
 装饰器的基本语法如下：
 
@@ -64,9 +64,40 @@ function Decorator(target: any, propertyKey?: string, descriptor?: PropertyDescr
 
 ### 装饰器的类型
 
+装饰器类型定义，详见 [decorators.legacy.d.ts](https://github.com/microsoft/TypeScript/blob/v5.6.3/src/lib/decorators.legacy.d.ts);
+
+```typescript
+// 类装饰器
+declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
+// 属性装饰器
+declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
+// 方法/访问器装饰器
+declare type MethodDecorator = <T>(
+  target: Object,
+  propertyKey: string | symbol,
+  descriptor: TypedPropertyDescriptor<T>
+) => TypedPropertyDescriptor<T> | void;
+// 参数装饰器
+declare type ParameterDecorator = (
+  target: Object,
+  propertyKey: string | symbol | undefined,
+  parameterIndex: number
+) => void;
+```
+
 #### 类装饰器
 
-类装饰器应用于类构造函数，可以用来监视、修改或替换类定义，仅接受一个参数，即类的构造函数。
+类装饰器应用于类构造函数，可以用来监视、修改或替换类定义。
+
+**参数**：仅接受一个参数，即类的构造函数。
+
+**返回值**：如果返回非空则替换原来的类。
+
+{{< notice notice-info >}}
+如果返回了一个和被装饰类毫无关系的类怎么办！！乱棍打死💢～
+{{< /notice >}}
+
+如上述tips所言，TS无法为装饰器提供类型保护。
 
 ```typescript
 // 使得类构造函数、原型不允许再被修改
@@ -89,7 +120,15 @@ class Greeter {
 
 #### 方法装饰器
 
-方法装饰器应用于方法，可以用来监视、修改或替换方法定义，接收三个参数，分别是原型对象、方法名和方法的描述符。
+方法装饰器应用于方法，可以用来监视、修改或替换方法定义。
+
+**参数**
+
+- `target`: 原型对象，修饰静态成员时则为构造函数
+- `propertyKey`: 方法名
+- `descriptor`: 方法的描述符。
+
+**返回值**：如果返回了一个非空的值`result`，则会调用`Object.defineProperty(target, result)`。
 
 ```typescript
 function timeLog(
@@ -122,17 +161,66 @@ class HeavyTask {
 }
 ```
 
-## TS装饰器详情
+#### 访问器装饰器
+
+访问器装饰器本质上就是方法装饰器，不同的地方在于第三个参数`属性描述符上`。
+
+![accessor-vs-function](/images/2024/0930/accessor-vs-function.png)
+
+> *同名访问器不允许使用相同的装饰器分别修饰*，详情见[Accessor Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html#accessor-decorators);
+
+可以看到访问器装饰器的描述符中同时有 `getter` 和 `setter`，如果都应用相同的装饰器，会出现装饰多次，显然是错误的——好比我穿了一件羽绒服，然后又穿了一件相同的羽绒服。
+
+#### 属性装饰器
+
+属性装饰器应用于类的属性，可以用来修改属性的元数据。由于运行装饰器的时候，类还没有实例化，如果我们严格按照定义使用，属性装饰器只能收集信息！但是结合下面说的 **返回值*bug(feature?)*** 还是可以实现很多好玩的功能。
+
+**参数**
+
+- `target`: 原型对象，修饰静态成员时则为构造函数
+- `propertyKey`: 属性名
+- ~~`descriptor`: 属性描述符（由于实例没有初始化，没有办法获取到属性描述符，会得到undefined）。~~ 
+
+> 虽然 `TS` 定义中不存在，但转译到 `JS` 却有传参，不可以通过判断参数长度来区分属性装饰器和方法装饰器。
+
+**返回值**：~~如果返回了一个非空的值`result`，则会调用`Object.defineProperty(target, result)`。~~
+
+> 虽然 `TS` 定义中不使用返回值，但转译到 `JS` 的时候返回值会和[方法装饰器]({{< relref "#方法装饰器" >}})一样处理。
+
+#### 参数装饰器
+
+参数装饰器应用于方法参数，可以用来修改参数的元数据。
+
+> 不使用骚操作（使用方法名获取到方法，然后修改原型或构造函数上的方法）的话，大概就只能信息收集！
+
+**参数**
+
+- `target`: 原型对象，修饰静态方法参数时则为构造函数
+- `propertyKey`: 参数所在的方法名
+- `parameterIndex`: 该参数在入参中的索引
+
+## TS 装饰器详情
 
 ### 前置知识
 
 #### Descriptor
 
-每个对象都有一组不可见的属性，其中包含于该属性关联的元数据，称为“属性描述符号”。
+每个对象都有一组不可见的属性，其中包含于该属性关联的元数据，称为“描述符”。`Descriptor` 包含以下属性：
+
+| 属性          | 描述                                                      | 默认值    |
+|---------------|----------------------------------------------------------|---------------|
+| `value`       | 与属性关联的值（仅限数据描述符）。                             | **undefined** |
+| `writable`    | 布尔值，属性值是否可以更改（仅限数据描述符）。                   | **false**     |
+| `get`         | 与属性关联的 getter 函数，没有则为 undefined（仅限访问器描述符）。| **undefined** |
+| `set`         | 与属性关联的 setter 函数，没有则为 undefined（仅限访问器描述符）。| **undefined** |
+| `configurable`| 布尔值，表示属性的描述符是否可以更改（writable 为 true 时，属性值可以被修改，且 writable 可以被修改为 false）或属性是否可以被删除。                           | **false**     |
+| `enumerable`  | 布尔值，表示访问器是否可以被枚举。                             | **false**     |
 
 > [[Web Dev] Property descriptors](https://web.dev/learn/javascript/objects/property-descriptors)
 >
 > [[MDN] Object.getOwnPropertyDescriptor()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor)
+>
+> [[MDN] Object.defineProperty()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
 
 #### 原型链
 
@@ -142,7 +230,7 @@ class HeavyTask {
 
 ##### 原型链的结构
 
-- 每个对象都有一个特殊的属性 __\_\_proto\_\___，指向它的原型对象（prototype）。注意 __\_\_proto\_\___ 是实现中的一个内部属性，而 prototype 是函数对象特有的属性。
+- 每个对象都有一个特殊的属性 __\_\_proto\_\___，指向它的原型对象（prototype）。注意 __\_\_proto\_\___ 是实现中的一个内部属性，而 __prototype__ 是函数对象特有的属性。
 - 一个对象的原型对象又有它自己的原型对象，这样就形成了一条链，称为原型链。
 
 ```plantuml
@@ -188,15 +276,22 @@ OC -down-> FP :__proto__
 >
 > JSObject以及JSFunction的关系可以参考[（更新）从Chrome源码看JS Object的实现](https://zhuanlan.zhihu.com/p/26169639)中的插图.
 
-### 装饰器简介
+好的，现在我们已经知道 *1 + 1 = 2*，接下来我们来解方程吧！
 
-`TypeScript` 中的装饰器
+```javascript
+const obj = {}; // 如果更换为 Object.create(null)，结果是啥？
+const prototype = (obj.__proto__ = Object.defineProperty({ a: 1 }, 'b', {
+  configurable: false,
+  value: 2,
+}));
+// 输出啥？
+console.log(obj.a, (obj.a = 10), obj.a, prototype.a);
+console.log(obj.b, (obj.b = 20), obj.b, prototype.b);
+```
 
 ### demo
 
 > 在 *⚙ -> 配置* 中打开Console, 查看执行结果。
->
-> ~~以下为装饰器相关代码，可以在 *⚙ -> JavaScript* 中配置是否启用[实验性装饰器](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#decorators)。~~
 
 {{<playground id="decorator-example" theme="dark" tab="js" tsc="{\"experimentalDecorators\": true, \"emitDecoratorMetadata\": true }" >}}
 {{<playground/param js>}}
@@ -272,9 +367,6 @@ function __param(paramIndex, decorator) {
   };
 }
 
-```
-
-```javascript
 __decorate([
   // 先通过工厂函数生成所有的装饰器
   decoratorFactory('func1'),
@@ -341,8 +433,6 @@ end
 > - 函数及参数装饰器执行顺序[源码](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts#L532)
 > - 静态成员和实例成员执行顺序[源码](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts#L183)
 
-> *同名访问器的装饰器，不允许使用相同的装饰器分别修饰*，详情见[Accessor Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html#accessor-decorators);
-
 > 如果启用了 `emitDecoratorMetadata`, `Metadata` 应用时机在用户装饰器之前。所以用户装饰器可以安全的访问 `design:type`, `design:paramtypes`, `design:returntype` 等信息，详情见[reflect-metadata](https://github.com/rbuckton/reflect-metadata)[^reflect].
 
 ### 推荐文章
@@ -350,7 +440,7 @@ end
 - [TS装饰器完全指南](https://mirone.me/a-complete-guide-to-typescript-decorator/)
 - [TS handbook 装饰器](https://www.typescriptlang.org/docs/handbook/decorators.html)
 
-## TS装饰器应用
+## TS 装饰器应用
 
 **纸上得来终觉浅，绝知此事要躬行**
 
@@ -372,33 +462,11 @@ http
 ```
 分别实现方法装饰器、类装饰器。
 
-- **TimeLog**：在原有的方法上包装一层，打印函数的运行时间，实际开发中需要考虑函数的异步以及其他回调方式。
-
 - **AllMethod**：作用是允许任意方法请求该二级路由，实际开发中可以用工厂创建，同时将请求方法和路由一起存入 `metaData`。
 
 - **Controller**：由于类装饰器最后运行，因此我们可以拿到方法上保存的 `metaData`，并增加统一的路由前缀后注册到路由控制器上。
 
 ```typescript {linenostart=12}
-function TimeLog(name: string): MethodDecorator {
-  return function <T>(
-    target: Object,
-    propertyKey: string | symbol,
-    descriptor: TypedPropertyDescriptor<T>
-  ) {
-    const originalMethod = descriptor.value! as unknown as Function;
-
-    descriptor.value = function (...args: any[]) {
-      const start = performance.now();
-      const result = originalMethod.apply(target, args);
-      const executionTime = performance.now() - start;
-      console.log(`Method ${name} executed in ${executionTime}ms`);
-      return result;
-    } as unknown as T;
-
-    return descriptor;
-  };
-}
-
 const pathSymbol = Symbol("path");
 
 function Controller(path: string): ClassDecorator {
@@ -432,7 +500,6 @@ function AllMethod(path: string): MethodDecorator {
 @Controller("/user")
 class UserController {
   @AllMethod("/query/:id")
-  @TimeLog("query")
   public getById(
     req: http.IncomingMessage & { params: Record<string, string> },
     res: http.ServerResponse<http.IncomingMessage>
@@ -491,6 +558,7 @@ function Injected(key: string): PropertyDecorator {
     const privateKey = Symbol(propertyKey.toString());
     return ({
       get(this: any) {
+        // 惰性初始化
         return (this[privateKey] ??= container.instantiate(key));
       },
       set(this: any, value: any) {
