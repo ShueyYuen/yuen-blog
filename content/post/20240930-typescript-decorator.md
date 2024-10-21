@@ -97,7 +97,7 @@ declare type ParameterDecorator = (
 如果返回了一个和被装饰类毫无关系的类怎么办！！乱棍打死💢～
 {{< /notice >}}
 
-如上述tips所言，TS无法为装饰器提供类型保护。
+***如上述tips所言，TS无法为装饰器提供类型保护。***
 
 ```typescript
 // 使得类构造函数、原型不允许再被修改
@@ -604,6 +604,7 @@ test.doSomething();
 
 ## 参考文献
 
+- [TypeScript装饰器完全指南](https://mirone.me/zh-hans/a-complete-guide-to-typescript-decorator/)
 - [一起读透TS装饰器](https://juejin.cn/post/7004035071459983390)
 - [深入理解Typescript装饰器](https://3rcd.com/blog/ts-decorator)
 

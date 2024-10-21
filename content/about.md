@@ -13,7 +13,7 @@ aplayer: true
 
 <div class="zh post-container">
     <!--copied from markdown -->
-    <blockquote><p>不愚为耻，不愚为耻</p></blockquote>
+    <blockquote><p>百工之人，不恥相師</p></blockquote>
     <p>&emsp;&emsp;Hey，我是<strong>Cofal(へいぎ)</strong>，一名还在苦苦求学的渣渣.</p>
     <p>
         &emsp;&emsp;我是一位酷爱<strong><a href="{{ site.url }}/tags/#二次元">二次元</a></strong>
