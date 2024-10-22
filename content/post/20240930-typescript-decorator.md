@@ -391,8 +391,8 @@ group 实例成员
   note left
     方法装饰器、访问器
     装饰器和属性装饰器
-    是同优先级的。谁先
-    声明谁先应用。
+    为同优先级，谁先声
+    明谁先应用。
   end note
   split
     :属性装饰器;
@@ -428,10 +428,11 @@ end
 @enduml
 ```
 
-> 以上过程是根据编译结果推测执行顺序，详情可以查看[TypeScript源码v5.6.3, legacyDecorators](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts);
->
-> - 函数及参数装饰器执行顺序[源码](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts#L532)
-> - 静态成员和实例成员执行顺序[源码](https://github.com/microsoft/TypeScript/blob/d48a5cf89a62a62d6c6ed53ffa18f070d9458b85/src/compiler/transformers/legacyDecorators.ts#L183)
+> [TypeScript Handbook 装饰器应用顺序](https://www.typescriptlang.org/docs/handbook/decorators.html#decorator-evaluation)。对于装饰器工厂，装饰器在对应装饰器被使用前生成（**无间隔**）。如果对具体源码感兴趣，可以查看对应内容：
+> 
+> - 装饰器编译 [TypeScript源码v5.6.3, legacyDecorators](https://github.com/microsoft/TypeScript/blob/v5.6.3/src/compiler/transformers/legacyDecorators.ts);
+> - 函数及参数装饰器执行顺序[源码](https://github.com/microsoft/TypeScript/blob/v5.6.3/src/compiler/transformers/legacyDecorators.ts#L532)
+> - 静态成员和实例成员执行顺序[源码](https://github.com/microsoft/TypeScript/blob/v5.6.3/src/compiler/transformers/legacyDecorators.ts#L183)
 
 > 如果启用了 `emitDecoratorMetadata`, `Metadata` 应用时机在用户装饰器之前。所以用户装饰器可以安全的访问 `design:type`, `design:paramtypes`, `design:returntype` 等信息，详情见[reflect-metadata](https://github.com/rbuckton/reflect-metadata)[^reflect].
 
