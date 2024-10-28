@@ -48,7 +48,7 @@ cover: /images/2024/0930/title-bg.webp
 装饰器的基本语法如下：
 
 ```typescript
-@Decorator
+@decorator
 class MyClass {
   // ...
 }
@@ -57,7 +57,7 @@ class MyClass {
 装饰器函数的定义如下：
 
 ```typescript
-function Decorator(target: any, propertyKey?: string, descriptor?: PropertyDescriptor) {
+function decorator(target: any, propertyKey?: string, descriptor?: PropertyDescriptor) {
   // 装饰器逻辑
 }
 ```
@@ -470,7 +470,7 @@ http
 ```typescript {linenostart=12}
 const pathSymbol = Symbol("path");
 
-function Controller(path: string): ClassDecorator {
+function controller(path: string): ClassDecorator {
   return function (target: any) {
     for (const handlerName in target.prototype) {
       const childPath = Reflect.getMetadata(
@@ -484,7 +484,7 @@ function Controller(path: string): ClassDecorator {
   };
 }
 
-function AllMethod(path: string): MethodDecorator {
+function allMethod(path: string): MethodDecorator {
   return function (
     targetPrototype: Object,
     propertyKey: string | symbol,
@@ -498,9 +498,9 @@ function AllMethod(path: string): MethodDecorator {
 最后编写我们的用户控制器类，分别注册 `GET /user/query/:id` 以及 `GET /user/exists/:name` 俩个接口。
 
 ```typescript {linenostart=58}
-@Controller("/user")
+@controller("/user")
 class UserController {
-  @AllMethod("/query/:id")
+  @allMethod("/query/:id")
   public getById(
     req: http.IncomingMessage & { params: Record<string, string> },
     res: http.ServerResponse<http.IncomingMessage>
@@ -508,7 +508,7 @@ class UserController {
     res.end(`${req.method} ${req.params.id}`, "utf-8");
   }
 
-  @AllMethod("/exists/:name")
+  @allMethod("/exists/:name")
   public queryIsTargetExisted(
     req: http.IncomingMessage & { params: Record<string, string> },
     res: http.ServerResponse<http.IncomingMessage>
@@ -548,13 +548,13 @@ const container = {
   }
 }
 
-function Inject(key: string | symbol): ClassDecorator {
+function inject(key: string | symbol): ClassDecorator {
   return function (target: any) {
     container.map.set(key, target);
   };
 }
 
-function Injected(key: string): PropertyDecorator {
+function injected(key: string): PropertyDecorator {
   return function (target: any, propertyKey: string | symbol) {
     const privateKey = Symbol(propertyKey.toString());
     return ({
@@ -572,14 +572,14 @@ function Injected(key: string): PropertyDecorator {
 }
 ```
 
-- **@Inject**：装饰器用于将类注册到容器中。
-- **@Injected**：装饰器用于从容器中获取依赖并注入到类的属性中。
+- **@inject**：装饰器用于将类注册到容器中。
+- **@injected**：装饰器用于从容器中获取依赖并注入到类的属性中。
 
 推荐博文的结尾也有一个简单的依赖注入的实现，和上述实现在属性装饰器部分有区别。一个是注入对象立即绑定到原型上，所有实例共享一个依赖；一个是使用时绑定到实例上，每个实例一个不同的依赖。实际开发中一般俩个都可能是合理的场景！
 
 ```typescript {linenostart=33}
 interface IService { write(name: string): void; };
-@Inject("IService")
+@inject("IService")
 class AService implements IService {
   write(name: string) {
     console.log(name);
@@ -587,7 +587,7 @@ class AService implements IService {
 }
 
 class InjectTest {
-  @Injected("IService")
+  @injected("IService")
   private readonly service: IService = null!;
 
   doSomething() {
@@ -601,7 +601,7 @@ test.doSomething();
 
 我们首先定义了一个 `IService` 接口，它包含一个 `write` 方法。之所以抽象接口出来，是为了减少被注入类和服务类具体实现之间的耦合。
 
-接下来，我们定义了一个 `AService` 类，它实现了 `IService` 接口。我们使用 `@Inject("IService")` 装饰器将 `AService` 类注册为 `IService` 的实现。最后使用 `@Injected("IService")` 装饰器将 `IService` 的实例注入到 `service` 属性中。
+接下来，我们定义了一个 `AService` 类，它实现了 `IService` 接口。我们使用 `@inject("IService")` 装饰器将 `AService` 类注册为 `IService` 的实现。最后使用 `@injected("IService")` 装饰器将 `IService` 的实例注入到 `service` 属性中。
 
 ## 参考文献
 
