@@ -19,3 +19,8 @@ draft: true
 ## 类型体操基础知识
 
 ## 类型体操问题分解
+
+## 参考文献
+
+- [业务代码里的 TypeScript 小技巧](https://blog.csdn.net/Taobaojishu/article/details/140731853)
+

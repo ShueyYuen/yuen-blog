@@ -28,7 +28,14 @@ function log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
   return descriptor;
 }
 ```
-这种装饰器的写法虽然功能强大，但存在一些问题，比如类型检查不够严格、对元编程支持不足。TypeScript 5.0 引入了全新的装饰器写法，提供了更强大的功能和更好的类型支持。新的装饰器写法如下：
+这种装饰器的写法虽然功能强大，但存在一些问题，比如类型检查不够严格、对元编程支持不足。TypeScript 5.0 引入了全新的装饰器写法，提供了更强大的功能和更好的类型支持。
+
+{{< github name="proposal-decorators" link="https://github.com/tc39/proposal-decorators" language="markdown" color="#083fa1" description="Decorators are a proposal for extending JavaScript classes which is widely adopted among developers in transpiler environments, with broad interest in standardization. TC39 has been iterating on decorators proposals for over five years." >}}
+
+{{< github name="proposal-decorator-metadata" link="https://github.com/tc39/proposal-decorator-metadata" language="markdown" color="#083fa1" description="This proposal seeks to extend the Decorators proposal by adding the ability for decorators to associate metadata with the value being decorated." >}}
+
+
+新的装饰器写法如下：
 
 ```typescript
 function log<This, Args extends any[], Return>(
@@ -60,6 +67,12 @@ function log<This, Args extends any[], Return>(
 
 - **更好的类型检查**：新版装饰器能够更好地与 TypeScript 的类型系统结合，提供更严格的类型检查。
 - **更加优雅的元编程**： 封装`has`、`set`、`get`等访问方法。
+
+### 总评
+
+参考上一篇中私对[参数注入]({{< ref "./20240930-typescript-decorator.md" >}}#%E5%8F%82%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8%E8%AE%A8%E8%AE%BA)的推崇，我认为使用新版本装饰器缺少 *参数装饰器* 是一个硬伤。对于不使用依赖注入的项目，可以尝试新装饰器，体验方便又类型严格的装饰器开发。其它情况都***不推荐***。
+
+~~大概等十年，参数装饰器提案通过后，我们就可以尝试使用。~~
 
 ## 新类型
 
@@ -106,9 +119,11 @@ type ExtractCommonDecoratorAccess<
 > = Required<Pick<CommonDecoratorContext<This, Value>['access'], K>>;
 ```
 
+新版本装饰器的入参基本相同（初始值、上下文），主要区别在上下文内以及返回值。
+
 ### 类装饰器
 
-类装饰器声明：
+**返回值**：如果返回非空则替换原类。
 
 ```typescript
 interface ClassDecoratorContext<
@@ -147,6 +162,8 @@ class MyClass {}
 
 ### 方法装饰器
 
+**返回值**：如果返回非空则替换原函数。
+
 ```typescript
 interface ClassMethodDecoratorContext<
   This = unknown,
@@ -177,6 +194,8 @@ function autoBind<This, Value extends (this: This, ...args: any) => any>(
 ```
 
 ### 访问器装饰器
+
+**返回值**：同方法装饰器，如果返回非空则替换访问器。
 
 ```typescript
 interface ClassGetterDecoratorContext<
@@ -210,6 +229,9 @@ type ClassSetterDecorator<This = unknown, Value = unknown> = (
 
 `accessor`装饰器比较特殊，同时有`getter`、`setter`以及`field`装饰器的效果。在参数和返回值上，`accessor`装饰器也是这三个装饰器的合集。
 
+**参数**：`value` 是包含 `get` 方法和 `set` 方法的对象。
+**返回值**：如果返回值包含 `get`、`set` 方法，替换对应访问器。如果包含 `init` 方法则使用其返回值初始化私有属性。`init` 的参数为上一个装饰器 `init` 返回值或者初始值。
+
 ```typescript
 interface ClassAccessorDecoratorContext<
   This = unknown,
@@ -238,6 +260,8 @@ type ClassAccessorDecorator<This = unknown, Value = unknown> = (
 ```
 
 ### 属性装饰器
+
+**返回值**：为空或者函数。如果返回值为函数，在类初始化阶段将使用函数返回值作为属性的初始化值。
 
 ```typescript
 interface ClassFieldDecoratorContext<
@@ -329,83 +353,6 @@ const a = new MyClass('name');
 {{</playground/param>}}
 {{</playground>}}
 
-### 代码分析
-
-```javascript
-'use strict';
-const __runInitializers =
-  (this && this.__runInitializers) ||
-  function (thisArg, initializers, value) {
-    const useValue = arguments.length > 2;
-    for (let i = 0; i < initializers.length; i++) {
-      value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
-    }
-    return useValue ? value : void 0;
-  };
-const __esDecorate =
-  (this && this.__esDecorate) ||
-  function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
-    function accept(f) {
-      if (f !== void 0 && typeof f !== 'function') {
-        throw new TypeError('Function expected');
-      }
-      return f;
-    }
-    const kind = contextIn.kind,
-      key = kind === 'getter' ? 'get' : kind === 'setter' ? 'set' : 'value';
-    const target = !descriptorIn && ctor ? (contextIn['static'] ? ctor : ctor.prototype) : null;
-    const descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
-    let _,
-      done = false;
-    for (let i = decorators.length - 1; i >= 0; i--) {
-      const context = {};
-      for (var p in contextIn) {
-        context[p] = p === 'access' ? {} : contextIn[p];
-      }
-      for (var p in contextIn.access) {
-        context.access[p] = contextIn.access[p];
-      }
-      context.addInitializer = function (f) {
-        if (done) {
-          throw new TypeError('Cannot add initializers after decoration has completed');
-        }
-        extraInitializers.push(accept(f || null));
-      };
-      const result = (0, decorators[i])(
-        kind === 'accessor' ? { get: descriptor.get, set: descriptor.set } : descriptor[key],
-        context
-      );
-      if (kind === 'accessor') {
-        if (result === void 0) {
-          continue;
-        }
-        if (result === null || typeof result !== 'object') {
-          throw new TypeError('Object expected');
-        }
-        if ((_ = accept(result.get))) {
-          descriptor.get = _;
-        }
-        if ((_ = accept(result.set))) {
-          descriptor.set = _;
-        }
-        if ((_ = accept(result.init))) {
-          initializers.unshift(_);
-        }
-      } else if ((_ = accept(result))) {
-        if (kind === 'field') {
-          initializers.unshift(_);
-        } else {
-          descriptor[key] = _;
-        }
-      }
-    }
-    if (target) {
-      Object.defineProperty(target, contextIn.name, descriptor);
-    }
-    done = true;
-  };
-```
-
 ### 执行顺序
 
 ```plantuml
@@ -465,6 +412,7 @@ title 类实例化执行顺序图
 start
 :实例方法初始化器应用;
 :实例字段、accessor初始化器应用;
+:实例构造函数执行;
 end
 @enduml
 ```
@@ -473,9 +421,7 @@ end
 
 ## 参考文献
 
-- [Decorators](https://github.com/tc39/proposal-decorators)
-- [Decorator Metadata](https://github.com/tc39/proposal-decorator-metadata)
 - [Writing Well-Typed Decorators](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#writing-well-typed-decorators)
 - [TypeScript 5.0 将支持全新的装饰器写法！](https://mp.weixin.qq.com/s?__biz=MzkyMjQzNjMxNQ==&mid=2247484057&idx=2&sn=9af9009a56de9315c7f60d090e5db1c9)
-- [TypeScript 5+装饰器变更的影响](https://juejin.cn/post/7277835425960099874)
+- [TypeScript 5+ 装饰器变更的影响](https://juejin.cn/post/7277835425960099874)
 - [全新 JavaScript 装饰器实战下篇：实现依赖注入](https://cloud.tencent.com/developer/article/2347383)

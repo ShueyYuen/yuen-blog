@@ -10,9 +10,9 @@ plantuml: true
 cover: /images/2024/0930/title-bg.webp
 ---
 
-## 装饰器模式
+## 装饰模式
 
-先简单介绍一下装饰器模式：动态地给一个对象添加额外的职责，同时不改变其结构。是比继承更有弹性的替代方案。
+先简单介绍一下装饰模式：动态地给一个对象添加额外的职责，同时不改变其结构。是比继承更有弹性的替代方案。
 
 > [《Design Patterns: Elements of Reusable Object-Oriented Software》#196](https://store.shuey.fun/ebook/CSBook/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/DesignPatterns.pdf)
 
@@ -173,7 +173,7 @@ class HeavyTask {
 
 #### 属性装饰器
 
-属性装饰器应用于类的属性，可以用来修改属性的元数据。由于运行装饰器的时候，类还没有实例化，如果我们严格按照定义使用，属性装饰器只能收集信息！但是结合下面说的 **返回值*bug(feature?)*** 还是可以实现很多好玩的功能。
+属性装饰器应用于类的属性，可以用来修改属性的元数据。由于运行装饰器的时候，类还没有实例化，如果我们严格按照定义使用，属性装饰器只能收集信息！但是结合下面说的 **返回值 *bug(feature?)*** 还是可以实现很多好玩的功能。
 
 **参数**
 
@@ -272,9 +272,9 @@ OC -down-> FP :__proto__
 @enduml
 ```
 
-> 逐步验证上图：[详解prototype与__proto__](https://louiszhai.github.io/2015/12/17/prototype/)
+> 逐步验证上图：[详解 prototype 与 \_\_proto\_\_](https://louiszhai.github.io/2015/12/17/prototype/)
 >
-> JSObject以及JSFunction的关系可以参考[（更新）从Chrome源码看JS Object的实现](https://zhuanlan.zhihu.com/p/26169639)中的插图.
+> JSObject以及JSFunction的关系可以参考[（更新）从 Chrome 源码看 JS Object 的实现](https://zhuanlan.zhihu.com/p/26169639)中的插图.
 
 好的，现在我们已经知道 *1 + 1 = 2*，接下来我们来解方程吧！
 
@@ -306,6 +306,10 @@ const functionDecorator = decoratorFactory('func');
 
 @decoratorFactory('class')
 class MyClass {
+  static {
+    console.log("static block")
+  }
+
   @decoratorFactory('static property')
   public static PROPS: number = 1;
  
@@ -377,10 +381,20 @@ __decorate([
 
 ### 执行顺序
 
+装饰器的执行分为两个阶段。
+
+（1）评估（evaluation）：计算@符号后面的表达式的值，得到的应该是函数。
+
+（2）应用（application）：将评估装饰器后得到的函数，应用于所装饰对象。
+
+这版本装饰器的**评估**和**应用**时先后一起发生的。
+
 ```plantuml
 @startuml
 title 装饰器执行顺序图
 start
+:类声明、命名，静态块;
+
 floating note
   同一个目标的多个装饰器顺序按照先定义
   （从上到下、从左到右）后应用的顺序, 
@@ -434,11 +448,11 @@ end
 > - 函数及参数装饰器执行顺序[源码](https://github.com/microsoft/TypeScript/blob/v5.6.3/src/compiler/transformers/legacyDecorators.ts#L532)
 > - 静态成员和实例成员执行顺序[源码](https://github.com/microsoft/TypeScript/blob/v5.6.3/src/compiler/transformers/legacyDecorators.ts#L183)
 
-> 如果启用了 `emitDecoratorMetadata`, `Metadata` 应用时机在用户装饰器之前。所以用户装饰器可以安全的访问 `design:type`, `design:paramtypes`, `design:returntype` 等信息，详情见[reflect-metadata](https://github.com/rbuckton/reflect-metadata)[^reflect].
+> 如果启用了 `emitDecoratorMetadata`, `Metadata` 应用时机在用户装饰器之前。所以用户装饰器可以安全的访问 `design:type`, `design:paramtypes`, `design:returntype` 等信息，详情见 [reflect-metadata](https://github.com/rbuckton/reflect-metadata)[^reflect].
 
 ### 推荐文章
 
-- [TS装饰器完全指南](https://mirone.me/a-complete-guide-to-typescript-decorator/)
+- [TS 装饰器完全指南](https://mirone.me/a-complete-guide-to-typescript-decorator/)
 - [TS handbook 装饰器](https://www.typescriptlang.org/docs/handbook/decorators.html)
 
 ## TS 装饰器应用
@@ -447,7 +461,7 @@ end
 
 ### 功能增加（如日志、路由）
 
-首先我们简单的创建一个http服务，同时声明好路由控制器。
+首先我们简单的创建一个 http 服务，同时声明好路由控制器。
 
 ```typescript {hl_lines=["4-5"]}
 import * as http from "http";
@@ -518,24 +532,24 @@ class UserController {
 }
 ```
 
-按照上述的代码即可编写简单一个简单的服务框架啦。也可以用上述方式配合[express](https://github.com/expressjs/express)等框架啦。
+按照上述的代码即可编写简单一个简单的服务框架啦。也可以用上述方式配合 [express](https://github.com/expressjs/express)等框架啦。
 
-> 代码依赖[router](https://github.com/pillarjs/router)、[reflect-metadata](https://github.com/rbuckton/reflect-metadata)。
+> 代码依赖 [router](https://github.com/pillarjs/router)、[reflect-metadata](https://github.com/rbuckton/reflect-metadata)。
 
-`VS Code` 中的[git extension](https://github.com/microsoft/vscode/blob/1.94.1/extensions/git/src/commands.ts#L287)也采用类似的方法装饰器实现注册多个`command`。方法装饰器还可以实现如下功能：
+`VS Code` 中的 [git extension](https://github.com/microsoft/vscode/blob/1.94.1/extensions/git/src/commands.ts#L287) 也采用类似的方法装饰器实现注册多个`command`。方法装饰器还可以实现如下功能：
 
 1. 返回值缓存
 2. 参数校验
 3. 权限控制
 4. ...
 
-### DI（依赖注入）
+### DI（依赖注入）[^SOLID]
 
 如何实现依赖注入？其实就是解决俩个主要问题，“依赖什么”以及“如何找到依赖”。不同于 `Java` 有内置的查询所有类的方法，在 `TS` 中我们需要自己实现一个全局的单例作为容器，并给依赖一个键，这样就解决了“如何找到依赖”的问题。“依赖什么”只需要在使用的时候指定前面说的键即可。
 
 实现依赖注入需要解决很多细节上问题，例如循环依赖。本文只展示技术应用，不做完整的校验。
 
-> 私推荐一下VSCode的依赖注入方式[源码](https://github.com/microsoft/vscode/blob/1.94.1/src/vs/platform/instantiation/common/instantiation.ts)，以及别人写的解读博客[VSCode For Web 深入浅出 -- 依赖注入设计](https://juejin.cn/post/7166143245851115550)。
+> 私推荐一下 VSCode 的依赖注入方式[源码](https://github.com/microsoft/vscode/blob/1.94.1/src/vs/platform/instantiation/common/instantiation.ts)，以及别人写的解读博客 [VSCode For Web 深入浅出 -- 依赖注入设计](https://juejin.cn/post/7166143245851115550)、[详解依赖注入的原理与实现](https://aaaaash.notion.site/e5674b99d1b5480988a1b3b2bdf52370)。
 
 ```typescript
 type Constructor<T = any> = new (...args: any[]) => T;
@@ -603,11 +617,36 @@ test.doSomething();
 
 接下来，我们定义了一个 `AService` 类，它实现了 `IService` 接口。我们使用 `@inject("IService")` 装饰器将 `AService` 类注册为 `IService` 的实现。最后使用 `@injected("IService")` 装饰器将 `IService` 的实例注入到 `service` 属性中。
 
+#### 参数装饰器讨论
+
+从依赖注入的角度来看，主要有两种方式：构造函数注入和属性注入。构造函数注入通过构造函数参数装饰器实现依赖收集，然后在实例化服务时进行注入；而属性注入则是直接将依赖注入到类的属性中。
+
+私更喜欢构造函数注入的方式，下面简单介绍一下它相对于属性注入的优缺点。
+
+***优点***：
+
+- **增加明确依赖** ：阅读代码时，可以快速从构造函数中看到当前类完成职能依赖的其他对象，依赖关系更加集中、明确。
+- **`bad smell`[^bad] 明确** ：当构造函数参数越来越多的时候，应该考虑当前类是否违反【单一职责】[^SOLID]！
+- **初始化流程更合理** ：在当前类初始化之前需要初始化依赖对象，好比造车之前需要把轮胎造好。
+- **性能更佳** ：参数注入不依赖原型进行，访问以及初始化速度更好。[本篇所写属性注入对比参数注入 benchmark](https://tinyurl.com/kxhj2z64)。
+- **方便测试** ：使用参数装饰器可以使得类测试可以脱离框架，模拟参数传入即可。
+- **注入的后处理** ：可以在构造函数内编写注入对象的后处理，例如轮胎传入之后检查轮胎的动平衡。可以看看 [VSCode ExtensionService](https://github.com/microsoft/vscode/blob/release/1.94/src/vs/workbench/services/extensions/common/abstractExtensionService.ts#L122)。
+- **减少多构造函数** ：在 `TypeScript` 中没有真正的多构造函数，同时**不方便**在构造函数注入的场景中使用多构造函数。当多个构造函数设计出现的时候，应该考虑当前类是否违反【单一职责】。
+- **依赖固定** ：如果时通过属性注入的方式，注入的对象可以被装饰器内的逻辑动态改变。参数装饰器则在创建的那一刻就固定（这个优缺点因人而异）。
+
+***缺点***：
+
+- **构造函数参数过多** ：`bad smell`是优点也是缺点，实际需求中确实会出现构造函数过多且不方便拆分。参考 [VSCode AbstractTaskService](https://github.com/microsoft/vscode/blob/release/1.94/src/vs/workbench/contrib/tasks/browser/abstractTaskService.ts#L241) 代码，足有36个参数！
+- **继承和扩展困难** ：继承需要增加维护依赖的逻辑。参考 [VSCode TaskService](https://github.com/microsoft/vscode/blob/release/1.94/src/vs/workbench/contrib/tasks/electron-sandbox/taskService.ts#L59)，为了增加一行销毁逻辑，写了一百多行代码。
+- **参数不可选** ：同【减少多构造函数】一样，也**不方便**实现构造参数可选这一点。
+
 ## 参考文献
 
-- [TypeScript装饰器完全指南](https://mirone.me/zh-hans/a-complete-guide-to-typescript-decorator/)
-- [一起读透TS装饰器](https://juejin.cn/post/7004035071459983390)
-- [深入理解Typescript装饰器](https://3rcd.com/blog/ts-decorator)
+- [TypeScript 装饰器完全指南](https://mirone.me/zh-hans/a-complete-guide-to-typescript-decorator/)
+- [一起读透 TS 装饰器](https://juejin.cn/post/7004035071459983390)
+- [深入理解 Typescript 装饰器](https://3rcd.com/blog/ts-decorator)
 
 [^experimental]: 本文主要介绍旧版本装饰器，需启用 `experimentalDecorators`。
-[^reflect]: 对当前的[Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect)的扩充。
+[^reflect]: 对当前的 [Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect) 的扩充，用来添加元数据，实现元编程。
+[^bad]: 代码异味，可以从这篇文章 [Refactoring / Code Smells](https://refactoringguru.cn/refactoring/smells) 看看还有哪些案例。
+[^SOLID]: SOLID (面向对象设计)：单一功能、开闭原则、里氏替换、接口隔离以及依赖反转。
