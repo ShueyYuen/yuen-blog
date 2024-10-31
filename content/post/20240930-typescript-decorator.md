@@ -20,13 +20,13 @@ cover: /images/2024/0930/title-bg.webp
 
 **优点**
 
-1. 相比较于类的继承来扩展功能，对对象进行包裹更加的灵活;
-2. 装饰类和被装饰类相互独立，耦合度较低.
+1. 相比较于类的继承来扩展功能，对对象进行包裹更加的灵活。
+2. 装饰类和被装饰类相互独立，耦合度较低。
 
 **缺点**
 
-1. 没有继承结构清晰;
-2. 层数较多时，难以理解和管理.
+1. 没有继承结构清晰。
+2. 层数较多时，难以理解和管理。
 
 
 ### 推荐文章
@@ -43,7 +43,7 @@ cover: /images/2024/0930/title-bg.webp
 
 ### 装饰器语法
 
-装饰装饰器是一种特殊类型的声明，本质上是一个普通的函数，通过语法 `@Decorator` 加到类、方法、访问器、属性或参数上。
+装饰器是一种特殊类型的声明，本质上是一个普通的函数，通过语法 `@Decorator` 加到类、方法、访问器、属性或参数上。
 
 装饰器的基本语法如下：
 
@@ -167,7 +167,7 @@ class HeavyTask {
 
 ![accessor-vs-function](/images/2024/0930/accessor-vs-function.png)
 
-> *同名访问器不允许使用相同的装饰器分别修饰*，详情见[Accessor Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html#accessor-decorators);
+> *同名访问器不允许使用相同的装饰器分别修饰*，详情见 [Accessor Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html#accessor-decorators);
 
 可以看到访问器装饰器的描述符中同时有 `getter` 和 `setter`，如果都应用相同的装饰器，会出现装饰多次，显然是错误的——好比我穿了一件羽绒服，然后又穿了一件相同的羽绒服。
 
@@ -274,7 +274,7 @@ OC -down-> FP :__proto__
 
 > 逐步验证上图：[详解 prototype 与 \_\_proto\_\_](https://louiszhai.github.io/2015/12/17/prototype/)
 >
-> JSObject以及JSFunction的关系可以参考[（更新）从 Chrome 源码看 JS Object 的实现](https://zhuanlan.zhihu.com/p/26169639)中的插图.
+> JSObject以及JSFunction的关系可以参考[（更新）从 Chrome 源码看 JS Object 的实现](https://zhuanlan.zhihu.com/p/26169639) 中的插图.
 
 好的，现在我们已经知道 *1 + 1 = 2*，接下来我们来解方程吧！
 
@@ -617,7 +617,7 @@ test.doSomething();
 
 接下来，我们定义了一个 `AService` 类，它实现了 `IService` 接口。我们使用 `@inject("IService")` 装饰器将 `AService` 类注册为 `IService` 的实现。最后使用 `@injected("IService")` 装饰器将 `IService` 的实例注入到 `service` 属性中。
 
-#### 参数装饰器讨论
+#### 构造函数注入 vs 属性注入
 
 从依赖注入的角度来看，主要有两种方式：构造函数注入和属性注入。构造函数注入通过构造函数参数装饰器实现依赖收集，然后在实例化服务时进行注入；而属性注入则是直接将依赖注入到类的属性中。
 
@@ -627,7 +627,7 @@ test.doSomething();
 
 - **增加明确依赖** ：阅读代码时，可以快速从构造函数中看到当前类完成职能依赖的其他对象，依赖关系更加集中、明确。
 - **`bad smell`[^bad] 明确** ：当构造函数参数越来越多的时候，应该考虑当前类是否违反【单一职责】[^SOLID]！
-- **初始化流程更合理** ：在当前类初始化之前需要初始化依赖对象，好比造车之前需要把轮胎造好。
+- **初始化流程更合理** ：在当前类初始化之前需要初始化依赖对象，好比穿衣服之前需要先有衣服。
 - **性能更佳** ：参数注入不依赖原型进行，访问以及初始化速度更好。[本篇所写属性注入对比参数注入 benchmark](https://tinyurl.com/kxhj2z64)。
 - **方便测试** ：使用参数装饰器可以使得类测试可以脱离框架，模拟参数传入即可。
 - **注入的后处理** ：可以在构造函数内编写注入对象的后处理，例如轮胎传入之后检查轮胎的动平衡。可以看看 [VSCode ExtensionService](https://github.com/microsoft/vscode/blob/release/1.94/src/vs/workbench/services/extensions/common/abstractExtensionService.ts#L122)。

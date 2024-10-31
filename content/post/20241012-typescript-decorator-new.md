@@ -30,10 +30,11 @@ function log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
 ```
 这种装饰器的写法虽然功能强大，但存在一些问题，比如类型检查不够严格、对元编程支持不足。TypeScript 5.0 引入了全新的装饰器写法，提供了更强大的功能和更好的类型支持。
 
-{{< github name="proposal-decorators" link="https://github.com/tc39/proposal-decorators" language="markdown" color="#083fa1" description="Decorators are a proposal for extending JavaScript classes which is widely adopted among developers in transpiler environments, with broad interest in standardization. TC39 has been iterating on decorators proposals for over five years." >}}
+{{< github name="proposal-decorators" link="https://github.com/tc39/proposal-decorators" description="Decorators are a proposal for extending JavaScript classes which is widely adopted among developers in transpiler environments, with broad interest in standardization. TC39 has been iterating on decorators proposals for over five years." >}}
 
-{{< github name="proposal-decorator-metadata" link="https://github.com/tc39/proposal-decorator-metadata" language="markdown" color="#083fa1" description="This proposal seeks to extend the Decorators proposal by adding the ability for decorators to associate metadata with the value being decorated." >}}
+{{< github name="proposal-decorator-metadata" link="https://github.com/tc39/proposal-decorator-metadata" language="HTML" color="#e34c26" description="This proposal seeks to extend the Decorators proposal by adding the ability for decorators to associate metadata with the value being decorated." >}}
 
+{{< github name="proposal-class-method-parameter-decorators" link="https://github.com/tc39/proposal-class-method-parameter-decorators" language="HTML" color="#e34c26" description="This proposal adds support for decorators on the parameters of class constructors and class methods." >}}
 
 新的装饰器写法如下：
 
@@ -70,7 +71,7 @@ function log<This, Args extends any[], Return>(
 
 ### 总评
 
-参考上一篇中私对[参数注入]({{< ref "./20240930-typescript-decorator.md" >}}#%E5%8F%82%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8%E8%AE%A8%E8%AE%BA)的推崇，我认为使用新版本装饰器缺少 *参数装饰器* 是一个硬伤。对于不使用依赖注入的项目，可以尝试新装饰器，体验方便又类型严格的装饰器开发。其它情况都***不推荐***。
+参考上一篇中私对[参数注入]({{< ref "./20240930-typescript-decorator.md" >}}#%E5%8F%82%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8%E8%AE%A8%E8%AE%BA)的推崇，私认为使用新版本装饰器缺少 *参数装饰器* 是一个硬伤。对于不使用依赖注入的项目，可以尝试新装饰器，体验方便又类型严格的装饰器开发。其它情况都***不推荐***。
 
 ~~大概等十年，参数装饰器提案通过后，我们就可以尝试使用。~~
 

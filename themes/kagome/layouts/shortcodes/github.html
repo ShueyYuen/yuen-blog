@@ -15,7 +15,7 @@
     width: 1.2em;
     height: 1.2em;
     margin-right: 0.5em;
-    fill: var(--color-contrast-high);
+    fill: var(--theme-text-primary);
     transition: all .5s;
 }
 .github .name {
@@ -24,35 +24,37 @@
     text-decoration: none;
 }
 .github .description {
-    margin-top: 0.5em;
-    margin-bottom: 1em;
-    color: var(--color-contrast-high);
+    margin: 0.5em 0;
+    color: var(--theme-text-primary);
     text-align: justify;
     font-size: 90%;
-    transition: all .5s;
+}
+.github .description:last-child {
+    margin-bottom: 0;
 }
 .github .language-color {
     position: relative;
     top: 1px;
     display: inline-block;
-    width: 0.75em;
-    height: 0.75em;
+    width: 0.85em;
+    height: 0.85em;
     border-radius: 50%;
 }
 .github .language-name {
-    color: var(--color-contrast-high);
+    color: var(--theme-text-primary);
     font-size: 90%;
     margin-left: 0.5em;
-    transition: all .5s;
 }
   </style>
     <div class="logo">
         {{ replace $.Site.Data.SVG.repository "icon" "icon github-icon" | safeHTML }}
         <a class="name" href={{ .Get "link" }} target="_blank">{{ .Get "name" }}</a>
     </div>
-    <div class="description">{{ .Get "description" }}</div> 
+    <div class="description">{{ .Get "description" }}</div>
+{{ if .Get "language" }}
     <div class="language">
         <span class="language-color" style="background-color: {{ .Get "color" }}"></span>
         <span class="language-name">{{ .Get "language" }}</span>
     </div>
+{{ end }}
 </div>
