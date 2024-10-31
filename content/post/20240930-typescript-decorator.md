@@ -104,18 +104,17 @@ declare type ParameterDecorator = (
 function sealed(constructor: Function) {
     Object.seal(constructor);
     Object.seal(constructor.prototype);
+
+    return class extend constructor {
+      constructor(...args) {
+        super(...args);
+        Object.seal(this);
+      }
+    }
 }
 
 @sealed
-class Greeter {
-    greeting: string;
-    constructor(message: string) {
-        this.greeting = message;
-    }
-    greet() {
-        return "Hello, " + this.greeting;
-    }
-}
+class Greeter {}
 ```
 
 #### 方法装饰器
@@ -124,8 +123,8 @@ class Greeter {
 
 **参数**
 
-- `target`: 原型对象，修饰静态成员时则为构造函数
-- `propertyKey`: 方法名
+- `target`: 原型对象，修饰静态成员时则为构造函数。
+- `propertyKey`: 方法名。
 - `descriptor`: 方法的描述符。
 
 **返回值**：如果返回了一个非空的值`result`，则会调用`Object.defineProperty(target, result)`。
@@ -177,8 +176,8 @@ class HeavyTask {
 
 **参数**
 
-- `target`: 原型对象，修饰静态成员时则为构造函数
-- `propertyKey`: 属性名
+- `target`: 原型对象，修饰静态成员时则为构造函数。
+- `propertyKey`: 属性名。
 - ~~`descriptor`: 属性描述符（由于实例没有初始化，没有办法获取到属性描述符，会得到undefined）。~~ 
 
 > 虽然 `TS` 定义中不存在，但转译到 `JS` 却有传参，不可以通过判断参数长度来区分属性装饰器和方法装饰器。
@@ -316,7 +315,7 @@ class MyClass {
   @decoratorFactory('property')
   public prop1: number = 0;
 
-  constructor(public data: string) {}
+  constructor(@decoratorFactory('constructor param') public data: string) {}
 
   @decoratorFactory('accessor')
   public get prop() {
@@ -387,7 +386,7 @@ __decorate([
 
 （2）应用（application）：将评估装饰器后得到的函数，应用于所装饰对象。
 
-这版本装饰器的**评估**和**应用**时先后一起发生的。
+这版本装饰器的**评估**和**应用**是先后一起发生的。
 
 ```plantuml
 @startuml
@@ -591,21 +590,23 @@ function injected(key: string): PropertyDecorator {
 
 推荐博文的结尾也有一个简单的依赖注入的实现，和上述实现在属性装饰器部分有区别。一个是注入对象立即绑定到原型上，所有实例共享一个依赖；一个是使用时绑定到实例上，每个实例一个不同的依赖。实际开发中一般俩个都可能是合理的场景！
 
-```typescript {linenostart=33}
-interface IService { write(name: string): void; };
-@inject("IService")
-class AService implements IService {
+```typescript {linenostart=34}
+interface IWriteService {
+  write(name: string): void;
+}
+@inject("IWriteService")
+class ConsoleWriteService implements IWriteService {
   write(name: string) {
     console.log(name);
   }
 }
 
 class InjectTest {
-  @injected("IService")
-  private readonly service: IService = null!;
+  @injected("IWriteService")
+  private readonly service: IWriteService = null!;
 
   doSomething() {
-    this.service.write('hello world');
+    this.service.write("hello world");
   }
 }
 
