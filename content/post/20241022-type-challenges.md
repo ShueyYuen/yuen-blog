@@ -26,17 +26,246 @@ TypeScript类型体操是一种在TypeScript中运用复杂类型定义和操作
 **TypeScript**:
 `tuple`, `enum`, `Interface`, `字面量类型`, `unknown`, `void`, `any`, `never`.
 
+#### `undefined` vs `null` vs `void` vs `never`
+
+在 TypeScript 中，`undefined`、`null`、`void` 和 `never` 是四个特殊的类型，它们有各自的用途和意义。
+
+##### `undefined`[^undefined]
+
+`undefined` 表示未定义的值。当一个变量声明了但没有赋值、对象中没有的属性或未传递的可选参数，它的值就是 `undefined`。通常用于检查变量是否已被初始化，但不建议主动赋值为 `undefined`。
+
+同时，由于 `undefined` 是全局对象的一部分，因此可能会被重写，存在安全隐患。许多大型框架通过使用 `void 0` 来判断 `undefined`，以确保安全性。
+
+```typescript
+let a;
+let obj: { x?: number } = {};
+console.log(a, obj.x); // 输出 undefined undefinedd
+```
+
+##### `null`
+
+`null` 表示空值，通常表示一个空的对象引用。常用于释放对象或表示一个变量目前没有值。与 `undefined` 不同，`null` 是一个赋值给变量的值，表示变量已经被明确设置为空。
+
+```typescript
+let person: Person = { name: 'hannah' };
+person = null!;
+```
+
+{{< notice notice-warning >}}
+使用上述方式释放对象，一定要确保对象被释放后不会再被使用！！！
+{{< /notice >}}
+
+##### `void`
+
+`void` 表示没有任何类型，通常用于函数没有返回值的情况。函数声明返回类型为 `void`，意味着函数执行完毕后不会返回任何值。
+
+此外，`void` 也可以用来声明只允许赋值 `undefined` 的变量，但这种用法较为罕见。
+
+在 `JavaScript` 中，`void` 操作符用于计算一个表达式但不返回任何值，通常用于立即执行函数表达式（IIFE）或确保返回 `undefined`。
+
+```typescript
+let uniqId = 0;
+const increaseUniqId = (): void => void uniqId++;
+const result = increaseUniqId(); // undefined
+```
+
+##### `never`
+
+`never` 表示永不存在的值的类型、不应到达的代码路径，通常用于会抛出错误或无限循环的函数。
+
+```typescript
+function error(message: string): never {
+  throw new Error(message);
+}
+
+function infiniteLoop(): never {
+  while (true) {}
+}
+
+type Foo = 'A' | 'B';
+function handleFoo(value: Foo) {
+  switch (value) {
+    case 'A':
+      // 处理 A
+      break;
+    case 'B':
+      // 处理 B
+      break;
+    default:
+      const check: never = value;
+      // 如果新增了 Foo 的类型，这里会报错，提醒处理新类型
+  }
+}
+```
+
+##### 总结与应用
+
+- **`undefined`**：表示变量未初始化，可用于可选参数和可选属性。
+- **`null`**：表示有意设置为空的值，可用于初始化对象为空。
+- **`void`**：主要用于函数没有返回值的情况。
+- **`never`**：用于不应到达的代码路径，增强类型检查的完整性。
+
+详见：[`any`, `unknown`, `object`, `void`, `undefined`, `null`, and `never` assignability](https://www.typescriptlang.org/docs/handbook/type-compatibility.html?#any-unknown-object-void-undefined-null-and-never-assignability)
+
+
+|               | any | unknown | object | void | undefined | null | never |
+|---------------|-----|---------|--------|------|-----------|------|-------|
+| **any**       |     | ✓       | ✓      | ✓    | ✓         | ✓    | ✕     |
+| **unknown**   | ✓   |         | ✕      | ✕    | ✕         | ✕    | ✕     |
+| **object**    | ✓   | ✓       |        | ✕    | ✕         | ✕    | ✕     |
+| **void**      | ✓   | ✓       | ✕      |      | ✕         | ✕    | ✕     |
+| **undefined** | ✓   | ✓       | ⍻      | ✓    |           | ⍻    | ✕     |
+| **null**      | ✓   | ✓       | ⍻      | ⍻    | ⍻         |      | ✕     |
+| **never**     | ✓   | ✓       | ✓      | ✓    | ✓         | ✓    |       |
+
+#### `interface` vs `type`
+
+在 TypeScript 中，`interface` 和 `type` 都可以用于定义类型，但有一些区别：
+
+**相同点：**
+- 都可描述对象结构和扩展类型。
+
+**区别：**
+1. **声明合并**：`interface` 支持多次声明同名接口并合并，`type` 不支持。
+2. **类型别名**：`type` 可声明基本类型、联合类型、元组等，`interface` 只能声明对象类型。
+3. **高级类型操作**：`type` 支持类型运算，`interface` 不支持。
+4. **实现**：类可 `implements` 接口，但不能 `implements` 类型别名。
+5. **扩展内置对象**：`interface` 可扩展内置对象，`type` 不行。
+
+**使用建议：**
+- 用 `interface`：需要声明合并、类实现、扩展内置对象时。
+- 用 `type`：定义基本类型别名、联合类型、元组、类型运算时。
+
+**总结：**
+- `interface` 适合定义对象结构和接口规范。
+- `type` 更灵活，可定义任意类型。
+
 ### 基础运算
 
-- **条件**：T extends U ? X : Y
-- **约束**：extends
-- **推导**：infer
-- **联合**：|
-- **交叉**：&
-- **索引查询**：keyof T
-- **索引访问**：T[K]
-- **索引遍历**：infer
-- **索引重映射**：as
+后续的类型体操就依靠这些啦！！！
+
+#### 条件类型
+
+条件类型是根据类型的条件来选择不同的类型。语法为【`T extends U ? X : Y`】，表示如果 `T` 能赋值给 `U`，则类型为 `X`，否则为 `Y`。
+
+```typescript
+type TypeName<T> = 
+  T extends string ? "string" :
+  T extends number ? "number" :
+  T extends boolean ? "boolean" :
+  T extends undefined ? "undefined" :
+  T extends Function ? "function" :
+  "object";
+
+type T1 = TypeName<string>;  // "string"
+type T2 = TypeName<42>;      // "number"
+type T3 = TypeName<true>;    // "boolean"
+type T4 = TypeName<() => void>; // "function"
+type T5 = TypeName<{}>;      // "object"
+```
+
+#### 类型约束
+
+类型约束用于限制泛型类型的范围。语法为【`T extends U`】，表示类型 `T` 必须是类型 `U` 的子类型。这个是后续类型体操的基础！！
+
+```typescript
+function identity<T extends number | string>(arg: T): T {
+  return arg;
+}
+
+identity(10);    // OK
+identity("hello"); // OK
+identity(true);  // Error: Argument of type 'true' is not assignable to parameter of type 'number | string'.
+```
+
+#### 类型推导
+
+【`infer`】关键字用于在条件类型中推导类型变量。它允许我们在条件类型的 `extends` 子句中引入一个新的类型变量。
+
+```typescript
+type ReturnType<T> = T extends (...args: any[]) => infer R ? R : any;
+
+function fn(): string {
+  return "hello";
+}
+
+type R = ReturnType<typeof fn>; // string
+```
+
+#### 联合类型
+
+联合类型表示一个值可以是几种类型之一。使用【`|`】符号来定义联合类型。
+
+```typescript
+type Union = string | number | boolean;
+
+let value: Union;
+value = "hello"; // OK
+value = 42;      // OK
+value = true;    // OK
+value = {};      // Error: Type '{}' is not assignable to type 'Union'.
+```
+
+#### 交叉类型
+
+交叉类型表示一个值可以同时是几种类型。使用【`&`】符号来定义交叉类型。
+
+```typescript
+type A = { name: string };
+type B = { age: number };
+
+type AB = A & B;
+
+let person: AB = { name: "Alice", age: 30 }; // OK
+```
+
+#### 索引查询
+
+索引查询操作符【`keyof`】用于获取某个类型的所有键，返回一个联合类型。
+
+```typescript
+type Person = { name: string; age: number };
+
+type Keys = keyof Person; // "name" | "age"
+```
+
+#### 索引访问
+
+索引访问操作符【`T[K]`】用于获取某个类型的特定属性的类型。
+
+```typescript
+type Person = { name: string; age: number };
+
+type NameType = Person["name"]; // string
+```
+
+#### 索引遍历
+
+【`in`】用于遍历一个类型的所有键，并生成一个新的类型。常见的用法是结合 `keyof` 操作符来获取类型的所有键。
+
+```typescript
+type Mapped<T> = {
+  [P in keyof T]: T[P];
+};
+
+type Person = { name: string; age: number };
+type MappedPerson = Mapped<Person>; // { name: string; age: number }
+```
+
+#### 索引重映射
+
+`as` 关键字用于在映射类型中重映射键。
+
+```typescript
+type Mapped<T> = {
+  [P in keyof T as `get${Capitalize<string & P>}`]: () => T[P];
+};
+
+type Person = { name: string; age: number };
+type MappedPerson = Mapped<Person>; 
+// { getName: () => string; getAge: () => number }
+```
+
 
 ### 修饰符
 
@@ -51,268 +280,23 @@ TypeScript类型体操是一种在TypeScript中运用复杂类型定义和操作
 
 ### 工具类型
 
-#### Partial
+这些工具的详情可以查看 [es5.d.ts](https://github.com/microsoft/TypeScript/blob/v5.6.3/src/lib/es5.d.ts#L1560);
 
-将类型的所有属性变为可选。
+#### 常用类型工具
 
-```typescript
-type Partial<T> = {
-    [P in keyof T]?: T[P];
-};
-// { name?: string; age?: number }
-type PartialPerson = Partial<{
-    name: string;
-    age: number;
-}>;
-```
+`Partial`, `Required`, `Readonly`, `Pick`, `Record`, `Exclude`, `Extract`, `Omit`, `NonNullable`, `Parameters`, `ConstructorParameters`, `ReturnType`, `InstanceType`
 
-#### Required
+#### 字符串映射工具
 
-将类型的所有属性变为必选。
+`Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`
 
-```typescript
-type Required<T> = {
-    [P in keyof T]-?: T[P];
-};
-// { name: string; age: number }
-type RequiredPerson = Partial<{
-    name?: string;
-    age: number;
-}>;
-```
+#### 进阶类型工具
 
-#### Readonly
+`NoInfer`
 
-将类型的所有属性变为只读。
+#### 上下文类型工具
 
-```typescript
-type Readonly<T> = {
-    readonly [P in keyof T]: T[P];
-};
-
-// { readonly name: string; readonly age: number }
-type ReadonlyPerson = Readonly<{
-    name: string;
-    age: number;
-}>
-```
-
-#### Pick
-
-从类型中选择一组属性。
-
-```typescript
-type Pick<T, K extends keyof T> = {
-    [P in K]: T[P];
-};
-
-// { name: string; age: number }
-type BasicPerson = Pick<{
-    name: string;
-    age: number;
-    gender: string;
-}, "name" | "age">
-```
-
-#### Record
-
-构造一个类型，其属性名为K，属性值为T。
-
-```typescript
-type Record<K extends keyof any, T> = {
-    [P in K]: T;
-};
-
-const nameAgeMap: Record<string, number> = { Alice: 30, Bob: 25 }; // Record<string, number>
-```
-
-#### Exclude
-
-从类型T中排除可以赋值给类型U的类型。
-
-```typescript
-type Exclude<T, U> = T extends U ? never : T;
-
-type T = string | number | boolean;
-type U = Exclude<T, boolean>; // string | number
-```
-
-#### Extract
-
-从类型T中提取可以赋值给类型U的类型。
-
-```typescript
-type Extract<T, U> = T extends U ? T : never;
-
-type T = string | number | boolean;
-type U = Extract<T, boolean | number>; // number | boolean
-```
-
-#### Omit
-
-从类型中排除一组属性。
-
-```typescript
-type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
-
-interface Person {
-    name: string;
-    age: number;
-    gender: string;
-}
-
-const omittedPerson: Omit<Person, "gender"> = { name: "Alice", age: 30 }; // Omit<Person, "gender">
-```
-
-#### NonNullable
-
-从类型T中排除null和undefined。
-
-```typescript
-type NonNullable<T> = T & {};
-
-type T = string | number | null | undefined;
-type U = NonNullable<T>; // string | number
-```
-
-#### Parameters
-
-获取函数类型的参数类型组成的元组类型。
-
-```typescript
-type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
-
-function fn(a: string, b: number): void {}
-type Params = Parameters<typeof fn>; // [string, number]
-```
-
-#### ConstructorParameters
-
-获取构造函数类型的参数类型组成的元组类型。
-
-```typescript
-type ConstructorParameters<T extends abstract new (...args: any) => any> =
-    T extends abstract new (...args: infer P) => any ? P : never;
-
-class Person {
-    constructor(public name: string, public age: number) {}
-}
-
-type Params = ConstructorParameters<typeof Person>; // [string, number]
-```
-
-#### ReturnType
-
-获取函数类型的返回类型。
-
-```typescript
-type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
-
-function fn(): string {
-    return "hello";
-}
-
-type R = ReturnType<typeof fn>; // string
-```
-
-#### InstanceType
-
-获取构造函数类型的实例类型。
-
-```typescript
-type InstanceType<T extends abstract new (...args: any) => any> =
-    T extends abstract new (...args: any) => infer R ? R : any;
-
-class Person {
-    constructor(public name: string, public age: number) {}
-}
-
-type Instance = InstanceType<typeof Person>; // Person
-```
-
-#### Uppercase
-
-将字符串字面量类型的所有字符转换为大写。
-
-```typescript
-type Uppercase<S extends string> = intrinsic;
-
-type T = Uppercase<"hello">; // "HELLO"
-```
-
-#### Lowercase
-
-将字符串字面量类型的所有字符转换为小写。
-
-```typescript
-type Lowercase<S extends string> = intrinsic;
-
-type T = Lowercase<"HELLO">; // "hello"
-```
-
-#### Capitalize
-
-将字符串字面量类型的第一个字符转换为大写。
-
-```typescript
-type Capitalize<S extends string> = intrinsic;
-
-type T = Capitalize<"hello">; // "Hello"
-```
-
-#### Uncapitalize
-
-将字符串字面量类型的第一个字符转换为小写。
-
-```typescript
-type Uncapitalize<S extends string> = intrinsic;
-
-type T = Uncapitalize<"Hello">; // "hello"
-```
-
-#### NoInfer
-
-防止类型推断。
-
-```typescript
-type NoInfer<T> = intrinsic;
-
-function example<T>(arg: NoInfer<T>): T {
-    return arg;
-}
-
-const result = example<string>("hello"); // string
-```
-
-#### ThisType
-
-用于指定上下文对象的类型。
-
-```typescript
-interface ThisType<T> {}
-
-// 示例
-type ObjectDescriptor<D, M> = {
-    data?: D;
-    methods?: M & ThisType<D & M>;
-};
-
-function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M {
-    let data: object = desc.data || {};
-    let methods: object = desc.methods || {};
-    return { ...data, ...methods } as D & M;
-}
-
-let obj = makeObject({
-    data: { x: 0, y: 0 },
-    methods: {
-        moveBy(dx: number, dy: number) {
-            this.x += dx; // this has type { x: number, y: number, moveBy: (dx: number, dy: number) => void }
-            this.y += dy;
-        }
-    }
-});
-```
+`ThisType`, 这个在类型体操里面用的很少，主要在实战场景。
 
 ### 小技巧
 
@@ -322,4 +306,7 @@ let obj = makeObject({
 
 ## 参考文献
 
+- [[Web Dev] null and undefined](https://web.dev/learn/javascript/data-types/null-undefined)
 - [业务代码里的 TypeScript 小技巧](https://blog.csdn.net/Taobaojishu/article/details/140731853)
+
+[^undefined]: `TypeScript` 官方的代码风格中要求使用 `undefined`，这个因团队而异。`TypeScript` 官方也不推荐使用 `const enum`，但是代码里面也到处飞啊！
