@@ -7,14 +7,13 @@ tags: ["TypeScript"]
 categories: ["Web"]
 toc: true
 cover: /images/2024/1022/title-bg.webp
-draft: true
 ---
 
 ## 为什么做类型体操
 
 TypeScript类型体操是一种在TypeScript中运用复杂类型定义和操作来实现更强大和灵活类型检查的方法。学习类型体操有助于提升代码的健壮性和可维护性，捕捉更多的潜在错误，并使代码更加自文档化。
 
-耐心看完本文，相信 [type-challenges](https://github.com/type-challenges/type-challenges/) 无所畏惧！
+如果已经熟练使用 `TypeScript`，请直接跳转[类型体操问题分解]({{< relref "#类型体操问题分解" >}}) 。耐心看完本文，相信 [type-challenges](https://github.com/type-challenges/type-challenges/) 无所畏惧！
 
 ## 类型体操基础知识
 
@@ -57,7 +56,7 @@ person = null!;
 
 ##### `void`
 
-`void` 表示没有任何类型，通常用于函数没有返回值的情况。函数声明返回类型为 `void`，意味着函数执行完毕后不会返回任何值。
+`void` 意味着函数的返回值不会被观察到。
 
 此外，`void` 也可以用来声明只允许赋值 `undefined` 的变量，但这种用法较为罕见。
 
@@ -107,7 +106,6 @@ function handleFoo(value: Foo) {
 
 详见：[`any`, `unknown`, `object`, `void`, `undefined`, `null`, and `never` assignability](https://www.typescriptlang.org/docs/handbook/type-compatibility.html?#any-unknown-object-void-undefined-null-and-never-assignability)
 
-
 |               | any | unknown | object | void | undefined | null | never |
 |---------------|-----|---------|--------|------|-----------|------|-------|
 | **any**       |     | ✓       | ✓      | ✓    | ✓         | ✓    | ✕     |
@@ -117,6 +115,10 @@ function handleFoo(value: Foo) {
 | **undefined** | ✓   | ✓       | ⍻      | ✓    |           | ⍻    | ✕     |
 | **null**      | ✓   | ✓       | ⍻      | ⍻    | ⍻         |      | ✕     |
 | **never**     | ✓   | ✓       | ✓      | ✓    | ✓         | ✓    |       |
+
+{{< notice notice-warning >}}
+`null` 以及 `undefined` 在非严格检查下（`strictNullChecks` off），会被作为其他类型的子类（除 `never`）。
+{{< /notice >}}
 
 #### `interface` vs `type`
 
@@ -164,6 +166,14 @@ type T4 = TypeName<() => void>; // "function"
 type T5 = TypeName<{}>;      // "object"
 ```
 
+成立条件如下：
+
+- 字面量及其原始类型，例如 `1 extends number`。
+- 结构化类型系统判断得到的子类型关系（包含派生）。
+- Top Type（any, unknown） 与 Bottom Type（never）。
+- 联合类型及其分支，例如 `'a' | 'b' extends 'a' | 'b' | 'c'`。
+- 分布式条件类型，见[联合类型]({{< relref "#联合类型" >}})
+
 #### 类型约束
 
 类型约束用于限制泛型类型的范围。语法为【`T extends U`】，表示类型 `T` 必须是类型 `U` 的子类型。这个是后续类型体操的基础！！
@@ -194,17 +204,19 @@ type R = ReturnType<typeof fn>; // string
 
 #### 联合类型
 
-联合类型表示一个值可以是几种类型之一。使用【`|`】符号来定义联合类型。
+联合类型表示一个值可以是几种类型之一。使用【`|`】符号来定义联合类型。联合类型进行条件运算时，会对每个成员进行分布式处理，这种行为被称为“[分布式条件类型](https://juejin.cn/post/7068947287593975815#heading-5)”。
 
 ```typescript
-type Union = string | number | boolean;
+type ExtractedKey1 = Extract<'a' | 'b' | 'c', 'a' | 'b'>; // 'a' | 'b'
+type ExtractedKey2 = 'a' | 'b' | 'c' extends 'a' | 'b' ? true : false; // false
 
-let value: Union;
-value = "hello"; // OK
-value = 42;      // OK
-value = true;    // OK
-value = {};      // Error: Type '{}' is not assignable to type 'Union'.
+type Naked<T> = T extends boolean ? 'Y' : 'N';
+type ArrayWrapped = [T] extends [boolean] ? 'Y' : 'N';
+
+type Result1 = Naked<number | boolean>; // 'N' | 'Y'
+type Result2 = ArrayWrapped<number | boolean>; // 'N'
 ```
+> 泛型中，**对于属于裸类型参数的检查类型，条件类型会在实例化时期自动分发到联合类型上。**
 
 #### 交叉类型
 
@@ -254,7 +266,7 @@ type MappedPerson = Mapped<Person>; // { name: string; age: number }
 
 #### 索引重映射
 
-`as` 关键字用于在映射类型中重映射键。
+【`as`】关键字用于在映射类型中重映射键。
 
 ```typescript
 type Mapped<T> = {
@@ -273,10 +285,49 @@ type MappedPerson = Mapped<Person>;
 - **?**：将属性设置为可选。
 - **\-**：从类型中移除属性修饰符。
 
+```typescript
+type Required<T> = {
+  // 遍历 key，移除可选属性
+  [P in keyof T]-?: T[P];
+};
+```
+
 ### 断言
 
 - as const
 - satisfies
+
+#### `as const`
+
+用于将变量或对象的类型断言为最严格的字面量类型。这在定义不可变数据时非常有用，特别是在定义常量对象或数组时。
+
+
+```typescript
+// 类型推断为：`readonly ["red", "green", "blue"]`
+const colors = ["red", "green", "blue"] as const;
+// ColorDimension 的类型为 "red" | "green" | "blue"
+type ColorDimension = typeof colors[number];
+```
+**用法：**
+
+- 使用 `as const` 可以在类型层面确保数据的不可变性。
+- 常用于定义枚举类型的取值集合。
+
+#### `satisfies`
+
+它可以确保一个表达式满足某个类型约束，而不改变其被推断的类型。
+
+```typescript
+interface RouterOption {
+    redirect: boolean | string;
+};
+
+// router 的类型推断和 const 保持一致
+const router = {
+    '/user': { redirect: false },
+    '/login': '', // Type 'string' is not assignable to type 'RouterOption'.(2322)
+} satisfies Record<string, RouterOption>;
+```
 
 ### 工具类型
 
@@ -300,13 +351,116 @@ type MappedPerson = Mapped<Person>;
 
 ### 小技巧
 
-- type KeyType = keyof any;
+#### `keyof any`
+
+`keyof any` 的结果类型是 `string | number | symbol`，表示所有可能的对象键类型。这在需要泛型键类型时非常有用。
+
+```typescript
+type KeyType = keyof any; // string | number | symbol
+```
+
+#### 类型交叉 `(string & {})`
+
+交叉类型 `(string & {})` 可以将基础类型转化为非原始类型，从而触发类型兼容性的细微差别。常用于防止泛型参数过于宽泛，确保类型的精确性。
+
+```typescript
+type Size = 'small' | 'medium' | 'large';
+// 这样可以提示 Size，也可以传入普通字符串
+function calculateSize(size: Size | (string & {})) {}
+```
+
+#### Brand Type
+
+用于在类型系统中创建具有独特标识的类型，防止不同类型之间的混用。通过在类型中添加一个独特的属性（通常是私有的符号或唯一的字符串字面量），可以使逻辑上相同的类型在类型系统中被视为不同的类型。
+
+```typescript
+type Brand<K, T> = K & { __brand: T };
+
+type USD = Brand<number, 'USD'>;
+type EUR = Brand<number, 'EUR'>;
+
+const makeTyped = <T extends number>(amount: number) => amount as T;
+const addPrices = (a: USD, b: USD) => makeTyped<USD>(a + b);
+
+const priceUSD = makeTyped<USD>(10), priceEUR = makeTyped<EUR>(10);
+
+addPrices(priceUSD, priceUSD); // 正确
+addPrices(priceUSD, priceEUR); // 错误，Type '"EUR"' is not assignable to type '"USD"'
+```
+
+{{< notice notice-info >}}
+在编译后不会影响生成的 JavaScript 代码，只在类型检查阶段生效。代码中不要对类型标志做任何赋值访问！！
+{{< /notice >}}
+
+## 协变与逆变
+
+`协变（Covariance）` 和 `逆变（Contravariance）` 是与类型兼容性和子类型关系相关的重要概念。
+
+先约定如下的标记：
+
+- 【`A ≦ B`】意味着 A 是 B 的子类型。
+- 【`A → B`】指的是以 A 为参数类型，以 B 为返回值类型的函数类型。
+- 【`C<A>`】泛型。
+
+解释名词：
+
+- `协变`：如果它依然保持子类型序关系。`A ≦ B`，则 `ReadonlyArray<A> ≦ ReadonlyArray<B>`，`() → A ≦ () → B`。
+- `逆变`：如果它逆转了子类型序关系。`A ≦ B`，则 `B → void ≦ A → void`。
+- `不变`（invariant）：如果上述两种均不适用。
+
+对于函数类型，我们可以总结为： **对输入类型是逆变的而对输出类型是协变的**。
+
+思考一个场景：`A ≦ B`，则 `B[] → void ≦ A[] → void`。这个是否合理呢？显然是不合理的，因为可以传入 `A[]`，但是可以在子类型 `B[] → void` 的代码中插入一个 `B` 到 `A[]` 上。那么 `A[]` 的内容就类型错误了！
+
+给一个类似的简化代码：
+
+```typescript
+interface Example {
+  // 属性定义（且开启 strict 或 strictFunctionTypes）的方式是逆变的。
+  // fun: (n: 1 | 2 | 3) => void
+
+  // 方法定义的方式，参数是双向可变的。
+  fun(n: 1 | 2 | 3): void;
+}
+const e1: Example = {
+  fun(n: 1 | 2 | 3 | 4) {}
+}
+const e2: Example = {
+  // 这在属性定义的时候会报错。
+  fun(n: 1 | 2) {}
+}
+```
+
+{{< notice notice-info >}}
+由于没有类似 `Dart` 中的 `convariant` 关键字，`TypeScript` 对函数参数采用的时候双向可变的方案。详见 [Why are function parameters bivariant?](https://github.com/Microsoft/TypeScript/wiki/FAQ#why-are-function-parameters-bivariant)
+{{< /notice >}}
 
 ## 类型体操问题分解
+
+### 模式匹配
+
+在类型体操中，**模式匹配**是一种利用 TypeScript 条件类型和 `infer` 关键字，对类型进行模式化拆解和提取的技巧。通过模式匹配，我们可以对复杂类型进行解析、重组，达到类型转换和提取的目的。
+
+**模式匹配**主要依赖于以下两个特性：**条件类型**，**类型推断（infer）**。
+
+```typescript
+type ParametersType<T> = T extends (...args: infer P) => any ? P : never;
+type Func = (x: number, y: string) => void;
+type Params = ParametersType<Func>; // [number, string]
+
+type PromiseType<T> = T extends Promise<infer U> ? U : T;
+type PT = PromiseType<Promise<number>>; // number
+
+type T1 = RemovePrefix<'prefix_home'>; // 'home'
+type T2 = RemovePrefix<'prefix_user'>; // 'user'
+type T3 = RemovePrefix<'about'>;       // 'about'
+```
 
 ## 参考文献
 
 - [[Web Dev] null and undefined](https://web.dev/learn/javascript/data-types/null-undefined)
 - [业务代码里的 TypeScript 小技巧](https://blog.csdn.net/Taobaojishu/article/details/140731853)
+- [Microsoft Typescript FAQ](https://github.com/Microsoft/TypeScript/wiki/FAQ)
+- [Covariance and contravariance (computer science)](https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science))
 
 [^undefined]: `TypeScript` 官方的代码风格中要求使用 `undefined`，这个因团队而异。`TypeScript` 官方也不推荐使用 `const enum`，但是代码里面也到处飞啊！
