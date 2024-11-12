@@ -1,7 +1,7 @@
 ---
 author: "Shuey Yuen"
 date: 2024-10-22T12:22:03+08:00
-title: "TypeScript类型体操"
+title: "TypeScript类型体操（基础）"
 description: 如何一步步解决类型体操，以及分解的基本问题。
 tags: ["TypeScript"]
 categories: ["Web"]
@@ -202,6 +202,32 @@ function fn(): string {
 type R = ReturnType<typeof fn>; // string
 ```
 
+使用 `infer` 做类型推断时，同一个候选值能有**多个**推断位置。
+
+当 `infer` 处于协变位置时，结果为[交叉类型]({{< relref "#交叉类型" >}})。
+
+> For a given infer type variable `V`, if any candidates were inferred from co-variant positions, the type inferred for `V` is a union of those candidates. Otherwise, if any candidates were inferred from contra-variant positions, the type inferred for `V` is an intersection of those candidates. Otherwise, the type inferred for `V` is never.
+>
+> {{< align right "—— [TypeScript 2.8 Conditional Types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#conditional-types)" >}}
+
+```typescript
+type CovariantInfer<T> = T extends { a: infer U; b: infer U } ? U : never;
+type Result1 = CovariantInfer<{ a: string; b: string }>; // string
+type Result2 = CovariantInfer<{ a: string; b: number }>; // string | number
+```
+
+当 `infer` 处于逆变位置时，结果为[联合类型]({{< relref "#联合类型" >}})。
+
+```typescript
+type ContravariantInfer<T> = T extends { a: (x: infer U) => void; b: (x: infer U) => void }
+  ? U
+  : never;
+// string
+type Result1 = ContravariantInfer<{ a: (x: string) => void; b: (x: string) => void }>;
+// string & { n: number }
+type Result2 = ContravariantInfer<{ a: (x: string) => void; b: (x: { n: number }) => void }>;
+```
+
 #### 联合类型
 
 联合类型表示一个值可以是几种类型之一。使用【`|`】符号来定义联合类型。联合类型进行条件运算时，会对每个成员进行分布式处理，这种行为被称为“[分布式条件类型](https://juejin.cn/post/7068947287593975815#heading-5)”。
@@ -218,6 +244,10 @@ type Result2 = ArrayWrapped<number | boolean>; // 'N'
 ```
 > 泛型中，**对于属于裸类型参数的检查类型，条件类型会在实例化时期自动分发到联合类型上。**
 
+> Conditional types in which the checked type is a naked type parameter are called distributive conditional types. Distributive conditional types are automatically distributed over union types during instantiation. For example, an instantiation of `T extends U ? X : Y` with the type argument `A | B | C` for `T` is resolved as `(A extends U ? X : Y) | (B extends U ? X : Y) | (C extends U ? X : Y)`.
+>
+> {{< align right "—— [TypeScript 2.8 Distributive conditional types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types)" >}}
+
 #### 交叉类型
 
 交叉类型表示一个值可以同时是几种类型。使用【`&`】符号来定义交叉类型。
@@ -233,7 +263,7 @@ let person: AB = { name: "Alice", age: 30 }; // OK
 
 #### 索引查询
 
-索引查询操作符【`keyof`】用于获取某个类型的所有键，返回一个联合类型。
+索引查询操作符【`keyof`】用于获取某个类型的所有键，返回一个联合类型。关于 `keyof (A & B)` 的计算详见[链接](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#improved-keyof-with-intersection-types)
 
 ```typescript
 type Person = { name: string; age: number };
@@ -283,7 +313,7 @@ type MappedPerson = Mapped<Person>;
 
 - **readonly**：将属性设置为只读，不能被重新赋值。
 - **?**：将属性设置为可选。
-- **\-**：从类型中移除属性修饰符。
+- **+/\-**：从类型中添加/移除属性修饰符。
 
 ```typescript
 type Required<T> = {
@@ -434,27 +464,6 @@ const e2: Example = {
 {{< notice notice-info >}}
 由于没有类似 `Dart` 中的 `convariant` 关键字，`TypeScript` 对函数参数采用的时候双向可变的方案。详见 [Why are function parameters bivariant?](https://github.com/Microsoft/TypeScript/wiki/FAQ#why-are-function-parameters-bivariant)
 {{< /notice >}}
-
-## 类型体操问题分解
-
-### 模式匹配
-
-在类型体操中，**模式匹配**是一种利用 TypeScript 条件类型和 `infer` 关键字，对类型进行模式化拆解和提取的技巧。通过模式匹配，我们可以对复杂类型进行解析、重组，达到类型转换和提取的目的。
-
-**模式匹配**主要依赖于以下两个特性：**条件类型**，**类型推断（infer）**。
-
-```typescript
-type ParametersType<T> = T extends (...args: infer P) => any ? P : never;
-type Func = (x: number, y: string) => void;
-type Params = ParametersType<Func>; // [number, string]
-
-type PromiseType<T> = T extends Promise<infer U> ? U : T;
-type PT = PromiseType<Promise<number>>; // number
-
-type T1 = RemovePrefix<'prefix_home'>; // 'home'
-type T2 = RemovePrefix<'prefix_user'>; // 'user'
-type T3 = RemovePrefix<'about'>;       // 'about'
-```
 
 ## 参考文献
 
