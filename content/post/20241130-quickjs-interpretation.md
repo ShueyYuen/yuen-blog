@@ -1,10 +1,10 @@
 ---
 author: "Shuey Yuen"
 date: 2024-11-30T18:58:12+08:00
-title: "quickjs源码解读"
-description: 深度解析quickjs源码。
+title: "quickjs源码解读（一）"
+description: 深度解析quickjs源码，基础定义部分。
 tags: ["JavaScript", "quickjs"]
-categories: ["Web"]
+categories: ["QuickJS"]
 toc: true
 cover: /images/2024/1022/title-bg.webp
 draft: true
@@ -100,6 +100,20 @@ draft: true
   - `string_list`（仅在 `DUMP_LEAKS` 定义时存在）：`struct list_head`，字符串对象列表，用于检测内存泄漏。
 
 这些属性共同维护了 JavaScript 运行时的状态，包括内存管理、垃圾回收、模块加载、异常处理和异步任务等功能，确保引擎能够正确、高效地执行 JavaScript 代码。
+
+### JSThreadState
+
+`JSThreadState` 结构体用于存储与 JavaScript 线程状态相关的数据。以下是该结构体中各个成员的详细说明：
+
+- `os_rw_handlers`: 存储与读写操作相关的处理程序的链表。
+- `os_signal_handlers`: 存储与信号处理相关的处理程序的链表。
+- `os_timers`: 存储定时器的链表。
+- `port_list`: 存储与工作线程消息处理相关的处理程序的链表。
+- `eval_script_recurse`: 仅在主线程中使用，用于记录脚本递归执行的深度。
+- `next_timer_id`: 用于 `setTimeout()` 函数的下一个定时器 ID。
+- `recv_pipe` 和 `send_pipe`: 不在主线程中使用，分别表示接收和发送消息的管道。
+
+这些成员变量共同维护了线程的各种状态和处理程序，确保线程能够正确处理读写操作、信号、定时器和消息传递等任务。
 
 ### JSClass
 
@@ -485,4 +499,5 @@ draft: true
 
 ## 参考文献
 
+- https://ming1016.github.io/2018/04/21/deeply-analyse-javascriptcore/
 - https://ming1016.github.io/2021/02/21/deeply-analyse-quickjs
