@@ -221,6 +221,9 @@ export const isReservedProp = (key: string): boolean => {
 
 目前`errorHandling.ts`在项目中没有被使用，定义了ErrorTypes（生命周期、渲染、原生事件、组件事件）和handleError的函数。
 
+## 参考
+
+- https://blog.csdn.net/u012562943/article/details/144004208
 
 
 [Vue Core]: https://github.com/vuejs/core "Vue Core在Github上的源码"
