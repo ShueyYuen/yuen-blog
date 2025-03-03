@@ -50,6 +50,7 @@ declare var reloadPlantUML: (isDark: boolean) => void
 
   function switchTheme(theme: string) {
     const rootDom: Element = document.documentElement
+    theme = theme || "auto"
     switch (theme) {
       case "auto":
         autoSwitchTheme({
@@ -126,7 +127,7 @@ declare var reloadPlantUML: (isDark: boolean) => void
   }
 
   const currentTheme: string = window.localStorage.getItem('theme') || ''
-  currentTheme && switchTheme(currentTheme);
+  switchTheme(currentTheme);
 
   window.addEventListener('DOMContentLoaded', () => {
     /** moble click toggle menu */
