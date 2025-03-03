@@ -1,5 +1,5 @@
 # And see https://gohugo.io/getting-started/configuration/
-baseURL = "https://shuey.fun/"
+baseURL = "https://www.shuey.fun/"
 title = "Shuey猫舍"
 enableRobotsTXT = true
 enableEmoji = true
