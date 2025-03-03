@@ -16,7 +16,7 @@ cover: /images/2022/0425/title_bg.webp
 
 {{< playground id="render-example" theme="dark" tab="result" processor="" >}}
 {{<playground/param jses true>}}
-https://cdn.shuey.fun/javascript/2022/0425/gl-matrix-min.js
+https://shuey.fun/javascript/2022/0425/gl-matrix-min.js
 {{</playground/param>}}
 {{<playground/param meta>}}
 <meta name="title" value="test"></meta>
@@ -146,7 +146,7 @@ function main() {
     }
   };
   const buffers = initBuffers(gl);
-  const texture = loadTexture(gl, 'https://cdn.shuey.fun/images/2022/0425/cube_texture.webp');
+  const texture = loadTexture(gl, 'https://shuey.fun/images/2022/0425/cube_texture.webp');
   var then = 0;
   function render(now) {
     now *= 0.001;  // convert to seconds

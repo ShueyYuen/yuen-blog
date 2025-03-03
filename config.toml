@@ -121,7 +121,7 @@ defaultContentLanguage = "zh-cn"           # Default language to use
     tags_count = 6
 
   [params.CDN]
-    enable = true
+    enable = false
     host = "https://cdn.shuey.fun"
 
 
