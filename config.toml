@@ -1,5 +1,5 @@
 # And see https://gohugo.io/getting-started/configuration/
-baseURL = "https://www.shuey.fun/"
+baseURL = "https://shuey.fun/"
 title = "Shuey猫舍"
 enableRobotsTXT = true
 enableEmoji = true
@@ -88,7 +88,7 @@ defaultContentLanguage = "zh-cn"           # Default language to use
   toc = true                # 是否开启目录
 
   # 国内备案号
-  beian = "皖ICP备2023022130号"
+  beian = "皖ICP备2023022130号-1"
   # TOC目录出现字符长度限制
   toc_show_len = 300
 
@@ -97,7 +97,7 @@ defaultContentLanguage = "zh-cn"           # Default language to use
   customCSS = []            # if ['custom.css'], load '/static/css/custom.css' file
   customJS = []             # if ['custom.js'], load '/static/js/custom.js' file
 
-  clarityID = "b43ixctzrv"    # bing的热力图
+  # clarityID = "b43ixctzrv"    # bing的热力图
 
   [params.aplayer]
     theme = "#b7daff"
