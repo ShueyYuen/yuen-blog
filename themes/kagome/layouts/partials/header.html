@@ -14,9 +14,7 @@
           {{- range .Site.Menus.main -}}
           <a class="list-item soft-size--small soft-style--hover soft-style--active" href="{{- .URL | safeURL -}}" title="{{- .Title -}}">{{- .Name -}}</a>
           {{- end -}}
-          {{- if .Site.Params.algolia.appId -}}
-          <div id="docsearch"></div>
-          {{- end -}}
+          {{- partial "algolia.html" . -}}
         </div>
       </div>
     </nav>
