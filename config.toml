@@ -161,3 +161,6 @@ defaultContentLanguage = "zh-cn"           # Default language to use
 
 [Blackfriday]
   hrefTargetBlank = true
+
+[build]
+  noJSConfigInAssets = true

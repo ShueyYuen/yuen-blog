@@ -5,6 +5,7 @@ if (and .Page.Site.Params.CDN.enable (not .Page.Site.IsServer)) -}} {{- if not
 $CDNImgDestination = (print .Page.Site.Params.CDN.host (path.Join
 $.Site.Author.avatar)) -}} {{- end -}} {{- end -}}
 <section
+  id="author-card"
   class="aside-widget widget-author content-padding-large soft-size--large soft-style--box"
 >
   <div class="widget-body">
@@ -22,5 +23,31 @@ $.Site.Author.avatar)) -}} {{- end -}} {{- end -}}
       {{- end -}}
     </div>
   </div>
+  <script id="magic-source" type="application/json">
+    {{- $magic := dict -}}
+    {{- range resources.Match "ts/magic/*.ts" -}}
+    {{- $name := replace (replace .Name "ts/magic/" "") ".ts" "" -}}
+      {{-
+        $opts := dict
+          "targetPath" (printf "assets/js/magic/%s.min.js" $name)
+          "minify" hugo.IsProduction
+      -}}
+      {{- $script := . | js.Build $opts | resources.Fingerprint "sha256" -}}
+      {{-
+        $magic = merge $magic (
+          dict $name (
+            dict "url" $script.RelPermalink
+                 "integrity" $script.Data.Integrity
+                 "crossorigin" "anonymous"
+          )
+        ) 
+      -}}
+    {{ end }}
+    {{- $magic -}}
+  </script>
+  {{- $js := resources.Get "ts/magic.ts" -}}
+  {{- $opts := dict "targetPath" "assets/js/magic.min.js" "minify" hugo.IsProduction -}}
+  {{- $script := $js | js.Build $opts | resources.Fingerprint "sha256" -}}
+  <script src="{{- $script.RelPermalink -}}" integrity="{{- $script.Data.Integrity -}}" crossorigin="anonymous"></script>
 </section>
 {{- end -}}
