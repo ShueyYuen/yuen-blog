@@ -4,6 +4,7 @@ import { DisposableStore } from './magic/utils/disposable';
 declare global {
   function onDeactive(cb: () => Promise<void> | void): void;
   function onActive(cb: (context: DisposableStore) => void): void;
+  async function onMagic(name?: string): void;
 }
 
 // 如果需要导出 DisposableStore，应该单独创建一个模块导出文件

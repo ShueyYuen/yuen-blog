@@ -39,39 +39,43 @@ window.onActive = function onActive(cb) {
 const magicSource = document.getElementById('magic-source') as HTMLScriptElement;
 const magicData = JSON.parse(magicSource.text);
 
+const magicKeys = Object.keys(magicData);
+const shownMagic = JSON.parse(localStorage.getItem('shown-magic') || '{}');
+
+let isBusy = false;
+window.onMagic = async function onMagic(name?: string) {
+  if (isBusy) return;
+  isBusy = true;
+  await onDeactive();
+  if (Object.keys(shownMagic).length >= magicKeys.length) {
+    // 清空对象
+    for (const key in shownMagic) {
+      delete shownMagic[key];
+    }
+  }
+  if (!name) {
+    const notShownMagic = magicKeys.filter(key => !shownMagic[key]);
+    name = notShownMagic[Math.floor(Math.random() * notShownMagic.length)];
+  }
+  const magicScript = magicData[name];
+  loadScript(magicScript.url, magicScript.integrity, magicScript.crossorigin)
+    .then(() => {
+      console.log(`Loaded magic: ${name}`);
+      // 在这里可以执行魔法脚本的相关操作
+    })
+    .catch(error => {
+      console.error(`Error loading magic: ${error}`);
+    });
+  if (isLucky()) {
+    shownMagic[name] = true; // 使用对象属性记录已显示的魔法
+  }
+  localStorage.setItem('shown-magic', JSON.stringify(shownMagic));
+  isBusy = false;
+}
+
 const authorCard = document.getElementById('author-card');
 if (authorCard) {
-  const magicKeys = Object.keys(magicData);
-  const shownMagic = JSON.parse(localStorage.getItem('shown-magic') || '{}');
-
-  let isBusy = false;
-  authorCard.addEventListener('click', async function () {
-    if (isBusy) return;
-    isBusy = true;
-    await onDeactive();
-    if (Object.keys(shownMagic).length >= magicKeys.length) {
-      // 清空对象
-      for (const key in shownMagic) {
-        delete shownMagic[key];
-      }
-    }
-    const notShownMagic = magicKeys.filter(key => !shownMagic[key]);
-    const randomKey = notShownMagic[Math.floor(Math.random() * notShownMagic.length)];
-    const magicScript = magicData[randomKey];
-    loadScript(magicScript.url, magicScript.integrity, magicScript.crossorigin)
-      .then(() => {
-        console.log(`Loaded magic: ${randomKey}`);
-        // 在这里可以执行魔法脚本的相关操作
-      })
-      .catch(error => {
-        console.error(`Error loading magic: ${error}`);
-      });
-    if (isLucky()) {
-      shownMagic[randomKey] = true; // 使用对象属性记录已显示的魔法
-    }
-    localStorage.setItem('shown-magic', JSON.stringify(shownMagic));
-    isBusy = false;
-  });
+  authorCard.addEventListener('click', () => onMagic());
 }
 
 document.addEventListener('keyup', function (event) {
