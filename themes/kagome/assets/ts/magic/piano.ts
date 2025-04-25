@@ -4,7 +4,7 @@
 import { ElementAnimator } from './utils/animation';
 import { CanvasManager } from './utils/canvas';
 import { DOMEmitter } from './utils/dom';
-import { Disposable } from './utils/disposable';
+import { Disposable, IDisposable } from './utils/disposable';
 import { BaseEvent, Emitter } from './utils/emitter';
 
 // #region Global Variables
@@ -40,7 +40,7 @@ const DISPLAY_OPACITY = '0.6';
 const MIN_KEY_SIZE = 8;
 // #endregion
 
-class SoundGenerator {
+class SoundGenerator implements IDisposable {
   static TWELVE_TET = 12;
 
   static readonly INSTANCE = new SoundGenerator();
@@ -73,21 +73,11 @@ class SoundGenerator {
     return bufferSource;
   }
 
-  public getBeatSound() {
-    const oscillator = this.audioContext.createOscillator();
-    const gainNode = this.audioContext.createGain();
-
-    oscillator.type = 'sine'; // 使用正弦波
-    oscillator.frequency.setValueAtTime(780, this.audioContext.currentTime); // 设置频率为880Hz
-
-    gainNode.gain.setValueAtTime(1, this.audioContext.currentTime); // 初始音量
-    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 0.05); // 快速衰减音量
-
-    oscillator.connect(gainNode);
-    gainNode.connect(this.audioContext.destination);
-
-    oscillator.start();
-    oscillator.stop(this.audioContext.currentTime + 0.05);
+  dispose(): void {
+    if (this.audioContext) {
+      this.audioContext.close();
+      this.audioContext = null!;
+    }
   }
 }
 
@@ -348,12 +338,14 @@ class Metronome extends Disposable {
   private bpm: number;
   private isRunning: boolean;
   private intervalId: number | null = null;
+  private audioContext: AudioContext;
 
   constructor(
     keydownEmitter: DOMEmitter<'keydown'>,
     initialBpm: number = 120
   ) {
     super();
+    this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     this._register(keydownEmitter.event(this.handleKeyDown.bind(this)));
     this.bpm = initialBpm;
     this.isRunning = false;
@@ -412,17 +404,35 @@ class Metronome extends Disposable {
   }
 
   private tick() {
-    SoundGenerator.INSTANCE.getBeatSound();
+    const oscillator = this.audioContext.createOscillator();
+    const gainNode = this.audioContext.createGain();
+
+    oscillator.type = 'sine'; // 使用正弦波
+    oscillator.frequency.setValueAtTime(780, this.audioContext.currentTime); // 设置频率为880Hz
+
+    gainNode.gain.setValueAtTime(1, this.audioContext.currentTime); // 初始音量
+    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 0.05); // 快速衰减音量
+
+    oscillator.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(this.audioContext.currentTime + 0.05);
   }
 
   public dispose(): void {
     super.dispose();
+    if (this.audioContext) {
+      this.audioContext.close();
+      this.audioContext = null!;
+    }
     this.stop();
   }
 }
 
 // #region Activation
 onActivate((context) => {
+  context.add(SoundGenerator.INSTANCE);
   const keydownEmitter = context.add(new DOMEmitter(window, 'keydown'));
   const keyupEmitter = context.add(new DOMEmitter(window, 'keyup'));
   context.add(new Metronome(keydownEmitter));
