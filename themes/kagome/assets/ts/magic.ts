@@ -20,18 +20,18 @@ function loadScript(url: string, integrity: string, crossorigin: string) {
   });
 }
 
-let _onDeactive: () => Promise<void> | void, _context: DisposableStore;
-async function onDeactive(cb?: () => Promise<void> | void) {
+let _onDeactivate: () => Promise<void> | void, _context: DisposableStore;
+async function onDeactivate(cb?: () => Promise<void> | void) {
   if (typeof cb === 'function') {
-    _onDeactive = cb;
+    _onDeactivate = cb;
   } else {
-    _onDeactive && await _onDeactive();
+    _onDeactivate && await _onDeactivate();
     _context && _context.dispose();
-    _onDeactive = null!; // 清空回调函数
+    _onDeactivate = null!; // 清空回调函数
   }
 }
-window.onDeactive = onDeactive;
-window.onActive = function onActive(cb) {
+window.onDeactivate = onDeactivate;
+window.onActivate = function onActivate(cb) {
   _context = new DisposableStore();
   cb(_context);
 }
@@ -46,7 +46,7 @@ let isBusy = false;
 window.onMagic = async function onMagic(name?: string) {
   if (isBusy) return;
   isBusy = true;
-  await onDeactive();
+  await onDeactivate();
   if (Object.keys(shownMagic).length >= magicKeys.length) {
     // 清空对象
     for (const key in shownMagic) {
@@ -80,6 +80,6 @@ if (authorCard) {
 
 document.addEventListener('keyup', function (event) {
   if (event.key === 'Escape') {
-    onDeactive();
+    onDeactivate();
   }
 });

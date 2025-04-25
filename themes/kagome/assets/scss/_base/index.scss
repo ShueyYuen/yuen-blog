@@ -40,6 +40,10 @@ body {
   }
 }
 
+*::-webkit-scrollbar-corner {
+  display: none;
+}
+
 .text-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;

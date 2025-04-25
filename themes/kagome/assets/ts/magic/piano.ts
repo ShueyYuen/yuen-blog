@@ -4,7 +4,8 @@
 import { ElementAnimator } from './utils/animation';
 import { CanvasManager } from './utils/canvas';
 import { DOMEmitter } from './utils/dom';
-import { Disposable, IDisposable } from './utils/disposable';
+import { Disposable } from './utils/disposable';
+import { BaseEvent, Emitter } from './utils/emitter';
 
 // #region Global Variables
 enum PianoKeyShape {
@@ -40,15 +41,17 @@ const MIN_KEY_SIZE = 8;
 // #endregion
 
 class SoundGenerator {
-  static INSTANCE: SoundGenerator = new SoundGenerator();
   static TWELVE_TET = 12;
 
-  private audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+  static readonly INSTANCE = new SoundGenerator();
+
+  private audioContext: AudioContext;
   private audioBuffer: AudioBuffer | null = null;
 
   public isReady: Promise<void>;
 
   private constructor() {
+    this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     this.isReady = fetch('/magic/piano.mp3')
       .then((response) => response.arrayBuffer())
       .then((data) => this.audioContext.decodeAudioData(data))
@@ -69,6 +72,23 @@ class SoundGenerator {
     bufferSource.connect(this.audioContext.destination);
     return bufferSource;
   }
+
+  public getBeatSound() {
+    const oscillator = this.audioContext.createOscillator();
+    const gainNode = this.audioContext.createGain();
+
+    oscillator.type = 'sine'; // 使用正弦波
+    oscillator.frequency.setValueAtTime(780, this.audioContext.currentTime); // 设置频率为880Hz
+
+    gainNode.gain.setValueAtTime(1, this.audioContext.currentTime); // 初始音量
+    gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioContext.currentTime + 0.05); // 快速衰减音量
+
+    oscillator.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(this.audioContext.currentTime + 0.05);
+  }
 }
 
 class Piano extends Disposable {
@@ -77,47 +97,57 @@ class Piano extends Disposable {
   private damperPedal: DamperPedal = null!;
   private keyReleaseMap: Map<string, PianoKey> = new Map();
   private keyControlIndex = CENTER_C_POSITION;
+  private needsRedraw = true;
 
   constructor(
     keydownEmitter: DOMEmitter<'keydown'>,
     keyupEmitter: DOMEmitter<'keyup'>
   ) {
     super();
-    this._register(keydownEmitter.event((e) => {
-      if (e.repeat) {
-        return;
+    this._register(keydownEmitter.event(this.handleKeyDown.bind(this)));
+    this._register(keyupEmitter.event(this.handleKeyUp.bind(this)));
+  }
+
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.repeat) {
+      return;
+    }
+    if (e.code === 'KeyZ') {
+      this.keyControlIndex -= KEY_PATTERN.length;
+      if (this.keyControlIndex + PATTERN_BIAS < 0) {
+        this.keyControlIndex = -PATTERN_BIAS;
       }
-      if (e.code === 'KeyZ') {
-        this.keyControlIndex -= KEY_PATTERN.length;
-        if (this.keyControlIndex + PATTERN_BIAS < 0) {
-          this.keyControlIndex = -PATTERN_BIAS;
-        }
-        return;
+      this.needsRedraw = true;
+      return;
+    }
+    if (e.code === 'KeyX') {
+      this.keyControlIndex += KEY_PATTERN.length;
+      if (this.keyControlIndex - PATTERN_BIAS > PIANO_KEY_COUNTS) {
+        this.keyControlIndex = PIANO_KEY_COUNTS - PATTERN_BIAS;
       }
-      if (e.code === 'KeyX') {
-        this.keyControlIndex += KEY_PATTERN.length;
-        if (this.keyControlIndex - PATTERN_BIAS > PIANO_KEY_COUNTS) {
-          this.keyControlIndex = PIANO_KEY_COUNTS - PATTERN_BIAS;
-        }
-        return;
-      }
-      const key = KEYBOARD_PATTERN.indexOf(e.code);
-      if (key === -1) {
-        return;
-      }
-      const pianoKey = this.keys[key + this.keyControlIndex];
-      if (pianoKey) {
-        pianoKey.down();
-        this.keyReleaseMap.set(e.code, pianoKey);
-      }
-    }));
-    this._register(keyupEmitter.event((e) => {
-      const toRelease = this.keyReleaseMap.get(e.code);
-      if (!toRelease) {
-        return;
-      }
-      toRelease.up();
-    }));
+      this.needsRedraw = true;
+      return;
+    }
+    const key = KEYBOARD_PATTERN.indexOf(e.code);
+    if (key === -1) {
+      return;
+    }
+    const pianoKey = this.keys[key + this.keyControlIndex];
+    if (pianoKey) {
+      pianoKey.down();
+      this.keyReleaseMap.set(e.code, pianoKey);
+      this.needsRedraw = true;
+    }
+  }
+
+  private handleKeyUp(e: KeyboardEvent) {
+    const toRelease = this.keyReleaseMap.get(e.code);
+    if (!toRelease) {
+      return;
+    }
+    toRelease.up();
+    this.keyReleaseMap.delete(e.code);
+    this.needsRedraw = true;
   }
 
   setDamperPedal(damperPedal: DamperPedal) {
@@ -133,6 +163,9 @@ class Piano extends Disposable {
   }
 
   draw(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
+    if (!this.needsRedraw) {
+      return;
+    }
     ctx.clearRect(x, y, width, height);
     const nextDraw: Array<[PianoKey, any]> = [];
     const whiteWidth = width / WHITE_KET_COUNT;
@@ -149,18 +182,26 @@ class Piano extends Disposable {
     });
     nextDraw.forEach(([key, { x, width, height }]) => key.draw(ctx, x, width, height));
 
+    this.applyGradientMask(ctx, width, height);
+
+    this.needsRedraw = false;
+  }
+
+  private applyGradientMask(ctx: CanvasRenderingContext2D, width: number, height: number): void {
     ctx.save();
     ctx.globalCompositeOperation = 'destination-in';
     const gradient = ctx.createLinearGradient(0, 0, 0, height);
 
-    // 设置渐变的颜色和透明度
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0)'); // 顶部完全透明
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 1)'); // 底部完全不透明
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0)');  // 顶部完全透明
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 1)');  // 底部完全不透明
 
-    // 将渐变应用到画布上
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
     ctx.restore();
+  }
+
+  requestRedraw(): void {
+    this.needsRedraw = true;
   }
 
   public dispose(): void {
@@ -175,42 +216,46 @@ class DamperPedal extends Disposable {
     return this._isPressed;
   }
 
-  private activatedSounds: AudioBufferSourceNode[] = [];
+  private pressEmitter: Emitter<void>;
+  get onPress(): BaseEvent<void> {
+    return this.pressEmitter.event;
+  }
+
+  private releaseEmitter: Emitter<void>;
+  get onRelease(): BaseEvent<void> {
+    return this.releaseEmitter.event;
+  }
 
   constructor(
-    private piano: Piano,
     keydownEmitter: DOMEmitter<'keydown'>,
     keyupEmitter: DOMEmitter<'keyup'>
   ) {
     super();
-    this._register(keydownEmitter.event((e) => {
-      if (e.repeat) {
-        return;
-      }
-      if (e.code === 'ShiftLeft') {
-        this._isPressed = true;
-        this.piano.keys.forEach((key) => {
-          if (key.isPressed) {
-            this.addSound(key.transSound());
-          }
-        });
-      }
-    }));
-    this._register(keyupEmitter.event((e) => {
-      if (e.code === 'ShiftLeft') {
-        this._isPressed = false;
-        this.activatedSounds.forEach((sound) => sound.stop(0));
-        this.activatedSounds = [];
-      }
-    }));
+    this._register(keydownEmitter.event(this.handleKeyDown.bind(this)));
+    this._register(keyupEmitter.event((this.handleKeyUp.bind(this))));
+    this.pressEmitter = this._register(new Emitter<void>());
+    this.releaseEmitter = this._register(new Emitter<void>());
   }
 
-  addSound(sound?: AudioBufferSourceNode) {
-    sound && this.activatedSounds.push(sound);
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.repeat) {
+      return;
+    }
+    if (e.code === 'ShiftLeft') {
+      this._isPressed = true;
+      this.pressEmitter.fire();
+    }
+  }
+
+  private handleKeyUp(e: KeyboardEvent) {
+    if (e.code === 'ShiftLeft') {
+      this._isPressed = false;
+      this.releaseEmitter.fire();
+    }
   }
 }
 
-class PianoKey implements IDisposable {
+class PianoKey extends Disposable {
   public readonly frequency: number;
 
   private sound: AudioBufferSourceNode | null = null;
@@ -220,13 +265,19 @@ class PianoKey implements IDisposable {
     return this._isPressed;
   }
 
+  private isAttachedToDamper = false;
+
   constructor(
     public shape: PianoKeyShape,
     public color: string,
     TET: number,
     private damperPedal: DamperPedal
   ) {
+    super();
     this.frequency = Math.pow(2, TET / SoundGenerator.TWELVE_TET);
+
+    this._register(this.damperPedal.onPress(this.handleDamperPress.bind(this)));
+    this._register(this.damperPedal.onRelease(this.handleDamperRelease.bind(this)));
   }
 
   get isCenterC() {
@@ -252,55 +303,148 @@ class PianoKey implements IDisposable {
     }
   }
 
-  transSound() {
-    if (!this.sound) {
+  handleDamperPress() {
+    this.isAttachedToDamper = true;
+  }
+
+  handleDamperRelease() {
+    this.isAttachedToDamper = false;
+    if (this._isPressed) {
       return;
     }
-    const sound = this.sound;
-    this.sound = null;
-    return sound;
+    this.mute();
   }
 
   down() {
     if (this._isPressed) {
       return;
     }
+    this._isPressed = true;
+    this.mute();
     this.sound = SoundGenerator.INSTANCE.getSound(this.frequency);
     this.sound.start(0);
-    this._isPressed = true;
-
-    if (this.damperPedal.isPressed) {
-      this.damperPedal.addSound(this.transSound());
-    }
   }
 
   up() {
-    this.sound && this.sound.disconnect();
     this._isPressed = false;
+    if (this.isAttachedToDamper) {
+      return;
+    }
+    this.mute();
+  }
+
+  mute() {
+    this.sound && this.sound.disconnect();
+    this.sound = null;
   }
 
   dispose(): void {
-    this.up();
+    super.dispose();
+    this.mute();
   }
 }
 
-// #region Canvas Resize
-onActive((context) => {
+class Metronome extends Disposable {
+  private bpm: number;
+  private isRunning: boolean;
+  private intervalId: number | null = null;
+
+  constructor(
+    keydownEmitter: DOMEmitter<'keydown'>,
+    initialBpm: number = 120
+  ) {
+    super();
+    this._register(keydownEmitter.event(this.handleKeyDown.bind(this)));
+    this.bpm = initialBpm;
+    this.isRunning = false;
+  }
+
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.code === 'ArrowUp') {
+      this.increaseBpm();
+    } else if (e.code === 'ArrowDown') {
+      this.decreaseBpm();
+    }
+    if (e.repeat) {
+      return;
+    }
+    if (e.code === 'ControlLeft' || e.code === 'ControlRight') {
+      return this.isRunning ? this.stop() : this.start();
+    }
+  }
+
+  start() {
+    if (this.isRunning) return;
+    this.isRunning = true;
+    this.scheduleTick();
+  }
+
+  stop() {
+    if (!this.isRunning) return;
+    this.isRunning = false;
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+  }
+
+  increaseBpm() {
+    this.bpm = Math.min(this.bpm + 1, 300); // 限制最大BPM为300
+    if (this.isRunning) {
+      this.stop();
+      this.start();
+    }
+  }
+
+  decreaseBpm() {
+    this.bpm = Math.max(this.bpm - 1, 30); // 限制最小BPM为30
+    if (this.isRunning) {
+      this.stop();
+      this.start();
+    }
+  }
+
+  private scheduleTick() {
+    const interval = 60000 / this.bpm; // 计算每次tick的间隔时间
+    this.intervalId = setInterval(() => {
+      this.tick();
+    }, interval);
+  }
+
+  private tick() {
+    SoundGenerator.INSTANCE.getBeatSound();
+  }
+
+  public dispose(): void {
+    super.dispose();
+    this.stop();
+  }
+}
+
+// #region Activation
+onActivate((context) => {
   const keydownEmitter = context.add(new DOMEmitter(window, 'keydown'));
   const keyupEmitter = context.add(new DOMEmitter(window, 'keyup'));
+  context.add(new Metronome(keydownEmitter));
 
   const piano = context.add(new Piano(keydownEmitter, keyupEmitter));
-  const damperPedal = new DamperPedal(piano, keydownEmitter, keyupEmitter);
+  const damperPedal = new DamperPedal(keydownEmitter, keyupEmitter);
   piano.setDamperPedal(damperPedal);
 
   for (let i = 0; i < PIANO_KEY_COUNTS; i++) {
     const patternIndex = (i + PATTERN_BIAS) % KEY_PATTERN.length;
-    piano.addKey(new PianoKey(KEY_PATTERN[patternIndex], NOTE_COLORS[patternIndex], i - CENTER_C_POSITION, damperPedal));
+    piano.addKey(new PianoKey(
+      KEY_PATTERN[patternIndex],
+      NOTE_COLORS[patternIndex],
+      i - CENTER_C_POSITION,
+      damperPedal
+    ));
   }
 
-  const canvasManager = new CanvasManager(document.body, {
+  const canvasManager = context.add(new CanvasManager(document.body, {
     autoResize: false,
     styles: {
+      pointerEvents: 'none',
       position: 'fixed',
       opacity: DISPLAY_OPACITY,
       bottom: '0',
@@ -309,7 +453,7 @@ onActive((context) => {
       boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.3)',
       zIndex: '9999',
     }
-  });
+  }));
   const canvas = canvasManager.element;
   const canvasContext = canvasManager.getContext('2d')!;
   canvasManager.linkSize(document.body, function (entry, canvas) {
@@ -318,6 +462,7 @@ onActive((context) => {
     const minWidth = length * MIN_KEY_SIZE;
     canvas.width = Math.max(width, minWidth);
     canvas.height = canvas.width * RATIO;
+    piano.requestRedraw();
     piano.draw(canvasContext, 0, 0, canvas.width, canvas.height);
   });
   canvasManager.startRenderLoop(() => piano.draw(canvasContext, 0, 0, canvas.width, canvas.height));
@@ -328,7 +473,7 @@ onActive((context) => {
     { transform: 'translateX(-50%) translateY(0)', opacity: DISPLAY_OPACITY }
   ]);
 
-  // Modify onDeactive to use disappearance animation
-  onDeactive(() => ElementAnimator.hide(canvas));
+  // Modify onDeactivate to use disappearance animation
+  onDeactivate(() => ElementAnimator.hide(canvas));
 })
 // #endregion

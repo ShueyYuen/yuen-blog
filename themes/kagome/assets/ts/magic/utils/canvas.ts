@@ -1,3 +1,5 @@
+import { IDisposable } from "./disposable";
+
 export interface CanvasManagerOptions {
   width?: number;
   height?: number;
@@ -10,7 +12,7 @@ export interface CanvasManagerOptions {
 
 export type CanvasContextType = '2d' | 'webgl' | 'webgl2' | 'bitmaprenderer';
 
-export class CanvasManager {
+export class CanvasManager implements IDisposable {
   private canvas: HTMLCanvasElement;
   private resizeObserver: ResizeObserver | null = null;
   private contexts: Map<string, RenderingContext> = new Map();
