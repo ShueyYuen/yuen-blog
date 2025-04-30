@@ -98,6 +98,13 @@
   margin: .67em 0;
 }
 
+.markdown-body button {
+  border: none;
+  color: var(--theme-text-primary);
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
 .markdown-body img {
   border-style: none;
 }
@@ -900,6 +907,7 @@
   border: none;
 }
 
+.markdown-body button,
 .markdown-body img {
   max-width: 100%;
   box-sizing: initial;
@@ -964,6 +972,7 @@
     line-height: 1.4;
     color: #fff;
     background-color: rgba(119, 119, 119, 0.4);
+    box-shadow: none;
     min-width: 55px;
     text-align: center;
     cursor: pointer;
@@ -1351,4 +1360,8 @@
     font-weight: bold;
     margin-top: -0.7em;
   }
+}
+
+.markdown-body .dplayer-box button {
+  box-shadow: none;
 }

@@ -451,7 +451,7 @@ onActivate((context) => {
     ));
   }
 
-  const canvasManager = context.add(new CanvasManager(document.body, {
+  const canvasManager = context.add(new CanvasManager({
     autoResize: false,
     styles: {
       pointerEvents: 'none',
@@ -464,6 +464,7 @@ onActivate((context) => {
       zIndex: '9999',
     }
   }));
+  canvasManager.mount(document.body);
   const canvas = canvasManager.element;
   const canvasContext = canvasManager.getContext('2d')!;
   canvasManager.linkSize(document.body, function (entry, canvas) {

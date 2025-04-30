@@ -15,21 +15,18 @@ body {
   }
 }
 
-*::-webkit-scrollbar
-{
-    width: 6px;
-    height: 6px;
-    background-color: var(--theme-bg-primary);
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: var(--theme-bg-primary);
 }
 
-*::-webkit-scrollbar-track
-{
-    border-radius: 10px;
-    background-color: transparent;
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: transparent;
 }
 
-*::-webkit-scrollbar-thumb
-{
+*::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: var(--theme-text-active);
   transition: transitions(background-color, 0.3s);
@@ -113,6 +110,32 @@ body {
   }
 }
 
-.DocSearch-NoResults-Prefill-List {
-  margin-top: 10px;
+[data-plain="true"] {
+  [class*=soft-style--] {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .card-cover {
+    opacity: 0.25;
+  }
+
+  .highlight {
+    opacity: 0.6;
+  }
+
+  .article-content img {
+    opacity: 0.6;
+  }
+
+  #waline {
+    .wl-comment {
+      background: none;
+      box-shadow: none;
+
+      .wl-panel {
+        background: none;
+      }
+    }
+  }
 }

@@ -9,6 +9,10 @@ svg .cls-1, svg .cls-2 {
   fill: var(--docsearch-primary-color);
 }
 
+.DocSearch-NoResults-Prefill-List {
+  margin-top: 10px;
+}
+
 @media #{$mq-mb} {
   .header-container {
     .header-nav--list #docsearch {

@@ -41,17 +41,15 @@ export class CanvasManager implements IDisposable {
     return Math.floor(this.canvas.clientHeight);
   }
 
-  constructor(element: HTMLElement, options: CanvasManagerOptions = {}) {
+  constructor(private options: CanvasManagerOptions = {}) {
     this.canvas = document.createElement('canvas');
-    this.parentElement = element;
-    element.appendChild(this.canvas);
 
     this.pixelRatio = options.pixelRatio || window.devicePixelRatio || 1;
 
     // 设置初始尺寸
-    const width = options.width || element.clientWidth;
-    const height = options.height || element.clientHeight;
-    this.setSize(width, height);
+    const width = options.width!;
+    const height = options.height!;
+    Number.isInteger(width) && Number.isInteger(height) && this.setSize(width, height);
 
     // 应用样式
     if (options.styles) {
@@ -67,6 +65,17 @@ export class CanvasManager implements IDisposable {
 
     // 自动调整大小
     if (options.autoResize !== false) {
+      this.enableAutoResize();
+    }
+  }
+
+  mount(parent: HTMLElement): void {
+    this.parentElement = parent;
+    parent.appendChild(this.canvas);
+    if (this.options.autoResize) {
+      const width = parent.clientWidth;
+      const height = parent.clientHeight;
+      this.setSize(width, height);
       this.enableAutoResize();
     }
   }
@@ -149,18 +158,36 @@ export class CanvasManager implements IDisposable {
   /**
    * 自定义调整大小处理
    */
-  linkSize(element: HTMLElement, onResize: (this: CanvasManager, entry: ResizeObserverEntry, canvas: HTMLCanvasElement) => void): void {
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-      this.resizeObserver = null;
-    }
-
+  linkSize(element: Element, onResize: (this: CanvasManager, entry: ResizeObserverEntry, canvas: HTMLCanvasElement) => void): void {
+    this.clearResize();
     this.resizeObserver = new ResizeObserver((entries) => {
       const entry = entries[0];
       onResize.call(this, entry, this.canvas);
     });
 
     this.resizeObserver.observe(element);
+  }
+
+  private _linkSizeToWindow = () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    this.setSize(width, height);
+  };
+  /**
+   * 保持画布大小与窗口一致
+   */
+  linkSizeToWindow(): void {
+    this.clearResize();
+    window.addEventListener('resize', this._linkSizeToWindow);
+    this._linkSizeToWindow(); // 立即调用一次以设置初始大小
+  }
+
+  private clearResize() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
+    window.removeEventListener('resize', this._linkSizeToWindow);
   }
 
   /**
@@ -275,10 +302,7 @@ export class CanvasManager implements IDisposable {
     this.eventHandlers.clear();
 
     // 断开ResizeObserver
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-      this.resizeObserver = null;
-    }
+    this.clearResize();
 
     // 清除上下文引用
     this.contexts.clear();

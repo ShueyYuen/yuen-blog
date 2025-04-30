@@ -124,7 +124,6 @@ export class ElementAnimator {
     return new Promise<void>(resolve => {
       animation.onfinish = () => {
         // 动画完成后隐藏元素
-        element.style.display = 'none';
         resolve();
       };
     });
