@@ -47,3 +47,52 @@ export class DomListener implements IDisposable {
     this.handler = null!;
   }
 }
+
+export function requestPlainPage(): IDisposable {
+  const stylesheet = new CSSStyleSheet();
+  stylesheet.insertRule(`[data-plain="true"] [class*=soft-style] {
+  background-color: transparent;
+  box-shadow: none;
+}`);
+  stylesheet.insertRule(`
+[data-plain="true"] [class*=soft-style--] {
+  background-color: transparent;
+  box-shadow: none;
+}`);
+  stylesheet.insertRule(`
+[data-plain="true"] .card-cover {
+  opacity: 0.6;
+}`);
+
+  stylesheet.insertRule(`
+[data-plain="true"] .highlight {
+  opacity: 0.9;
+}`);
+
+  stylesheet.insertRule(`
+[data-plain="true"] .article-content img {
+  opacity: 0.9;
+}`);
+
+  stylesheet.insertRule(`
+[data-plain="true"] #waline .wl-comment {
+  background: none;
+  box-shadow: none;
+}`);
+
+  stylesheet.insertRule(`
+[data-plain="true"] #waline .wl-comment .wl-panel {
+  background: none;
+}`);
+  document.adoptedStyleSheets.push(stylesheet);
+  document.documentElement.dataset.plain = 'true';
+  return {
+    dispose: () => {
+      document.documentElement.dataset.plain = 'false';
+      const index = document.adoptedStyleSheets.indexOf(stylesheet);
+      if (index !== -1) {
+        document.adoptedStyleSheets.splice(index, 1);
+      }
+    }
+  }
+}

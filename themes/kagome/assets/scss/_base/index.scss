@@ -109,33 +109,3 @@ body {
     @include soft-box--active(var(--radius));
   }
 }
-
-[data-plain="true"] {
-  [class*=soft-style--] {
-    background-color: transparent;
-    box-shadow: none;
-  }
-
-  .card-cover {
-    opacity: 0.25;
-  }
-
-  .highlight {
-    opacity: 0.6;
-  }
-
-  .article-content img {
-    opacity: 0.6;
-  }
-
-  #waline {
-    .wl-comment {
-      background: none;
-      box-shadow: none;
-
-      .wl-panel {
-        background: none;
-      }
-    }
-  }
-}
