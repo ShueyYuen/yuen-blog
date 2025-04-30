@@ -21,7 +21,7 @@ class DinoGame extends Disposable {
   private canvas: CanvasManager;
   private ctx: CanvasRenderingContext2D;
   private width: number = 600;
-  private height: number = 150;
+  private height: number = 170;
 
   private dino: Dino;
   private ground: Ground;
@@ -99,7 +99,7 @@ class DinoGame extends Disposable {
     }));
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    this.dino = new Dino(this.spiritManager, this.ctx);
+    this.dino = new Dino(this.spiritManager, this.ctx, this.height);
     this.ground = new Ground(this.spiritManager, this.ctx, this.height);
 
     this.setupEventListeners();
@@ -146,7 +146,7 @@ class DinoGame extends Disposable {
 
     // 生成障碍物
     if (now - this.lastObstacleTime > (Math.random() * 1000 + 800)) {
-      this.obstacles.push(new Obstacle(this.spiritManager, this.ctx, this.width));
+      this.obstacles.push(new Obstacle(this.spiritManager, this.ctx, this.width, this.height));
       this.lastObstacleTime = now;
     }
 
@@ -357,8 +357,8 @@ class Dino {
     });
   }
 
-  constructor(private spiritManager: SpiritManager, private ctx: CanvasRenderingContext2D) {
-    this.groundY = 130; // 恐龙在地面上的Y坐标
+  constructor(private spiritManager: SpiritManager, private ctx: CanvasRenderingContext2D, height: number) {
+    this.groundY = height - 20; // 恐龙在地面上的Y坐标
     this.y = this.groundY;
   }
 
@@ -523,8 +523,8 @@ class Obstacle {
 
   private drawer: SpiritAnimationFrameDrawer;
 
-  constructor(spiritManager: SpiritManager, private ctx: CanvasRenderingContext2D, canvasWidth: number) {
-    this.x = canvasWidth;
+  constructor(spiritManager: SpiritManager, private ctx: CanvasRenderingContext2D, width: number, height: number) {
+    this.x = width;
 
     // 随机选择障碍物类型：仙人掌(小、大)或翼龙
     this.type = Obstacle.TYPES[Math.floor(Math.random() * Obstacle.TYPES.length)];
@@ -532,7 +532,7 @@ class Obstacle {
 
     if (this.type === 'pterodactyl') {
       // 翼龙的高度在三个不同的位置之一
-      const heights = [70, 100, 130];
+      const heights = [height - 80, height - 50, height - 20];
       this.y = heights[Math.floor(Math.random() * heights.length)];
       this.drawer = spiritManager.createAnimationFrames('pterodactyl', {
         scale: 0.5,
@@ -541,7 +541,7 @@ class Obstacle {
       })!;
     } else {
       // 仙人掌总是在地面上
-      this.y = 128;
+      this.y = height - 22;
       this.drawer = spiritManager.createAnimationFrames(`${this.type}-${this.size}`, {
         scale: 0.5,
         alignment: Alignment.BOTTOM_CENTER,
@@ -654,7 +654,7 @@ onActivate((context) => {
   container.append(wrapper);
   ElementAnimator.show(wrapper, [
     { height: '0', opacity: '0' },
-    { height: '150px', opacity: '1' },
+    { height: '170px', opacity: '1' },
   ]);
 
   const spiritManager = SpiritManager.getInstance();
