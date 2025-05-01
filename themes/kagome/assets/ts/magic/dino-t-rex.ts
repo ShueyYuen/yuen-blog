@@ -110,7 +110,7 @@ class DinoGame extends Disposable {
     this.canvas.linkSize(container, (entry) => {
       const { width } = entry.contentRect;
       this.width = width;
-      this.canvas.setSize(width, this.height);
+      this.canvas.setSize(width, this.height, true);
       this.render();
     });
   }
