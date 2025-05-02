@@ -65,12 +65,13 @@ window.onMagic = async function onMagic(name?: string) {
     })
     .catch(error => {
       console.error(`Error loading magic: ${error}`);
+    }).finally(() => {
+      isBusy = false;
     });
   if (isLucky()) {
     shownMagic[name] = true; // 使用对象属性记录已显示的魔法
   }
   localStorage.setItem('shown-magic', JSON.stringify(shownMagic));
-  isBusy = false;
 }
 
 const authorCard = document.getElementById('author-card');
