@@ -6,6 +6,7 @@ import { CanvasManager } from './utils/canvas';
 import { DOMEmitter } from './utils/dom';
 import { Disposable, IDisposable } from './utils/disposable';
 import { BaseEvent, Emitter } from './utils/emitter';
+import { renderTips } from './utils/tips-render';
 
 // #region Global Variables
 enum PianoKeyShape {
@@ -483,6 +484,17 @@ onActivate((context) => {
     { transform: 'translateX(-50%) translateY(100px)', opacity: '0' },
     { transform: 'translateX(-50%) translateY(0)', opacity: DISPLAY_OPACITY }
   ]);
+
+  renderTips({
+    title: '钢琴彩蛋',
+    description: '按下键盘上的字母键来弹奏音符，使用 Shift 键来踩踏板，使用 Ctrl 键来控制节拍器的开关。',
+    operations: [
+      { key: 'Z', description: '向左移动' },
+      { key: 'X', description: '向右移动' },
+      { key: 'Shift', description: '踩踏板' },
+      { key: 'Ctrl', description: '开启/关闭节拍器' }
+    ]
+  });
 
   // Modify onDeactivate to use disappearance animation
   onDeactivate(() => ElementAnimator.hide(canvas));

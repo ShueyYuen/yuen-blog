@@ -20,14 +20,14 @@ function loadScript(url: string, integrity: string, crossorigin: string) {
   });
 }
 
-let _onDeactivate: () => Promise<void> | void, _context: DisposableStore;
+let _onDeactivate: Array<() => Promise<void> | void> = [], _context: DisposableStore;
 async function onDeactivate(cb?: () => Promise<void> | void) {
   if (typeof cb === 'function') {
-    _onDeactivate = cb;
+    _onDeactivate.push(cb);
   } else {
-    _onDeactivate && await _onDeactivate();
+    await Promise.all(_onDeactivate.map(fn => fn()));
     _context && _context.dispose();
-    _onDeactivate = null!; // 清空回调函数
+    _onDeactivate = []; // 清空回调函数
   }
 }
 window.onDeactivate = onDeactivate;

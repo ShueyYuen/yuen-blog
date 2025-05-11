@@ -1,5 +1,6 @@
 import { Disposable } from "./utils/disposable";
 import { DomListener, requestPlainPage } from "./utils/dom";
+import { renderTips } from "./utils/tips-render";
 
 interface Ball {
   x: number;           // 当前X位置
@@ -209,5 +210,10 @@ class ElectromagneticField extends Disposable {
 
 onActivate((context) => {
   context.add(requestPlainPage());
-  context.add(new ElectromagneticField())
+  context.add(new ElectromagneticField());
+
+  renderTips({
+    title: '电磁场',
+    description: '鼠标悬停在小球上，电磁场会将小球吸引到鼠标位置，释放鼠标后小球会回到原位。',
+  });
 });

@@ -2,7 +2,7 @@ import { DisposableStore } from './magic/utils/disposable';
 
 // 全局声明应该使用 declare global
 declare global {
-  function onDeactivate(cb: () => Promise<void> | void): void;
+  function onDeactivate(cb: () => Promise<any> | void): void;
   function onActivate(cb: (context: DisposableStore) => void): void;
   async function onMagic(name?: string): void;
 }

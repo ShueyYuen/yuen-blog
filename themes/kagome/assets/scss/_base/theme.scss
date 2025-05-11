@@ -60,8 +60,8 @@ $dark-blockquote: rgba(67, 76, 82, 0.5);
   --theme-bg-primary: #{$light-bg-primary};
   --theme-bg-high: #{$light-bg-high};
   --theme-bg-shadow: #{$light-bg-shadow};
-  --theme-bg-actvie1: #{$light-bg-active1};
-  --theme-bg-actvie2: #{$light-bg-active2};
+  --theme-bg-active1: #{$light-bg-active1};
+  --theme-bg-active2: #{$light-bg-active2};
 
   --theme-text-active: #{$light-text-active};
   --theme-text-light: #{$light-text-light};
@@ -102,8 +102,8 @@ $dark-blockquote: rgba(67, 76, 82, 0.5);
   --theme-bg-primary: #{$dark-bg-primary};
   --theme-bg-high: #{$dark-bg-high};
   --theme-bg-shadow: #{$dark-bg-shadow};
-  --theme-bg-actvie1: #{$dark-bg-active1};
-  --theme-bg-actvie2: #{$dark-bg-active2};
+  --theme-bg-active1: #{$dark-bg-active1};
+  --theme-bg-active2: #{$dark-bg-active2};
 
   --theme-text-active: #{$dark-text-active};
   --theme-text-light: #{$dark-text-light};
@@ -164,4 +164,8 @@ $dark-blockquote: rgba(67, 76, 82, 0.5);
   :root {
     @include theme-dark;
   }
+}
+
+:root {
+  interpolate-size: allow-keywords;
 }

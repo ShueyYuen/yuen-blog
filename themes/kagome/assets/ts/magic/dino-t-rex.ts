@@ -8,6 +8,7 @@ import { ElementAnimator } from "./utils/animation";
 import { Disposable } from "./utils/disposable";
 import { CanvasManager } from "./utils/canvas";
 import { DomListener } from "./utils/dom";
+import { renderTips } from "./utils/tips-render";
 
 const SPIRIT = 'data:image/png;base64,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';
 
@@ -163,7 +164,7 @@ class DinoGame extends Disposable {
         }
 
         // 增加分数
-        if (obstacle.x + obstacleHitbox.width  < this.dino.x) {
+        if (obstacle.x + obstacleHitbox.width < this.dino.x) {
           obstacle.passed = true;
           this.score++;
 
@@ -658,15 +659,23 @@ onActivate((context) => {
   ]);
 
   const spiritManager = SpiritManager.getInstance();
-  const game = new DinoGame(spiritManager);
+  const game = context.add(new DinoGame(spiritManager));
   spiritManager.preloadAll().then(() => game.mount(wrapper));
+
+  renderTips({
+    title: '小恐龙游戏',
+    description: '按空格键或向上箭头开始游戏，向下箭头蹲下，点击屏幕重新开始',
+    operations: [
+      { key: '空格键', description: '开始游戏/跳跃' },
+      { key: '上箭头', description: '跳跃' },
+      { key: '下箭头', description: '蹲下' },
+      { key: '点击', description: '重新开始' },
+    ]
+  });
 
   onDeactivate(() =>
     ElementAnimator
       .hide(wrapper)
-      .then(() => {
-        wrapper.remove();
-        game.dispose();
-      })
+      .then(() => wrapper.remove())
   );
 });
