@@ -77,6 +77,11 @@ window.onMagic = async function onMagic(name?: string) {
 const authorCard = document.getElementById('author-card');
 if (authorCard) {
   authorCard.addEventListener('click', () => onMagic());
+  authorCard.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+      onMagic();
+    }
+  });
 }
 
 document.addEventListener('keyup', function (event) {

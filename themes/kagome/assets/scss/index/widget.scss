@@ -100,6 +100,18 @@
   }
 }
 
+@keyframes blink {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
 .widget-author {
   cursor: pointer;
   position: relative;
@@ -110,17 +122,20 @@
     background: linear-gradient(135deg, #7f5af0, #2cb67d);
     border: none;
     border-radius: 12px;
-    padding: 6px 12px;
+    padding: 6px 0;
     font-size: 14px;
     transition: transform 0.2s ease, box-shadow 0.3s ease;
     position: absolute;
     top: 0;
     right: 0;
+    width: 40px;
+    text-align: center;
   }
 
   &:hover::after {
     transform: scale(1.05) translate(-8px, 8px);
     box-shadow: 0 6px 18px rgba(127, 90, 240, 0.2);
+    animation: blink 1s linear infinite;
   }
 }
 
