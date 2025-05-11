@@ -18,7 +18,7 @@
         el: '#waline',
         locale,
         serverURL: 'https://comment.shuey.fun',
-{{- if not .Page.Site.IsServer -}}
+{{- if not hugo.IsServer -}}
         pageview: true,
 {{- end -}}
         comment: true,

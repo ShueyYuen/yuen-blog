@@ -4,8 +4,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{- if or .Params.author .Site.Author.name -}} {{/* author */}}
-      <meta name="author" content="{{- or .Params.author .Site.Author.name -}}">
+    {{- if or .Params.author .Site.Params.author.name -}} {{/* author */}}
+      <meta name="author" content="{{- or .Params.author .Site.Params.author.name -}}">
     {{- end -}}
     {{- if or .Keywords .Site.Params.keywords -}} {{/* keywords */}}
       {{- $keywords := slice -}}
@@ -26,7 +26,7 @@
     {{/* style */}}
     {{- $sass := resources.Get "scss/404/index.scss" -}}
     {{- $options := (dict "targetPath" "assets/css/404.min.css" "outputStyle" "compressed") -}}
-    {{- $style := $sass | resources.ToCSS $options | resources.Fingerprint "sha256" -}}
+    {{- $style := $sass | toCSS $options | resources.Fingerprint "sha256" -}}
     <link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}" crossorigin="anonymous" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@900&display=swap" rel="stylesheet">

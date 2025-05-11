@@ -4,8 +4,8 @@
   <meta http-equiv='content-language' content='zh-CN'>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  {{- if or .Params.author .Site.Author.name -}} {{/* author */}}
-  <meta name="author" content="{{- or .Params.author .Site.Author.name -}}"/>
+  {{- if or .Params.author .Site.Params.author.name -}} {{/* author */}}
+  <meta name="author" content="{{- or .Params.author .Site.Params.author.name -}}"/>
   {{- end -}}
 
   {{- if or .Keywords .Site.Params.keywords -}} {{/* keywords */}}
@@ -37,7 +37,7 @@
   {{/* style */}}
   {{- $sass := resources.Get "scss/index/index.scss" -}}
   {{- $options := dict "targetPath" "assets/css/style.min.css" "outputStyle" "compressed" -}}
-  {{ $style := $sass | resources.ToCSS $options | resources.Fingerprint "sha256" }}
+  {{ $style := $sass | toCSS $options | resources.Fingerprint "sha256" }}
   <link rel="stylesheet" href="{{- $style.RelPermalink -}}" integrity="{{- $style.Data.Integrity -}}" crossorigin="anonymous" />
   {{/* script */}}
   {{- $js := resources.Get "ts/main.ts" -}}

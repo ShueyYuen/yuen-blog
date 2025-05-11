@@ -6,7 +6,7 @@
 {{- $loop     := .Get "loop"      | default $.Site.Params.dplayer.loop -}}
 {{- $mutex    := .Get "mutex"     | default $.Site.Params.dplayer.mutex -}}
 
-{{- if (and .Page.Site.Params.CDN.enable (not .Page.Site.IsServer)) -}}
+{{- if (and .Page.Site.Params.CDN.enable (not hugo.IsServer)) -}}
   {{- if not (or (hasPrefix $pic "http://") (hasPrefix $pic "https://") (hasPrefix $pic "data:image")) -}}
     {{- $pic = (print .Page.Site.Params.CDN.host (path.Join $pic)) -}}
   {{- end -}}

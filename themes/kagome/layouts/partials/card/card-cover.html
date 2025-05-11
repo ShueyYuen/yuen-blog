@@ -2,7 +2,7 @@
 
   <div class="card-cover">
     {{- $CDNImgDestination := .Params.cover -}}
-    {{- if (and .Site.Params.CDN.enable (not .Site.IsServer)) -}}
+    {{- if (and .Site.Params.CDN.enable (not hugo.IsServer)) -}}
       {{- if $CDNImgDestination -}}
         {{- if not (or (hasPrefix $CDNImgDestination "http://") (hasPrefix $CDNImgDestination "https://") (hasPrefix $CDNImgDestination "data:image")) -}}
           {{- $CDNImgDestination = (print .Site.Params.CDN.host (path.Join .Params.cover)) -}}

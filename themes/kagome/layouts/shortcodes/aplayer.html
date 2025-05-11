@@ -11,7 +11,7 @@
 {{- $loop     := .Get "loop"      | default $.Site.Params.aplayer.loop -}}
 {{- $mutex    := .Get "mutex"     | default $.Site.Params.aplayer.mutex -}}
 
-{{- if (and .Page.Site.Params.CDN.enable (not .Page.Site.IsServer)) -}}
+{{- if (and .Page.Site.Params.CDN.enable (not hugo.IsServer)) -}}
   {{- if not (or (hasPrefix $cover "http://") (hasPrefix $cover "https://") (hasPrefix $cover "data:image")) -}}
     {{- $cover = (print .Page.Site.Params.CDN.host (path.Join $cover)) -}}
   {{- end -}}
