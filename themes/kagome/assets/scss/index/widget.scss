@@ -38,6 +38,9 @@
       color: var(--theme-text-stress);
       font: var(--base-font);
       transition: transitions(color, 0.3s);
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       &.center {
         text-align: center;
