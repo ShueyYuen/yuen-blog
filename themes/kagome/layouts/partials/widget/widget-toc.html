@@ -9,5 +9,38 @@
   <div class="widget-body">
     {{- .TableOfContents -}}
   </div>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const headers = document.querySelectorAll('.markdown-body h2, .markdown-body h3');
+      const tocLinks = Array.from(document.querySelectorAll('#TableOfContents a'))
+        .reduce((acc, link) => {
+          acc.set(link.getAttribute('href'), link);
+          return acc;
+        }, new Map());
+
+      function highlightTocLink() {
+        let index = 0;
+        headers.forEach((header, i) => {
+          const rect = header.getBoundingClientRect();
+          if (rect.top <= window.innerHeight / 4) {
+            index = i;
+          }
+        });
+
+        const header = headers[index];
+        if (!header) {
+          return;
+        }
+        tocLinks.forEach(link => link.classList.remove('active'));
+        const tocLink = tocLinks.get('#' + header.id);
+        if (tocLink) {
+          tocLink.classList.add('active');
+        }
+      }
+
+      highlightTocLink();
+      window.addEventListener('scroll', highlightTocLink);
+    });
+  </script>
 </section>
 {{- end -}}

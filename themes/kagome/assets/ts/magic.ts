@@ -2,7 +2,7 @@ import { DisposableStore } from "./magic/utils/disposable";
 
 function isLucky() {
   const luck = Math.random();
-  return luck > 0.1;
+  return luck > 0.9;
 }
 
 function loadScript(url: string, integrity: string, crossorigin: string) {
@@ -87,5 +87,6 @@ if (authorCard) {
 document.addEventListener('keyup', function (event) {
   if (event.key === 'Escape') {
     onDeactivate();
+    authorCard && authorCard.blur();
   }
 });
