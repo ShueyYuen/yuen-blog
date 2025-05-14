@@ -1,0 +1,3 @@
+[submodule "themes/kagome"]
+	path = themes/kagome
+	url = https://github.com/ShueyYuen/magic-kagome
