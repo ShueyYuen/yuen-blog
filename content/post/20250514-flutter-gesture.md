@@ -1,11 +1,10 @@
 ---
 author: Shuey Yuen
 date: 2025-05-14T11:16:35+08:00
-title: "20250414 Flutter Gesture"
+title: "Flutter中的Gesture管理"
 description: 
-categories: ["Web"]
-tags: ["Music"]
+categories: ["Flutter"]
 toc: true
-cover: 
+cover: /images/2025/0514/title-bg.webp
 draft: true
 ---

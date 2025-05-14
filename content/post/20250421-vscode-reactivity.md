@@ -7,6 +7,8 @@ tags: ["VSCode", "TypeScript", "Reactivity"]
 categories: ["Web"]
 toc: true
 cover: /images/2025/0421/title-bg.webp
+cover_author: 葬送のフリーレン(The Journey`s End)
+cover_source: https://www.netflix.com/hk/title/81726714
 draft: true
 ---
 

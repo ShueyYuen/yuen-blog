@@ -11,6 +11,8 @@ categories: [
 ]
 toc: true
 cover: /images/2022/0313/title-bg.webp
+cover_author: ArseniXC
+cover_source: https://www.pixiv.net/artworks/59519837
 ---
 
 ## 白嫖项目

@@ -12,6 +12,8 @@ categories: [
 toc: true
 plantuml: true
 cover: /images/2022/0314/title_bg.webp
+cover_author: Geister
+cover_source: https://www.pixiv.net/artworks/40178919
 ---
 
 > Commit ID: 3401f6b460196ce254a73df05ce571802b365054

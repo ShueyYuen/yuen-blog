@@ -10,6 +10,8 @@ categories: [
     "Web",
 ]
 cover: '/images/2020/0216/title-bg.jpg'
+cover_author: 海島千本
+cover_source: https://www.pixiv.net/artworks/25340935
 ---
 
 ## 安装准备

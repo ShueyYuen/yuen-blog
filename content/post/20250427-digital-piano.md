@@ -7,6 +7,8 @@ categories: ["Web"]
 tags: ["Music"]
 toc: true
 cover: /images/2025/0427/title-bg.webp
+cover_author: 野决明
+cover_source: https://www.pixiv.net/artworks/114356114
 draft: true
 ---
 

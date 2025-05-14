@@ -31,22 +31,17 @@ defaultContentLanguage = "zh-cn"           # Default language to use
     name = "文章"
     weight = 10
     identifier = "home"
-    url = "/"
+    url = "/post"
   [[menu.main]]
-    name = "标签"
-    weight = 30
-    identifier = "tags"
-    url = "/tags/"
-  [[menu.main]]
-    name = "分类"
-    weight = 40
-    identifier = "categories"
-    url = "/categories/"
+    name = "友链"
+    weight = 20
+    identifier = "links"
+    url = "/link"
   [[menu.main]]
     name = "项目"
     weight = 40
     identifier = "projects"
-    url = "/projects/"
+    url = "/projects"
 
   # 底部社交图标
   [[menu.social]]

@@ -13,6 +13,8 @@ dplayer: true
 aplayer: true
 toc: true
 cover: /images/2019/0115/title-bg.webp
+cover_author: NoriZC
+cover_source: https://www.pixiv.net/artworks/47786283
 ---
 
 ## 老套的故事

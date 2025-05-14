@@ -12,6 +12,8 @@ categories: [
 toc: true
 plantuml: true
 cover: /images/2022/0429/title_bg.webp
+cover_author: チュ～
+cover_source: https://www.pixiv.net/artworks/56866500
 ---
 
 > [The Anatomy of a Frame](https://aerotwist.com/blog/the-anatomy-of-a-frame/)

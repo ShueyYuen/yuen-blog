@@ -12,6 +12,8 @@ categories: [
 toc: true
 plantuml: true
 cover: /images/2022/0425/title_bg.webp
+cover_author: いちご飴
+cover_source: https://www.pixiv.net/artworks/85626613
 ---
 
 {{< playground id="render-example" theme="dark" tab="result" processor="" >}}

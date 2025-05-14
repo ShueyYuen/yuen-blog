@@ -8,6 +8,8 @@ categories: ["Web"]
 toc: true
 plantuml: true
 cover: /images/2024/0930/title-bg.webp
+cover_author: 前田ミック
+cover_source: https://x.com/m_mic_0707/status/1011589548302667777/photo/2
 ---
 
 ## 装饰模式

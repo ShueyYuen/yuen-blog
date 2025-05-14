@@ -8,6 +8,8 @@ categories: ["Web"]
 toc: true
 plantuml: true
 cover: /images/2024/1012/title-bg.webp
+cover_author: zinsser
+cover_source: https://www.pixiv.net/artworks/54527147
 ---
 
 ## TS 装饰器更新

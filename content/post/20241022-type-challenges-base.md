@@ -7,6 +7,8 @@ tags: ["TypeScript"]
 categories: ["Web"]
 toc: true
 cover: /images/2024/1022/title-bg.webp
+cover_author: Jimmy
+cover_source: https://www.pixiv.net/artworks/78045300
 ---
 
 ## 为什么做类型体操
