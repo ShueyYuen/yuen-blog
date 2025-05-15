@@ -40,17 +40,22 @@ defaultContentLanguage = "zh-cn"           # Default language to use
     weight = 30
     identifier = "projects"
     url = "/projects"
-  [[menu.main]]
-    name = "友链"
-    weight = 40
-    identifier = "links"
-    url = "/link"
+  # [[menu.main]]
+  #   name = "友链"
+  #   weight = 40
+  #   identifier = "links"
+  #   url = "/link"
 
   # 底部社交图标
   [[menu.social]]
     identifier = "github"
     name = "github"
     url = "https://github.com/ShueyYuen"
+    weight = 1
+  [[menu.social]]
+    identifier = "x"
+    name = "x"
+    url = "https://x.com/SimthTeade48892"
     weight = 1
   [[menu.social]]
     identifier = "email"
