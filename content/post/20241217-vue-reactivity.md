@@ -6,7 +6,7 @@ description: vue/reactivity 包的设计以及原理介绍。
 tags: ["TypeScript", "Vue"]
 categories: ["Vue"]
 toc: true
-cover: /images/2024/1022/title-bg.webp
+cover: /images/2024/1217/title-bg.webp
 draft: true
 ---
 

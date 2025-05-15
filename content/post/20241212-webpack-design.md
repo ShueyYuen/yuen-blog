@@ -6,7 +6,9 @@ description: 介绍 Webpack 的 loader、plugin 等机制设计。
 tags: ["JavaScript", "Webpack"]
 categories: ["JavaScript"]
 toc: true
-cover: /images/2024/1022/title-bg.webp
+cover: /images/2024/1212/title-bg.webp
+cover_author: 昔
+cover_source: https://www.pixiv.net/artworks/110115614
 draft: true
 ---
 

@@ -6,7 +6,7 @@ description: 深度解析quickjs源码，eval部分。
 tags: ["JavaScript", "quickjs"]
 categories: ["QuickJS"]
 toc: true
-cover: /images/2024/1022/title-bg.webp
+cover: /images/2024/1205/title-bg.webp
 draft: true
 ---
 

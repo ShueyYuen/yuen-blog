@@ -6,7 +6,7 @@ description: 如何一步步解决类型体操，以及分解的基本问题。
 tags: ["TypeScript"]
 categories: ["Web"]
 toc: true
-cover: /images/2024/1022/title-bg.webp
+cover: /images/2024/1117/title-bg.webp
 draft: true
 ---
 

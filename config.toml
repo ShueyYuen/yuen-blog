@@ -19,8 +19,6 @@ defaultContentLanguage = "zh-cn"           # Default language to use
   pagerSize = 9
   path = 'page'
 
-
-
 [sitemap]
   changefreq = "weekly"
   priority = 0.5
@@ -33,15 +31,20 @@ defaultContentLanguage = "zh-cn"           # Default language to use
     identifier = "home"
     url = "/post"
   [[menu.main]]
-    name = "友链"
+    name = "摄影"
     weight = 20
-    identifier = "links"
-    url = "/link"
+    identifier = "photos"
+    url = "/photos"
   [[menu.main]]
     name = "项目"
-    weight = 40
+    weight = 30
     identifier = "projects"
     url = "/projects"
+  [[menu.main]]
+    name = "友链"
+    weight = 40
+    identifier = "links"
+    url = "/link"
 
   # 底部社交图标
   [[menu.social]]

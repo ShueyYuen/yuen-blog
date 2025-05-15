@@ -6,7 +6,9 @@ description: 深度解析quickjs源码，常用内部函数部分。
 tags: ["JavaScript", "quickjs"]
 categories: ["QuickJS"]
 toc: true
-cover: /images/2024/1022/title-bg.webp
+cover: /images/2024/1202/title-bg.webp
+cover_author: 三日(^^♪
+cover_source: https://www.pixiv.net/artworks/79989985
 draft: true
 ---
 

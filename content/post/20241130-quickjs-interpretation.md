@@ -6,7 +6,9 @@ description: 深度解析quickjs源码，基础定义部分。
 tags: ["JavaScript", "quickjs"]
 categories: ["QuickJS"]
 toc: true
-cover: /images/2024/1022/title-bg.webp
+cover: /images/2024/1130/title-bg.webp
+cover_author: 焦茶
+cover_source: https://www.pixiv.net/artworks/70022389
 draft: true
 ---
 
