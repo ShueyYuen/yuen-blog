@@ -14,4 +14,6 @@ draft: true
 
 ## 乐理介绍
 
+{{< bilibili id="BV1fKXhY9ET7" ratio="16 / 9" >}}
+
 <button onclick="onMagic('piano')">试用</button>

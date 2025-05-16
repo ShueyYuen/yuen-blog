@@ -208,9 +208,9 @@ type R = ReturnType<typeof fn>; // string
 
 当 `infer` 处于协变位置时，结果为[交叉类型]({{< relref "#交叉类型" >}})。
 
-> For a given infer type variable `V`, if any candidates were inferred from co-variant positions, the type inferred for `V` is a union of those candidates. Otherwise, if any candidates were inferred from contra-variant positions, the type inferred for `V` is an intersection of those candidates. Otherwise, the type inferred for `V` is never.
->
-> {{< align right "—— [TypeScript 2.8 Conditional Types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#conditional-types)" >}}
+{{< blockquote link="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#conditional-types" title="TypeScript 2.8 Conditional Types" >}}
+For a given infer type variable `V`, if any candidates were inferred from co-variant positions, the type inferred for `V` is a union of those candidates. Otherwise, if any candidates were inferred from contra-variant positions, the type inferred for `V` is an intersection of those candidates. Otherwise, the type inferred for `V` is never.
+{{</ blockquote >}}
 
 ```typescript
 type CovariantInfer<T> = T extends { a: infer U; b: infer U } ? U : never;
@@ -246,9 +246,9 @@ type Result2 = ArrayWrapped<number | boolean>; // 'N'
 ```
 > 泛型中，**对于属于裸类型参数的检查类型，条件类型会在实例化时期自动分发到联合类型上。**
 
-> Conditional types in which the checked type is a naked type parameter are called distributive conditional types. Distributive conditional types are automatically distributed over union types during instantiation. For example, an instantiation of `T extends U ? X : Y` with the type argument `A | B | C` for `T` is resolved as `(A extends U ? X : Y) | (B extends U ? X : Y) | (C extends U ? X : Y)`.
->
-> {{< align right "—— [TypeScript 2.8 Distributive conditional types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types)" >}}
+{{< blockquote link="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types" title="TypeScript 2.8 Distributive conditional types" >}}
+Conditional types in which the checked type is a naked type parameter are called distributive conditional types. Distributive conditional types are automatically distributed over union types during instantiation. For example, an instantiation of `T extends U ? X : Y` with the type argument `A | B | C` for `T` is resolved as `(A extends U ? X : Y) | (B extends U ? X : Y) | (C extends U ? X : Y)`.
+{{</ blockquote >}}
 
 #### 交叉类型
 
